@@ -63,7 +63,7 @@
 
                     <li class="dropdown notification-list">
                         <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+                            <?=$this->Html->image('profile.png',['class'=>'rounded-circle'])?>
                             <span class="pro-user-name ml-1">
                                 Nik Patel <i class="mdi mdi-chevron-down"></i> 
                             </span>
@@ -121,7 +121,7 @@
 
                 <!-- LOGO -->
                 <div class="logo-box">
-                    <a href="index.html" class="logo text-center">
+                    <a href="javascript:void(0);" class="logo text-center">
                         <span class="logo-lg">
                             <?=$this->Html->image('logo/logo-light.png',['height'=>'40'])?>
                         </span>
