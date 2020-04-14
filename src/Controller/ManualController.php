@@ -17,10 +17,10 @@ class ManualController extends AppController
          $this->autoRender = false;
          $this->loadComponent('User');
 
-         $password = $this->User->hasPassword($password);
-         echo $password;
+         $_password = $this->User->hasPassword($password);
+         echo $_password;
 
-         $password = $this->User->decryptPassword($password);
-         echo $password;
+         echo $this->User->checkPassword($password,$_password);
+        
     }
 }
