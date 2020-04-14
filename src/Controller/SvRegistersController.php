@@ -22,6 +22,7 @@ class SvRegistersController extends AppController
 
         $this->Users = TableRegistry::get('Users');
         $this->Otps = TableRegistry::get('user_otps');
+        $this->loadComponent('User');
     }
 
     public function register(){
@@ -32,6 +33,9 @@ class SvRegistersController extends AppController
             if($chkMobile){
                 $user_register = $this->Users->newEntity();
                 $user_register = $this->Users->patchEntity($user_register, $postData);
+
+                $password = $this->User->hasPassword($password);
+                $user_register->password = $password;
 
                 if($this->Users->save($user_register)){
                     $this->createOTP($user_register->id);
