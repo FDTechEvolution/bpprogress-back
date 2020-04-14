@@ -38,6 +38,11 @@ class SvLoginController extends AppController
                 if(is_null($user)){
                     $this->responData['msg'] = 'user or password is invalid.';
                 }else{
+                    if($user->type !='NORMAL'){
+                        $authenCode = $this->User->generateAuthenCode($user->id);
+                        $user['authen_code'] = $authenCode;
+                    }
+
                     $user->password = NULL;
                     $this->responData['data'] = $user;
                 }

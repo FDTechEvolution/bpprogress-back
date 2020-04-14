@@ -27,6 +27,14 @@ class UserComponent extends Component
         $this->UserAuthens = TableRegistry::get('UserAuthens');
 
         $code = $this->Utils->generateRandomString(20);
+        $userAuthen = $this->UserAuthens->newEntity();
+        $userAuthen->user_id = $userId;
+        $userAuthen->authencode = $code;
+        $userAuthen->isused = 'N';
+
+        $this->UserAuthens->save($userAuthen);
+
+        return $code;
 
 
     }
