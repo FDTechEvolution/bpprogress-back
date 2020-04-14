@@ -13,7 +13,7 @@ use Cake\ORM\TableRegistry;
 class SvRegistersController extends AppController
 {
 
-    public $Users = NULL:
+    public $Users = NULL;
     public $responData = ['status'=>200,'msg'=>'','data'=>[]];
 
     public function beforeFilter(Event $event) {
