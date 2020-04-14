@@ -10,6 +10,8 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\ImagesTable&\Cake\ORM\Association\BelongsTo $Images
+ * @property &\Cake\ORM\Association\HasMany $UserAuthens
+ * @property &\Cake\ORM\Association\HasMany $UserOtps
  *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
@@ -42,6 +44,12 @@ class UsersTable extends Table
 
         $this->belongsTo('Images', [
             'foreignKey' => 'image_id',
+        ]);
+        $this->hasMany('UserAuthens', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('UserOtps', [
+            'foreignKey' => 'user_id',
         ]);
     }
 
@@ -80,7 +88,11 @@ class UsersTable extends Table
 
         $validator
             ->scalar('isactive')
-            ->allowEmptyString('isactive');
+            ->notEmptyString('isactive');
+
+        $validator
+            ->scalar('isverify')
+            ->notEmptyString('isverify');
 
         $validator
             ->scalar('description')

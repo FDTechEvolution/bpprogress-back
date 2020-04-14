@@ -34,7 +34,7 @@ class SvRegistersController extends AppController
                 $user_register = $this->Users->newEntity();
                 $user_register = $this->Users->patchEntity($user_register, $postData);
 
-                $password = $this->User->hasPassword($password);
+                $password = $this->User->hasPassword($postData['password']);
                 $user_register->password = $password;
 
                 if($this->Users->save($user_register)){

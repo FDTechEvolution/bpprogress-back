@@ -12,7 +12,8 @@ use Cake\ORM\Entity;
  * @property string $mobile
  * @property string|null $password
  * @property string|null $image_id
- * @property string|null $isactive
+ * @property string $isactive
+ * @property string $isverify
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string|null $description
@@ -38,6 +39,7 @@ class User extends Entity
         'password' => true,
         'image_id' => true,
         'isactive' => true,
+        'isverify' => true,
         'created' => true,
         'modified' => true,
         'description' => true,
