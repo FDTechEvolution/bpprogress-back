@@ -4,7 +4,6 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
-use Cake\Auth\AbstractPasswordHasher;
 
 /**
  * SvLogin Controller
@@ -32,14 +31,15 @@ class SvLoginController extends AppController
         if ($this->request->is(['ajax','post'])) {
             $postData = $this->request->getData();
             if(isset($postData['mobile']) && isset($postData['password'])){
-                $password = $this->AbstractPasswordHasher->hash($postData['password']);
+                $password = $postData['password'];
                 $mobile = $postData['mobile'];
 
-                $user = $this->Users->find()->where(['mobile'=>$mobile,'password'=>$password])->first();
+                $user = $this->User->authenUser($mobile,$password);
                 if(is_null($user)){
-
+                    $this->responData['msg'] = 'user or password is invalid.';
                 }else{
-                    
+                    $user->password = NULL;
+                    $this->responData['data'] = $user;
                 }
 
             }else{
