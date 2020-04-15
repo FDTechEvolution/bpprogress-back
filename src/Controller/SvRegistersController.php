@@ -71,9 +71,9 @@ class SvRegistersController extends AppController
         $otp->otp_ref = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 0, 4);
         $otp->otp_code = substr(str_shuffle("0123456789"), 0, 6);
         if($this->Otps->save($otp)){
-            // return $otp_return = [$id, $otp->otp_ref];
-            $message = "รหัส OTP ของคุณคือ ".$otp->otp_code." รหัสอ้างอิง ".$otp->otp_ref." สำหรับลงทะเบียน BPprogress ระยะเวลาสิ้นสุด ".date('d-m-Y')." ";
-            return $this->Sms->sendOTP('0000', $mobile, $message);
+            $message = "รหัส OTP ของคุณคือ ".$otp->otp_code." รหัสอ้างอิง ".$otp->otp_ref." สำหรับลงทะเบียน BPprogress";
+            $this->Sms->sendOTP('0000', $mobile, $message);
+            return $otp_return = [$id, $otp->otp_ref];
         }
     }
 

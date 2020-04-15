@@ -30,17 +30,23 @@ class SvLoginController extends AppController
     public function login(){
         if ($this->request->is(['ajax','post'])) {
             $postData = $this->request->getData();
+            $this->log($postData, 'debug');
             if(isset($postData['mobile']) && isset($postData['password'])){
                 $password = $postData['password'];
                 $mobile = $postData['mobile'];
 
                 $user = $this->User->authenUser($mobile,$password);
                 if(is_null($user)){
-                    $this->responData['msg'] = 'user or password is invalid.';
+                    $this->responData['status'] = 403;
+                    $this->responData['msg'] = 'หมายเลขโทรศัพท์ หรือ รหัสผ่าน ไม่ถูกต้อง!';
                 }else{
                     if($user->type !='NORMAL'){
                         $authenCode = $this->User->generateAuthenCode($user->id);
                         $user['authen_code'] = $authenCode;
+                    }
+
+                    if($user->isverify != 'Y') {
+                        $responData['status'] = 404;
                     }
 
                     $user->password = NULL;
