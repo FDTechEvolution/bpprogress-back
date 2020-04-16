@@ -27,6 +27,13 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+
+        $controllerName = $this->request->getParam('controller');
+        $actionName = $this->request->getParam('action');
+        //$this->MyAuthen->authen($controllerName,$actionName);
+    }
 
     /**
      * Initialization hook method.
@@ -45,6 +52,15 @@ class AppController extends Controller
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
+
+        $this->loadComponent('Cookie');
+
+        $this->loadComponent('MyAuthen',[
+            'loginRedirect'=>[
+                'controller' => 'login',
+                'action' => 'index'
+            ]
+        ]);
 
         /*
          * Enable the following component for recommended CakePHP security settings.

@@ -18,7 +18,7 @@ class LoginController extends AppController
      */
     public function index()
     {
-       
+       $this->viewBuilder()->setLayout('login');
     }
 
    

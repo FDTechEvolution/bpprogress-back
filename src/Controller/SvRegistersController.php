@@ -52,8 +52,9 @@ class SvRegistersController extends AppController
             
         }
 
-        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $json = json_encode($this->responData);
         $this->set(compact('json'));
+        // $this->set('_serialize', ['json']);
     }
 
     private function checkRegister ($mobile) {
