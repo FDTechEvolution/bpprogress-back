@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller\Component;
 
 use Cake\Controller\Component;
@@ -7,16 +8,14 @@ use Cake\Controller\ComponentRegistry;
 /**
  * Utils component
  */
-class UtilsComponent extends Component
-{
+class UtilsComponent extends Component {
+
     /**
      * Default configuration.
      *
      * @var array
      */
     protected $_defaultConfig = [];
-    
-
 
     public function generateRandomString($length = 10) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -26,5 +25,11 @@ class UtilsComponent extends Component
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
-    } 
+    }
+
+    public function startsWith($string, $startString) {
+        $len = strlen($startString);
+        return (substr($string, 0, $len) === $startString);
+    }
+
 }

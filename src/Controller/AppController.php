@@ -32,7 +32,11 @@ class AppController extends Controller
 
         $controllerName = $this->request->getParam('controller');
         $actionName = $this->request->getParam('action');
-        //$this->MyAuthen->authen($controllerName,$actionName);
+        
+        if(!$this->Utils->startsWith(strtolower($controllerName), 'sv')){
+            $this->MyAuthen->authen($controllerName,$actionName);
+        }
+        
     }
 
     /**
@@ -54,7 +58,7 @@ class AppController extends Controller
         $this->loadComponent('Flash');
 
         $this->loadComponent('Cookie');
-
+        $this->loadComponent('Utils');
         $this->loadComponent('MyAuthen',[
             'loginRedirect'=>[
                 'controller' => 'login',

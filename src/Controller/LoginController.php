@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Login Controller
@@ -9,17 +11,35 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Login[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class LoginController extends AppController
-{
+class LoginController extends AppController {
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+
+        $this->loadComponent('User');
+        
+    }
     /**
      * Index method
      *
      * @return \Cake\Http\Response|null
      */
-    public function index()
-    {
-       $this->viewBuilder()->setLayout('login');
+    public function index() {
+        $this->viewBuilder()->setLayout('login');
+        
+        if($this->request->is(['post'])){
+            $postData = $this->request->getData();
+            $mobile = isset($postData['mobile'])?$postData['mobile']:'';
+            $password = isset($postData['password'])?$postData['password']:'';
+            
+            $user = $this->User->authenUser($mobile,$password);
+            if(!is_null($user)){
+                $this->MyAuthen->setAuthen($user);
+                
+                $this->redirect(['controller'=>'home']);
+            }
+            
+        }
     }
 
-   
 }
