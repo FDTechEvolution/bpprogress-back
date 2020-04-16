@@ -23,7 +23,6 @@
                 <th scope="col"><?= $this->Paginator->sort('name') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('code') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('username') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('isactive') ?></th>
@@ -37,7 +36,6 @@
                 <td><?= h($shop->name) ?></td>
                 <td><?= h($shop->code) ?></td>
                 <td><?= h($shop->username) ?></td>
-                <td><?= $shop->has('user') ? $this->Html->link($shop->user->id, ['controller' => 'Users', 'action' => 'view', $shop->user->id]) : '' ?></td>
                 <td><?= h($shop->created) ?></td>
                 <td><?= h($shop->modified) ?></td>
                 <td><?= h($shop->isactive) ?></td>

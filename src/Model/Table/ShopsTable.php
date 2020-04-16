@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Shops Model
  *
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\HasMany $Users
  * @property \App\Model\Table\WarehousesTable&\Cake\ORM\Association\HasMany $Warehouses
  *
  * @method \App\Model\Entity\Shop get($primaryKey, $options = [])
@@ -41,9 +41,8 @@ class ShopsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
+        $this->hasMany('Users', [
+            'foreignKey' => 'shop_id',
         ]);
         $this->hasMany('Warehouses', [
             'foreignKey' => 'shop_id',
@@ -97,7 +96,6 @@ class ShopsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['username']));
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
     }

@@ -18,8 +18,11 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string|null $description
  * @property string $type
+ * @property string|null $shop_id
  *
  * @property \App\Model\Entity\Image $image
+ * @property \App\Model\Entity\UserAuthen[] $user_authens
+ * @property \App\Model\Entity\UserOtp[] $user_otps
  */
 class User extends Entity
 {
@@ -44,7 +47,10 @@ class User extends Entity
         'modified' => true,
         'description' => true,
         'type' => true,
+        'shop_id' => true,
         'image' => true,
+        'user_authens' => true,
+        'user_otps' => true,
     ];
 
     /**

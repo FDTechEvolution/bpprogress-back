@@ -10,7 +10,6 @@ use Cake\ORM\Entity;
  * @property string $name
  * @property string $code
  * @property string $username
- * @property string $user_id
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string|null $isactive
@@ -33,7 +32,6 @@ class Shop extends Entity
         'name' => true,
         'code' => true,
         'username' => true,
-        'user_id' => true,
         'created' => true,
         'modified' => true,
         'isactive' => true,

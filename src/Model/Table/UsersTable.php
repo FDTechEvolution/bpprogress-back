@@ -10,8 +10,9 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\ImagesTable&\Cake\ORM\Association\BelongsTo $Images
- * @property &\Cake\ORM\Association\HasMany $UserAuthens
- * @property &\Cake\ORM\Association\HasMany $UserOtps
+ * @property &\Cake\ORM\Association\BelongsTo $Shops
+ * @property \App\Model\Table\UserAuthensTable&\Cake\ORM\Association\HasMany $UserAuthens
+ * @property \App\Model\Table\UserOtpsTable&\Cake\ORM\Association\HasMany $UserOtps
  *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
@@ -44,6 +45,9 @@ class UsersTable extends Table
 
         $this->belongsTo('Images', [
             'foreignKey' => 'image_id',
+        ]);
+        $this->belongsTo('Shops', [
+            'foreignKey' => 'shop_id',
         ]);
         $this->hasMany('UserAuthens', [
             'foreignKey' => 'user_id',
@@ -118,6 +122,7 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['email']));
         $rules->add($rules->existsIn(['image_id'], 'Images'));
+        $rules->add($rules->existsIn(['shop_id'], 'Shops'));
 
         return $rules;
     }

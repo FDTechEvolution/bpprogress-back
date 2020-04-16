@@ -37,10 +37,6 @@
             <td><?= h($shop->username) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('User') ?></th>
-            <td><?= $shop->has('user') ? $this->Html->link($shop->user->id, ['controller' => 'Users', 'action' => 'view', $shop->user->id]) : '' ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Isactive') ?></th>
             <td><?= h($shop->isactive) ?></td>
         </tr>

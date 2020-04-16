@@ -28,7 +28,6 @@
             echo $this->Form->control('name');
             echo $this->Form->control('code');
             echo $this->Form->control('username');
-            echo $this->Form->control('user_id', ['options' => $users]);
             echo $this->Form->control('isactive');
         ?>
     </fieldset>
