@@ -22,6 +22,7 @@ class SvLoginController extends AppController
         $this->viewBuilder()->setLayout('ajax');
 
         $this->Users = TableRegistry::get('Users');
+        $this->Otps = TableRegistry::get('user_otps');
 
         $this->loadComponent('User');
     }
@@ -30,7 +31,7 @@ class SvLoginController extends AppController
     public function login(){
         if ($this->request->is(['ajax','post'])) {
             $postData = $this->request->getData();
-            $this->log($postData, 'debug');
+            // $this->log($postData, 'debug');
             if(isset($postData['mobile']) && isset($postData['password'])){
                 $password = $postData['password'];
                 $mobile = $postData['mobile'];
@@ -43,19 +44,36 @@ class SvLoginController extends AppController
                     if($user->type !='NORMAL'){
                         $authenCode = $this->User->generateAuthenCode($user->id);
                         $user['authen_code'] = $authenCode;
+                    }else if($user->isverify != 'Y') {
+                        $getOTP = $this->Otps->find('all')->where(['user_id' => $user->id])->first();
+                        $this->responData['status'] = 404;
+                        $this->responData['data'] = [true, $getOTP->user_id, $getOTP->otp_ref];
+                    }else{
+                        $user->password = NULL;
+                        $this->responData['data'] = $user;
                     }
-
-                    if($user->isverify != 'Y') {
-                        $responData['status'] = 404;
-                    }
-
-                    $user->password = NULL;
-                    $this->responData['data'] = $user;
                 }
 
             }else{
                 $this->responData['status'] = 400;
                 $this->responData['msg'] = 'post field(s) is invalid.';
+            }
+        }
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->set(compact('json'));
+    }
+
+    public function onlogged() {
+        if ($this->request->is(['ajax','get'])) {
+            $user_id = $this->request->getQuery('uid');
+            $user_logged = $this->Users->find('all')->where(['id' => $user_id])->first();
+            // $this->log($user_logged, 'debug');
+            // $this->log(sizeof($user_logged), 'debug');
+            if(sizeof($user_logged) > 0) {
+                $this->responData['msg'] = true;
+            }else{
+                $this->responData['msg'] = false;
             }
         }
 

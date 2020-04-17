@@ -3,6 +3,7 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
+use Cake\ORM\TableRegistry;
 
 /**
  * Sms component
@@ -20,7 +21,7 @@ class SmsComponent extends Component
      var $username  = 'sakorns';
      var $password  = '929da5';
  
-    public function sendOTP( $from='0000', $to=null, $message=null)
+    private function sendOTP( $from='0000', $to=null, $message=null)
     {
         $params['method']   = 'send';
         $params['username'] = $this->username;
@@ -65,5 +66,18 @@ class SmsComponent extends Component
         curl_close($ch);
  
         return $response;
+    }
+
+    public function getSendOTP ($id = '',$mobile = '') {
+        $this->Otps = TableRegistry::get('user_otps');
+        $otp = $this->Otps->newEntity();
+        $otp->user_id = $id;
+        $otp->otp_ref = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 0, 4);
+        $otp->otp_code = substr(str_shuffle("0123456789"), 0, 6);
+        if($this->Otps->save($otp)){
+            $message = "รหัส OTP ของคุณคือ ".$otp->otp_code." รหัสอ้างอิง ".$otp->otp_ref." สำหรับลงทะเบียน BP Shopping Mall";
+            $this->sendOTP('0000', $mobile, $message);
+            return $otp_return = [$id, $otp->otp_ref];
+        }
     }
 }

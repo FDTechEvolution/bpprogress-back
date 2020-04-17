@@ -30,6 +30,7 @@ class SvRegistersController extends AppController
 
         if ($this->request->is(['post','ajax'])) {
             $postData = $this->request->getData();
+            // $this->log($postData, 'debug');
             $chkMobile = $this->checkRegister($postData['mobile']);
             if($chkMobile){
                 $user_register = $this->Users->newEntity();
@@ -39,7 +40,7 @@ class SvRegistersController extends AppController
                 $user_register->password = $password;
 
                 if($this->Users->save($user_register)){
-                    $this->responData['data'] = $this->createOTP($user_register->id, $postData['mobile']);
+                    $this->responData['data'] = $this->Sms->getSendOTP($user_register->id, $postData['mobile']);
                     $this->responData['status'] = 200;
                     $this->responData['msg'] = 'Registed...';
                 }else{
@@ -63,18 +64,6 @@ class SvRegistersController extends AppController
             return false;
         }else{
             return true;
-        }
-    }
-
-    private function createOTP ($id,$mobile) {
-        $otp = $this->Otps->newEntity();
-        $otp->user_id = $id;
-        $otp->otp_ref = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 0, 4);
-        $otp->otp_code = substr(str_shuffle("0123456789"), 0, 6);
-        if($this->Otps->save($otp)){
-            $message = "รหัส OTP ของคุณคือ ".$otp->otp_code." รหัสอ้างอิง ".$otp->otp_ref." สำหรับลงทะเบียน BPprogress";
-            $this->Sms->sendOTP('0000', $mobile, $message);
-            return $otp_return = [$id, $otp->otp_ref];
         }
     }
 
