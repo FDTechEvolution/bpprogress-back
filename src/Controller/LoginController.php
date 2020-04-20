@@ -42,4 +42,18 @@ class LoginController extends AppController {
         }
     }
 
+    public function authenCode ($authenCode = null) {
+        if($this->request->is(['get'])){
+            $authenCode = $this->request->getQuery('authencode');
+            $authenStatus = $this->User->checkAuthenCode($authenCode);
+            // $this->log($authenCode, 'debug');
+            // $this->log($authenStatus, 'debug');
+            if(isset($authenStatus)) {
+                $this->MyAuthen->setAuthen($authenStatus);
+                
+                $this->redirect(['controller'=>'home']);
+            }
+        }
+    }
+
 }

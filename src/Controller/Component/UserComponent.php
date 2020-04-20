@@ -40,7 +40,18 @@ class UserComponent extends Component
     }
 
     public function checkAuthenCode($authenCode = ''){
-    	
+        $this->Users = TableRegistry::get('Users');
+        $this->UserAuthens = TableRegistry::get('UserAuthens');
+        $userAuthen = $this->UserAuthens->find()->where(['authencode' => $authenCode])->first();
+        if(!is_null($userAuthen)) {
+            $user = $this->Users->find()->where(['id'=>$userAuthen->user_id])->first();
+            $userAuthen->isused = 'Y';
+            if($this->UserAuthens->save($user)){
+                return $user;
+            }
+        }
+        
+        return null;
     }
 
     public function hasPassword($password = ''){

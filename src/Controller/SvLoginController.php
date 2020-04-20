@@ -44,13 +44,16 @@ class SvLoginController extends AppController
                     if($user->type !='NORMAL'){
                         $authenCode = $this->User->generateAuthenCode($user->id);
                         $user['authen_code'] = $authenCode;
-                    }else if($user->isverify != 'Y') {
-                        $getOTP = $this->Otps->find('all')->where(['user_id' => $user->id])->first();
-                        $this->responData['status'] = 404;
-                        $this->responData['data'] = [true, $getOTP->user_id, $getOTP->otp_ref];
-                    }else{
-                        $user->password = NULL;
                         $this->responData['data'] = $user;
+                    }else {
+                        if($user->isverify != 'Y') {
+                            $getOTP = $this->Otps->find('all')->where(['user_id' => $user->id])->first();
+                            $this->responData['status'] = 404;
+                            $this->responData['data'] = [true, $getOTP->user_id, $getOTP->otp_ref];
+                        }else{
+                            // $user->password = NULL;
+                            $this->responData['data'] = $user;
+                        }
                     }
                 }
 
