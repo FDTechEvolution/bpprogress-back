@@ -19,13 +19,12 @@ class WarehousesController extends AppController
      */
     public function index()
     {
-        $warehouses = $this->Warehouses->find()
-                        ->contain(['Shops'])
-                        ->order(['Warehouses.created' => 'DESC'])
-                        ->toArray();
+        $this->paginate = [
+            'contain' => ['Shops']
+        ];
+        $warehouses = $this->paginate($this->Warehouses);
 
-        // $shops = $this->Warehouses->Shops->find('list', ['limit' => 200]);
-        $this->set(compact('warehouses', 'shops'));
+        $this->set(compact('warehouses'));
     }
 
     /**
@@ -53,13 +52,21 @@ class WarehousesController extends AppController
     {
         $warehouse = $this->Warehouses->newEntity();
         if ($this->request->is('post')) {
-            $warehouse = $this->Warehouses->patchEntity($warehouse, $this->request->getData());
-            if ($this->Warehouses->save($warehouse)) {
-                $this->Flash->success(__('The warehouse has been saved.'));
+            $postData = $this->request->getData();
+            $warehouse_name = $postData['name'];
+            $checkNameDuplicate = $this->Warehouses->find()->where(['name' => $warehouse_name, 'shop_id' => $postData['shop_id']])->first();
+            if(!is_null($checkNameDuplicate)){
+                echo "<script>alert('คลังสินค้า $warehouse_name มีอยู่ในระบบแล้ว...กรุณาตรวจสอบ');</script>";
+                echo "<script>setTimeout('window.location.href=\"index\";', 0)</script>";
+            }else{
+                $warehouse = $this->Warehouses->patchEntity($warehouse, $this->request->getData());
+                if ($this->Warehouses->save($warehouse)) {
+                    $this->Flash->success(__('The warehouse has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The warehouse could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The warehouse could not be saved. Please, try again.'));
         }
         $shops = $this->Warehouses->Shops->find('list', ['limit' => 200]);
         $this->set(compact('warehouse', 'shops'));
@@ -72,19 +79,30 @@ class WarehousesController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit()
     {
-        $warehouse = $this->Warehouses->get($id, [
-            'contain' => [],
-        ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $warehouse = $this->Warehouses->patchEntity($warehouse, $this->request->getData());
-            if ($this->Warehouses->save($warehouse)) {
-                $this->Flash->success(__('The warehouse has been saved.'));
+            $postData = $this->request->getData();
+            $this->log($postData, 'debug');
+            $id = $postData['WH_ID'];
+            $warehouse_name = $postData['name'];
+            $warehouse = $this->Warehouses->get($id, [
+                'contain' => [],
+            ]);
 
-                return $this->redirect(['action' => 'index']);
+            $checkNameDuplicate = $this->Warehouses->find()->where(['name' => $warehouse_name, 'id !=' => $id, 'shop_id' => $postData['shop_id']])->first();
+            if(!is_null($checkNameDuplicate)) {
+                echo "<script>alert('คลังสินค้า $warehouse_name มีอยู่ในระบบแล้ว...กรุณาตรวจสอบ');</script>";
+                echo "<script>setTimeout('window.location.href=\"index\";', 0)</script>";
+            }else{
+                $warehouse = $this->Warehouses->patchEntity($warehouse, $this->request->getData());
+                if ($this->Warehouses->save($warehouse)) {
+                    $this->Flash->success(__('The warehouse has been saved.'));
+
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The warehouse could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The warehouse could not be saved. Please, try again.'));
         }
         $shops = $this->Warehouses->Shops->find('list', ['limit' => 200]);
         $this->set(compact('warehouse', 'shops'));
