@@ -45,7 +45,7 @@ class UserComponent extends Component
         $userAuthen = $this->UserAuthens->find()->where(['authencode' => $authenCode])->first();
         if(!is_null($userAuthen)) {
             $user = $this->Users->find()->where(['id'=>$userAuthen->user_id])->first();
-            $userAuthen->isused = 'Y';
+            $user->isused = 'Y';
             if($this->UserAuthens->save($user)){
                 return $user;
             }

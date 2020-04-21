@@ -19,12 +19,13 @@ class WarehousesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Shops'],
-        ];
-        $warehouses = $this->paginate($this->Warehouses);
+        $warehouses = $this->Warehouses->find()
+                        ->contain(['Shops'])
+                        ->order(['Warehouses.created' => 'DESC'])
+                        ->toArray();
 
-        $this->set(compact('warehouses'));
+        // $shops = $this->Warehouses->Shops->find('list', ['limit' => 200]);
+        $this->set(compact('warehouses', 'shops'));
     }
 
     /**

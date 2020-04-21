@@ -1,59 +1,46 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Warehouse[]|\Cake\Collection\CollectionInterface $warehouses
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Warehouse'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Shops'), ['controller' => 'Shops', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Shop'), ['controller' => 'Shops', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="warehouses index large-9 medium-8 columns content">
-    <h3><?= __('Warehouses') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('isactive') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('description') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('shop_id') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($warehouses as $warehouse): ?>
-            <tr>
-                <td><?= h($warehouse->id) ?></td>
-                <td><?= h($warehouse->name) ?></td>
-                <td><?= h($warehouse->created) ?></td>
-                <td><?= h($warehouse->modified) ?></td>
-                <td><?= h($warehouse->isactive) ?></td>
-                <td><?= h($warehouse->description) ?></td>
-                <td><?= $warehouse->has('shop') ? $this->Html->link($warehouse->shop->name, ['controller' => 'Shops', 'action' => 'view', $warehouse->shop->id]) : '' ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $warehouse->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $warehouse->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $warehouse->id], ['confirm' => __('Are you sure you want to delete # {0}?', $warehouse->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+<div id="app-warehouse">
+    <div class="row pt-3">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card-box">
+                <div id="warehouse">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12 text-left">
+                                    <?= $this->Html->link(__('สร้างคลังสินค้า'), ['action' => 'add'], ['class' => 'btn btn-primary']) ?>
+                                    <!-- <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#createModal"> สร้างคลังสินค้า</button> -->
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+                                <?php foreach ($warehouses as $warehouse): ?>
+                                    <div class="card org-card col-4">
+                                        <div class="card-body org-body-action">
+                                            <strong class="header-org">คลังสินค้า :</strong> <?= h($warehouse->name) ?><br/>
+                                            <strong class="header-org">ร้านค้า :</strong> <?= h($warehouse->shop->name) ?><br/>
+                                            <strong class="header-org">รายละเอียด :</strong> <?= h($warehouse->description) ?><br/>
+                                            <div style="display: -webkit-inline-box;">
+                                            <strong class="header-org">สถานะ : </strong>&nbsp;
+                                                <?php if($warehouse->isactive == 'Y'){ ?>
+                                                    <div style="color: #00dd00;">เปิดใช้งาน</div><?php 
+                                                }else{ ?>
+                                                    <div style="color: #dd0000;">ปิดใช้งาน</div>
+                                                <?php } ?>
+                                            </div>
+                                            <hr/>
+                                            <div class="row text-center">
+                                                <div class="col-4"><button class="btn btn-info btn-block" type="submit"><i class="mdi mdi-format-list-bulleted"></i> รายการ</button></div>
+                                                <div class="col-4"><?= $this->Html->link(__('<i class="mdi mdi-lead-pencil"></i> แก้ไข'), ['action' => 'edit', $warehouse->id], ['class' => 'btn btn-success btn-block', 'escape' => false]) ?></div>
+                                                <div class="col-4"><?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $warehouse->id], ['class' => 'btn btn-warning btn-block', 'escape' => false, 'confirm' => __('ยืนยันการลบคลังสินค้า #{0}?', $warehouse->name)]) ?></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
