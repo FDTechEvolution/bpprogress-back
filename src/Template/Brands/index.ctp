@@ -122,7 +122,7 @@
                             <div class="form-group row">
                                 <label class="col-3 col-form-label">รายละเอียดเพิ่มเติม</label>
                                 <div class="col-9">
-                                    <?php echo $this->Form->textarea('description', ['id' => 'edit_description', 'class' => 'form-control', 'label' => false]); ?>
+                                    <?php echo $this->Form->textarea('description', ['id' => 'edit_description', 'maxlength' => 255, 'class' => 'form-control', 'label' => false]); ?>
                                 </div>
                             </div>
                             <?php echo $this->Form->control('brandID', ['id' => 'edit_brandID' ,'class' => 'form-control', 'type' => 'hidden', 'label' => false]); ?>
