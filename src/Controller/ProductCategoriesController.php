@@ -102,6 +102,27 @@ class ProductCategoriesController extends AppController
         $this->set(compact('productCategory'));
     }
 
+    public function status()
+    {
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $postData = $this->request->getData();
+            $this->log($postData, 'debug');
+            $id = $postData['cateID'];
+            $productCategory = $this->ProductCategories->get($id, [
+                'contain' => [],
+            ]);
+
+            $productCategory->isactive = $postData['isactive'];
+            if ($this->ProductCategories->save($productCategory)) {
+                $this->Flash->success(__('The product category has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The product category could not be saved. Please, try again.'));
+        }
+        $this->set(compact('productCategory'));
+    }
+
     /**
      * Delete method
      *

@@ -16,7 +16,6 @@
                                     <span class="badge badge-warning badge-pill float-right">2</span>
                                     <span> Dashboards </span>
                                 </a>
-                                
                             </li>
 
                             <li class="mm-active">
@@ -41,6 +40,9 @@
                                     <li>
                                         <a href="apps-tickets.html">ย้ายสินค้า</a>
                                     </li>
+                                    <li>
+                                        <?=$this->Html->link('ยี่ห้อสินค้า',['controller'=>'brands'])?>
+                                    </li>
                                 </ul>
                             </li>
 
@@ -57,7 +59,6 @@
                                     <li>
                                         <?=$this->Html->link('บริษัทขนส่ง',['controller'=>'shippings'])?>
                                     </li>
-                                    
                                 </ul>
                             </li>
 

@@ -82,7 +82,7 @@
                             <div class="form-group row">
                                 <label class="col-3 col-form-label">รายละเอียด</label>
                                 <div class="col-9">
-                                    <?php echo $this->Form->textarea('description', ['class' => 'form-control', 'label' => false]); ?>
+                                    <?php echo $this->Form->textarea('description', ['class' => 'form-control', 'maxlength' => 255, 'label' => false]); ?>
                                 </div>
                             </div>
                             <?php echo $this->Form->control('shop_id', ['id' => 'add_shopID', 'type' => 'hidden', 'value' => '1111']); ?>
@@ -125,7 +125,7 @@
                             <div class="form-group row">
                                 <label class="col-3 col-form-label">รายละเอียด</label>
                                 <div class="col-9">
-                                    <?php echo $this->Form->textarea('description', ['id' => 'edit_description', 'class' => 'form-control', 'label' => false]); ?>
+                                    <?php echo $this->Form->textarea('description', ['id' => 'edit_description', 'maxlength' => 255, 'class' => 'form-control', 'label' => false]); ?>
                                 </div>
                             </div>
                             <?php echo $this->Form->control('shop_id', ['id' => 'edit_shopID', 'type' => 'hidden']); ?>
@@ -158,7 +158,7 @@
                 ยืนยันการเปลี่ยนแปลงสถานะ ?
             </div>
             <div class="modal-footer">
-            <?= $this->Form->create('wh', ['url'=>['controller'=>'warehouses', 'action'=>'edit'], 'class' => 'form-horizontal', 'role' => 'form','id'=>'frm_stat']) ?>
+            <?= $this->Form->create('wh', ['url'=>['controller'=>'warehouses', 'action'=>'status'], 'class' => 'form-horizontal', 'role' => 'form','id'=>'frm_stat']) ?>
                 <fieldset>
                     <?php echo $this->Form->control('WH_ID', ['id' => 'stat_WH_ID', 'class' => 'form-control', 'label' => false, 'type' => 'hidden']); ?>
                     <?php echo $this->Form->control('isactive', ['id' => 'stat_isactive','class' => 'form-control', 'label' => false, 'type' => 'hidden']); ?>
