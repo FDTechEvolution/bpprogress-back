@@ -105,13 +105,13 @@ class BrandsController extends AppController
     public function status()
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $postData = $this->request->getData();
-            $id = $postData['cateID'];
+            $this->log($postData, 'debug');
+            $id = $postData['brandID'];
             $Brand = $this->Brands->get($id, [
                 'contain' => [],
             ]);
 
-            $Brands->isactive = $postData['isactive'];
+            $Brand->isactive = $postData['isactive'];
             if ($this->Brands->save($Brand)) {
                 $this->Flash->success(__('The product brand has been saved.'));
 

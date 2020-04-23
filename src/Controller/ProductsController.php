@@ -24,7 +24,9 @@ class ProductsController extends AppController
         ];
         $products = $this->paginate($this->Products);
 
-        $this->set(compact('products'));
+        $brands = $this->Products->Brands->find('list', ['limit' => 200]);
+        $productCategories = $this->Products->ProductCategories->find('list', ['limit' => 200]);
+        $this->set(compact('products', 'brands', 'productCategories'));
     }
 
     /**

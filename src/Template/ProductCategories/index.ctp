@@ -11,10 +11,10 @@
         <div class="card-box">
             <div class="row pb-3">
                 <div class="col-md-12 text-right">
-                    <?= $this->Html->link(__('<i class="mdi mdi-account-multiple-plus"></i> เพิ่มประเภทสินค้า'), ['action' => 'add'], ['class' => 'btn btn-primary btn-rounded w-md waves-effect waves-light m-b-5', 'data-toggle' => 'modal', 'data-target' => '#addCateModal', 'escape' => false]) ?>
+                    <?= $this->Html->link(__('<i class="mdi mdi-plus-circle-outline"></i> เพิ่มประเภทสินค้า'), ['action' => 'add'], ['class' => 'btn btn-primary btn-rounded w-md waves-effect waves-light m-b-5', 'data-toggle' => 'modal', 'data-target' => '#addCateModal', 'escape' => false]) ?>
                 </div>
             </div>
-            <table cellpadding="0" cellspacing="0" id="datatable-buttons" class="table table-striped table-bordered">
+            <table id="datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr style="background-color: #3b73da91; color: #000;">
                         <th scope="col" style="width: 15%;"><?= __('ประเภท') ?></th>
@@ -24,16 +24,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($productCategories as $productCategory): ?>
+                    <?php foreach ($productCategories as $index=>$productCategory): ?>
                     <tr>
                         <td><?= h($productCategory->name) ?></td>
                         <td><?= h($productCategory->description) ?></td>
                         <td class="text-center">
-                            <?php if(h($productCategory->isactive == 'Y')) { ?>
-                                <?= $this->Form->button(__('<i class="mdi mdi-earth"></i> เปิดใช้งาน'), ['class' => 'btn btn-success waves-effect waves-light', 'data-toggle' => 'modal', 'data-target' => '#statCateModal', 'data-id' => $productCategory->id, 'data-value' => 'N', 'escape' => false, 'title'=>'คลิกเพื่อปิดการใช้งาน']) ?>
-                            <?php }else{ ?>
-                                <?= $this->Form->button(__('<i class="mdi mdi-earth-off"></i> ปิดการใช้งาน'), ['class' => 'btn btn-outline-secondary', 'data-toggle' => 'modal', 'data-target' => '#statCateModal', 'data-id' => $productCategory->id, 'data-value' => 'Y', 'escape' => false, 'title'=>'คลิกเพื่อเปิดใช้งาน']) ?>
-                            <?php } ?>
+                            <?= $this->Form->create('changStatForm', ['url'=>['controller'=>'productCategories', 'action'=>'status'], 'class' => 'form-horizontal', 'role' => 'form', 'id'=>'frm_stat-'.$index.'']) ?>
+                                <fieldset>
+                                    <?php if(h($productCategory->isactive == 'Y')) { ?>
+                                        <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-Y-'.$index.'', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'N', 'escape' => false, 'checked' => 'checked', 'onchange' => 'this.form.submit()']) ?>
+                                    <?php }else{ ?>
+                                        <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-N-'.$index.'', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'Y', 'escape' => false, 'onchange' => 'this.form.submit()']) ?>
+                                    <?php } ?>
+                                    <?php echo $this->Form->control('cateID', ['id' => 'stat_cateID-'.$index.'', 'class' => 'form-control', 'label' => false, 'type' => 'hidden', 'value' => $productCategory->id]); ?>
+                                </fieldset>
+                            <?= $this->Form->end() ?>
                         </td>
                         <?php
                             $modalCate = [
@@ -47,7 +52,7 @@
                             ];
                         ?>
                         <td class="actions text-center">
-                            <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $productCategory->id], ['class' => 'btn btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?>
+                            <!-- <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $productCategory->id], ['class' => 'btn btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?> -->
                             <?= $this->Html->link(__('<i class="mdi mdi-tooltip-edit"></i> แก้ไข'), ['action' => 'edit', $productCategory->id], $modalCate) ?>
                             <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $productCategory->id], ['confirm' => __('โปรดตรวจสอบ!!...รายการสินค้าที่อยู่ในหมวดหมู่นี้ทั้งหมดจะถูกลบไปด้วย\n ยืนยันการลบ #{0}?', $productCategory->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
                         </td>
@@ -142,35 +147,13 @@
     </div>
 </div>
 
+<?= $this->Html->script('assets/jquery.min.js') ?>
+<?= $this->Html->script('assets/libs/switchery/switchery.min.js') ?>
 
-<!-- Change Stat categories -->
-<div class="modal fade" id="statCateModal" tabindex="-1" role="dialog" aria-labelledby="statCateModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="statCateModalLabel">เปลี่ยนสถานะ</h5>
-            </div>
-            <div class="modal-body">
-                ยืนยันการเปลี่ยนแปลงสถานะ ?
-            </div>
-            <div class="modal-footer">
-            <?= $this->Form->create('wh', ['url'=>['controller'=>'productCategories', 'action'=>'status'], 'class' => 'form-horizontal', 'role' => 'form','id'=>'frm_stat']) ?>
-                <fieldset>
-                    <?php echo $this->Form->control('cateID', ['id' => 'stat_cateID', 'class' => 'form-control', 'label' => false, 'type' => 'hidden']); ?>
-                    <?php echo $this->Form->control('isactive', ['id' => 'stat_isactive','class' => 'form-control', 'label' => false, 'type' => 'hidden']); ?>
-                </fieldset>
-                <div class="form-group row">
-                    <div class="col-12 text-center">
-                        <?= $this->Form->button(__('<i class=" mdi mdi-auto-upload"></i> CONFIRM'), ['class' => 'btn btn-primary btn-custom waves-effect w-md waves-light m-b-5', 'escape' => false]) ?>
-                        <?= $this->Form->button(__('<i class="mdi mdi-close-circle"></i> Cancel'), ['class' => 'btn btn-secondary btn-custom waves-effect w-md waves-light m-b-5', 'data-dismiss' => 'modal', 'escape' => false]) ?>
-                    </div>
-                </div>
-            <?= $this->Form->end() ?>
-            </div>
-        </div>
-    </div>
-</div>
+<?= $this->Html->script('assets/libs/datatables/jquery.dataTables.min.js') ?>
+<?= $this->Html->script('assets/libs/datatables/dataTables.bootstrap4.js') ?>
 
+<?= $this->Html->script('assets/jquery.core.js') ?>
 
 <script>
     $(document).ready(function () {
@@ -184,13 +167,7 @@
             $('#frm_edit textarea[id="edit_description"]').val(description);
         });
 
-        $('#statCateModal').on('show.bs.modal', function (e) {
-            var warehouseId = $(e.relatedTarget).data('id');
-            var stat = $(e.relatedTarget).data('value');
-            
-            $(e.currentTarget).find('input[id="stat_cateID"]').val(warehouseId);
-            $('#frm_stat input[id="stat_isactive"]').val(stat);
-        });
+        $.noConflict();
+        var table = $('#datatable').DataTable();
     });
-
 </script>

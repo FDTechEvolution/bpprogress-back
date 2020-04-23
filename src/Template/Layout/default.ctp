@@ -13,7 +13,13 @@
         <?= $this->Html->css('assets/css/icons.min.css')?>
         <?= $this->Html->css('assets/css/app.min.css')?>
 
-        <?= $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js') ?>
+        <?= $this->Html->css('assets/libs/datatables/dataTables.bootstrap4.css') ?>
+        <?= $this->Html->css('assets/switchery/switchery.min.css')?>
+
+        <?= $this->Html->css('assets/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') ?>
+        <?= $this->Html->css('assets/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') ?>
+
+        <?= $this->Html->script('assets/modernizr.min.js') ?>
 
 
     </head>

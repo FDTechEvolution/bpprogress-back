@@ -24,16 +24,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($warehouses as $warehouse): ?>
+                    <?php foreach ($warehouses as $index => $warehouse): ?>
                     <tr>
                         <td><?= h($warehouse->name) ?></td>
                         <td><?= h($warehouse->description) ?></td>
                         <td class="text-center">
-                            <?php if(h($warehouse->isactive == 'Y')) { ?>
-                                <?= $this->Form->button(__('<i class="mdi mdi-earth"></i> เปิดใช้งาน'), ['class' => 'btn btn-success waves-effect waves-light', 'data-toggle' => 'modal', 'data-target' => '#statWHModal', 'data-id' => $warehouse->id, 'data-value' => 'N', 'escape' => false, 'title'=>'คลิกเพื่อปิดการใช้งาน']) ?>
-                            <?php }else{ ?>
-                                <?= $this->Form->button(__('<i class="mdi mdi-earth-off"></i> ปิดการใช้งาน'), ['class' => 'btn btn-outline-secondary', 'data-toggle' => 'modal', 'data-target' => '#statWHModal', 'data-id' => $warehouse->id, 'data-value' => 'Y', 'escape' => false, 'title'=>'คลิกเพื่อเปิดใช้งาน']) ?>
-                            <?php } ?>
+                            <?= $this->Form->create('changStatForm', ['url'=>['controller'=>'warehouses', 'action'=>'status'], 'class' => 'form-horizontal', 'role' => 'form', 'id'=>'frm_stat-'.$index.'']) ?>
+                                <fieldset>
+                                    <?php if(h($warehouse->isactive == 'Y')) { ?>
+                                        <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-Y-'.$index.'', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'N', 'escape' => false, 'checked' => 'checked', 'onchange' => 'this.form.submit()']) ?>
+                                    <?php }else{ ?>
+                                        <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-N-'.$index.'', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'Y', 'escape' => false, 'onchange' => 'this.form.submit()']) ?>
+                                    <?php } ?>
+                                    <?php echo $this->Form->control('WH_ID', ['id' => 'stat_WH_ID-'.$index.'', 'class' => 'form-control', 'label' => false, 'type' => 'hidden', 'value' => $warehouse->id]); ?>
+                                </fieldset>
+                            <?= $this->Form->end() ?>
                         </td>
                         <?php
                             $modalWH = [
@@ -146,40 +151,16 @@
     </div>
 </div>
 
+<?= $this->Html->script('assets/jquery.min.js') ?>
+<?= $this->Html->script('assets/libs/switchery/switchery.min.js') ?>
 
-<!-- Change Stat warehouse -->
-<div class="modal fade" id="statWHModal" tabindex="-1" role="dialog" aria-labelledby="statWHModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="statWHModalLabel">เปลี่ยนสถานะ</h5>
-            </div>
-            <div class="modal-body">
-                ยืนยันการเปลี่ยนแปลงสถานะ ?
-            </div>
-            <div class="modal-footer">
-            <?= $this->Form->create('wh', ['url'=>['controller'=>'warehouses', 'action'=>'status'], 'class' => 'form-horizontal', 'role' => 'form','id'=>'frm_stat']) ?>
-                <fieldset>
-                    <?php echo $this->Form->control('WH_ID', ['id' => 'stat_WH_ID', 'class' => 'form-control', 'label' => false, 'type' => 'hidden']); ?>
-                    <?php echo $this->Form->control('isactive', ['id' => 'stat_isactive','class' => 'form-control', 'label' => false, 'type' => 'hidden']); ?>
-                </fieldset>
-                <div class="form-group row">
-                    <div class="col-12 text-center">
-                        <?= $this->Form->button(__('<i class=" mdi mdi-auto-upload"></i> CONFIRM'), ['class' => 'btn btn-primary btn-custom waves-effect w-md waves-light m-b-5', 'escape' => false]) ?>
-                        <?= $this->Form->button(__('<i class="mdi mdi-close-circle"></i> Cancel'), ['class' => 'btn btn-secondary btn-custom waves-effect w-md waves-light m-b-5', 'data-dismiss' => 'modal', 'escape' => false]) ?>
-                    </div>
-                </div>
-            <?= $this->Form->end() ?>
-            </div>
-        </div>
-    </div>
-</div>
+<?= $this->Html->script('assets/libs/datatables/jquery.dataTables.min.js') ?>
+<?= $this->Html->script('assets/libs/datatables/dataTables.bootstrap4.js') ?>
 
-
+<?= $this->Html->script('assets/jquery.core.js') ?>
 
 <script>
     $(document).ready(function () {
-
         $('#editWHModal').on('show.bs.modal', function (e) {
             var warehouseId = $(e.relatedTarget).data('id');
             var name = $(e.relatedTarget).data('name');
@@ -192,12 +173,7 @@
             $('#frm_edit input[id="edit_shopID"]').val(shopId);
         });
 
-        $('#statWHModal').on('show.bs.modal', function (e) {
-            var warehouseId = $(e.relatedTarget).data('id');
-            var stat = $(e.relatedTarget).data('value');
-            
-            $(e.currentTarget).find('input[id="stat_WH_ID"]').val(warehouseId);
-            $('#frm_stat input[id="stat_isactive"]').val(stat);
-        });
+        $.noConflict();
+        var table = $('#datatable').DataTable();
     });
 </script>

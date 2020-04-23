@@ -11,7 +11,7 @@
         <div class="card-box">
             <div class="row pb-3">
                 <div class="col-md-12 text-right">
-                    <?= $this->Html->link(__('<i class="mdi mdi-account-multiple-plus"></i> เพิ่มสินค้า'), ['action' => 'add'], ['class' => 'btn btn-primary btn-rounded w-md waves-effect waves-light m-b-5', 'data-toggle' => 'modal', 'data-target' => '#addBrandModal', 'escape' => false]) ?>
+                    <?= $this->Html->link(__('<i class="mdi mdi-account-multiple-plus"></i> เพิ่มสินค้า'), ['action' => 'add'], ['class' => 'btn btn-primary btn-rounded w-md waves-effect waves-light m-b-5', 'data-toggle' => 'modal', 'data-target' => '#addProductModal', 'escape' => false]) ?>
                 </div>
             </div>
             <table cellpadding="0" cellspacing="0" id="datatable-buttons" class="table table-striped table-bordered">
@@ -64,29 +64,67 @@
 </div>
 
 
-<!-- ADD CATEGORY -->
-<div class="modal fade" id="addBrandModal" tabindex="-1" role="dialog" aria-labelledby="addCateModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 45%;">
+<!-- ADD PRODUCT -->
+<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 75%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addBrandModalLabel">เพิ่มรายการยี่ห้อสินค้า</h5>
+                <h5 class="modal-title" id="addProductModalLabel">เพิ่มรายการสินค้า</h5>
             </div>
             <div class="modal-body">
-                <?= $this->Form->create('partner', ['url'=>['controller'=>'brands', 'action'=>'add'], 'class' => 'form-horizontal', 'role' => 'form']) ?>
+                <?= $this->Form->create('partner', ['url'=>['controller'=>'products', 'action'=>'add'], 'class' => 'form-horizontal', 'role' => 'form']) ?>
                 <fieldset>
-                    <div class="row">
-                        <div class="col-12" style="padding: 20px;">
-                            <div class="form-group row">
-                                <label class="col-3 col-form-label">ชื่อยี่ห้อสินค้า</label>
-                                <div class="col-9">
-                                    <?php echo $this->Form->control('name', ['class' => 'form-control', 'label' => false]); ?>
+                    <div class="card-box">
+                        <div class="row">
+                            <div class="col-12" style="padding: 20px;">
+                                <div class="form-group row">
+                                    <label class="col-3 col-form-label">ชื่อสินค้า</label>
+                                    <div class="col-9">
+                                        <?php echo $this->Form->control('name', ['class' => 'form-control', 'label' => false]); ?>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-3 col-form-label">ประเภทสินค้า</label>
+                                    <div class="col-9">
+                                        <?php echo $this->Form->control('product_category_id', ['options' => $productCategories, 'class' => 'form-control', 'label' => false]); ?>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-12 col-form-label">ข้อมูลของสินค้า</label>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <label class="col-12 col-form-label">ยี่ห้อสินค้า</label>
+                                            <div class="col-12">
+                                                <?php echo $this->Form->control('brand_id', ['options' => $brands, 'class' => 'form-control', 'label' => false]); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <label class="col-12 col-form-label text-center">ขายปลีก</label>
+                                            <div class="col-12">
+                                                <?php echo $this->Form->select('isretail', ['Y' => 'เปิด','N' => 'ปิด'], ['class' => 'form-control', 'label' => false]); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <label class="col-12 col-form-label text-center">ขายส่ง</label>
+                                            <div class="col-12">
+                                                <?php echo $this->Form->select('iswholesale', ['Y' => 'เปิด','N' => 'ปิด'], ['class' => 'form-control', 'label' => false]); ?>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-3 col-form-label">รายละเอียดเพิ่มเติม</label>
-                                <div class="col-9">
-                                    <?php echo $this->Form->textarea('description', ['class' => 'form-control', 'maxlength' => 255, 'label' => false]); ?>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="card-box">
+                        <div class="row">
+                            <div class="col-12">
+
                             </div>
                         </div>
                     </div>

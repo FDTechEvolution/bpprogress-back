@@ -106,7 +106,6 @@ class ProductCategoriesController extends AppController
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
             $postData = $this->request->getData();
-            $this->log($postData, 'debug');
             $id = $postData['cateID'];
             $productCategory = $this->ProductCategories->get($id, [
                 'contain' => [],
