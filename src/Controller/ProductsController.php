@@ -93,6 +93,67 @@ class ProductsController extends AppController
         $this->set(compact('product', 'brands', 'productCategories'));
     }
 
+    public function setqty() {
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $postData = $this->request->getData();
+            $id = $postData['productID'];
+            $Product = $this->Products->get($id, [
+                'contain' => [],
+            ]);
+
+            $Product->qty = $postData['qty'];
+            if ($this->Products->save($Product)) {
+                $this->Flash->success(__('The product brand has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The product brand could not be saved. Please, try again.'));
+        }
+        $this->set(compact('product'));
+    }
+
+    public function setprice()
+    {
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $postData = $this->request->getData();
+            $this->log($postData, 'debug');
+            $id = $postData['productID'];
+            $Product = $this->Products->get($id, [
+                'contain' => [],
+            ]);
+
+            $Product->price = $postData['price'];
+            $Product->special_price = $postData['special_price'];
+            if ($this->Products->save($Product)) {
+                $this->Flash->success(__('The product brand has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The product brand could not be saved. Please, try again.'));
+        }
+        $this->set(compact('brand'));
+    }
+
+    public function status()
+    {
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $postData = $this->request->getData();
+            $id = $postData['productID'];
+            $Product = $this->Products->get($id, [
+                'contain' => [],
+            ]);
+
+            $Product->isactive = $postData['isactive'];
+            if ($this->Products->save($Product)) {
+                $this->Flash->success(__('The product brand has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The product brand could not be saved. Please, try again.'));
+        }
+        $this->set(compact('brand'));
+    }
+
     /**
      * Delete method
      *

@@ -105,7 +105,7 @@ class BrandsController extends AppController
     public function status()
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $this->log($postData, 'debug');
+            $postData = $this->request->getData();
             $id = $postData['brandID'];
             $Brand = $this->Brands->get($id, [
                 'contain' => [],

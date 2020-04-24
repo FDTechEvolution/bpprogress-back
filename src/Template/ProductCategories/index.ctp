@@ -17,10 +17,10 @@
             <table id="datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr style="background-color: #3b73da91; color: #000;">
-                        <th scope="col" style="width: 15%;"><?= __('ประเภท') ?></th>
-                        <th scope="col" style="width: 40%;"><?= __('รายละเอียด') ?></th>
-                        <th scope="col" style="width: 15%;" class="text-center"><?= __('สถานะ') ?></th>
-                        <th scope="col" style="width: 30%;" class="actions text-center"><?= __('การจัดการ') ?></th>
+                        <th scope="col" style="width: 25%;"><?= __('ประเภท') ?></th>
+                        <th scope="col" style="width: 45%;"><?= __('รายละเอียด') ?></th>
+                        <th scope="col" style="width: 10%;" class="text-center"><?= __('สถานะ') ?></th>
+                        <th scope="col" style="width: 20%;" class="actions text-center"><?= __('การจัดการ') ?></th>
                     </tr>
                 </thead>
                 <tbody>
