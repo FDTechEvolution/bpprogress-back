@@ -93,6 +93,7 @@ class ComposerStaticInitfcbb594b7ffdd4541bdf36848b9c7a16
         ),
         'C' => 
         array (
+            'Cors\\' => 5,
             'Composer\\XdebugHandler\\' => 23,
             'Composer\\Spdx\\' => 14,
             'Composer\\Semver\\' => 16,
@@ -251,6 +252,10 @@ class ComposerStaticInitfcbb594b7ffdd4541bdf36848b9c7a16
         'DebugKit\\' => 
         array (
             0 => __DIR__ . '/..' . '/cakephp/debug_kit/src',
+        ),
+        'Cors\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ozee31/cakephp-cors/src',
         ),
         'Composer\\XdebugHandler\\' => 
         array (

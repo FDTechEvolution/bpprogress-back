@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -12,6 +13,7 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App\Controller;
 
 use Cake\Controller\Controller;
@@ -25,19 +27,19 @@ use Cake\Event\Event;
  *
  * @link https://book.cakephp.org/3/en/controllers.html#the-app-controller
  */
-class AppController extends Controller
-{
+class AppController extends Controller {
+
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
 
         $controllerName = $this->request->getParam('controller');
         $actionName = $this->request->getParam('action');
-        
-        if(!$this->Utils->startsWith(strtolower($controllerName), 'sv')){
-            $this->MyAuthen->authen($controllerName,$actionName);
+
+        if (!$this->Utils->startsWith(strtolower($controllerName), 'sv')) {
+            $this->MyAuthen->authen($controllerName, $actionName);
         }
-        
     }
+
 
     /**
      * Initialization hook method.
@@ -48,8 +50,7 @@ class AppController extends Controller
      *
      * @return void
      */
-    public function initialize()
-    {
+    public function initialize() {
         parent::initialize();
 
         $this->loadComponent('RequestHandler', [
@@ -59,8 +60,8 @@ class AppController extends Controller
 
         $this->loadComponent('Cookie');
         $this->loadComponent('Utils');
-        $this->loadComponent('MyAuthen',[
-            'loginRedirect'=>[
+        $this->loadComponent('MyAuthen', [
+            'loginRedirect' => [
                 'controller' => 'login',
                 'action' => 'index'
             ]
@@ -72,4 +73,5 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
     }
+
 }

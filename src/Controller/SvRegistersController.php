@@ -18,7 +18,7 @@ class SvRegistersController extends AppController
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
-        $this->viewBuilder()->setLayout('ajax');
+        $this->viewBuilder()->setLayout('json');
 
         $this->Users = TableRegistry::get('Users');
         $this->Otps = TableRegistry::get('user_otps');
