@@ -14,7 +14,7 @@
                     <?= $this->Html->link(__('< ย้อนกลับ'), ['action' => 'index'], ['class' => 'btn btn-primary btn-sm btn-rounded w-md waves-effect waves-light m-b-5', 'escape' => false]) ?>
                 </div>
             </div>
-            <?= $this->Form->create('partner', ['url'=>['controller'=>'products', 'action'=>'add'], 'class' => 'form-horizontal', 'role' => 'form']) ?>
+            <?= $this->Form->create('addproduct', ['url'=>['controller'=>'products', 'action'=>'add'], 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'add-product']) ?>
                 <fieldset>
                     <div class="card-box">
                         <div class="row">
@@ -114,28 +114,41 @@
                                     <label class="col-2 col-form-label">รายละเอียดโดยย่อ</label>
                                     <div class="col-9">
                                         <?php echo $this->Form->textarea('short_description',['id' => 'elm1', 'maxlength' => 255]) ?>
-                                        <!-- <textarea id="elm1" name=""></textarea> -->
                                     </div>
                                 </div>
                                 <div class="row pt-2 py-2 px-3">
                                     <label class="col-2 col-form-label">รายละเอียดสินค้าแบบเต็ม</label>
                                     <div class="col-9">
-                                        <?php echo $this->Form->textarea('description',['id' => 'elm1']) ?>
-                                        <!-- <textarea id="elm1" name=""></textarea> -->
+                                        <?php echo $this->Form->textarea('description',['id' => 'elm2']) ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </fieldset>
-                <div class="form-group row">
-                    <div class="col-12 text-center">
-                        <?= $this->Form->button(__('<i class="mdi mdi-content-save"></i> SAVE'), ['class' => 'btn btn-primary btn-custom waves-effect w-md waves-light m-b-5', 'escape' => false]) ?>
-                        <?= $this->Form->button(__('<i class="mdi mdi-close-circle"></i> Cancel'), ['class' => 'btn btn-secondary btn-custom waves-effect w-md waves-light m-b-5', 'data-dismiss' => 'modal', 'escape' => false]) ?>
+            <?= $this->Form->end() ?>
+
+            <div class="card-box">
+                <div class="row">
+                    <div class="col-12 pt-0" style="padding: 20px;">
+                        <div class="form-group row pb-0 mb-2">
+                            <label class="col-12 col-form-label">รูปภาพสินค้า</label>
+                        </div>
+                        <hr>
+                        <?= $this->Form->create('productimage', ['url'=>['controller'=>'products', 'action'=>'uploadproductimage'], 'id' => 'dropzone', 'class' => 'form-horizontal dropzone', 'role' => 'form', 'enctype' => 'multipart/form-data']) ?>
+                            <div class="fallback">
+                                <input name="file" type="file" multiple />
+                            </div>
+                        <?= $this->Form->end() ?>
                     </div>
                 </div>
-            <?= $this->Form->end() ?>
+            </div>
         
+            <div class="form-group row">
+                <div class="col-12 text-center">
+                    <?= $this->Form->button(__('<i class="mdi mdi-content-save"></i> บันทึก'), ['id' => 'btn-add-product', 'class' => 'btn btn-primary btn-custom waves-effect w-md waves-light m-b-5', 'escape' => false]) ?>
+                </div>
+            </div>
     </div>
 </div>
 
@@ -148,12 +161,16 @@
     .mce-menubar {
         display: none;
     }
+    .dropzone {
+        border: 2px dashed rgba(0,0,0,0.3);
+    }
 </style>
 
 <?= $this->Html->script('assets/jquery.min.js') ?>
 <?= $this->Html->script('assets/libs/switchery/switchery.min.js') ?>
 
 <?= $this->Html->script('assets/libs/tinymce/tinymce.min.js') ?>
+<?= $this->Html->script('assets/libs/dropzone/dropzone.js') ?>
 
 <?= $this->Html->script('assets/jquery.core.js') ?>
 
@@ -183,6 +200,29 @@
             });
         }
 
+        if($("#elm2").length > 0){
+            tinymce.init({
+                selector: "textarea#elm2",
+                theme: "modern",
+                height:250,
+                plugins: [
+                    "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                    "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                    "save table contextmenu directionality emoticons template paste textcolor"
+                ],
+                toolbar: "bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor emoticons",
+                style_formats: [
+                    {title: 'Bold text', inline: 'b'},
+                    {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+                    {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+                    {title: 'Example 1', inline: 'span', classes: 'example1'},
+                    {title: 'Example 2', inline: 'span', classes: 'example2'},
+                    {title: 'Table styles'},
+                    {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+                ]
+            });
+        }
+
         $('#editBrandModal').on('show.bs.modal', function (e) {
             var brandId = $(e.relatedTarget).data('id');
             var name = $(e.relatedTarget).data('name');
@@ -194,4 +234,12 @@
         });
     });
 
+</script>
+
+<script>
+    var form = document.getElementById("add-product");
+
+    document.getElementById("btn-add-product").addEventListener("click", function () {
+        form.submit();
+    });
 </script>

@@ -83,8 +83,8 @@
                                 <fieldset>
                                 <?php if (h($product->isactive == 'Y')) { ?>
                                     <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-Y-' . $index . '', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'N', 'escape' => false, 'checked' => 'checked', 'onchange' => 'this.form.submit()']) ?>
-    <?php } else { ?>
-        <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-N-' . $index . '', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'Y', 'escape' => false, 'onchange' => 'this.form.submit()']) ?>
+                                <?php } else { ?>
+                                    <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-N-' . $index . '', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'Y', 'escape' => false, 'onchange' => 'this.form.submit()']) ?>
                                 <?php } ?>
                                 <?php echo $this->Form->control('productID', ['id' => 'stat_product_ID-' . $index . '', 'class' => 'form-control', 'label' => false, 'type' => 'hidden', 'value' => $product->id]); ?>
                                 </fieldset>
@@ -92,12 +92,12 @@
                             </td>
 
                             <td class="actions text-center">
-    <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $product->id], ['class' => 'btn btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?>
-    <?= $this->Html->link(__('<i class="mdi mdi-tooltip-edit"></i> แก้ไข'), ['action' => 'edit', $product->id], ['class' => 'btn btn-icon waves-effect waves-light btn-success m-b-5', 'escape' => false]) ?>
-    <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $product->id], ['confirm' => __('โปรดตรวจสอบ!!...รายการสินค้าที่อยู่ในยี่ห้อนี้ทั้งหมดจะถูกลบไปด้วย\n ยืนยันการลบ #{0}?', $product->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
+                                <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $product->id], ['class' => 'btn btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?>
+                                <?= $this->Html->link(__('<i class="mdi mdi-tooltip-edit"></i> แก้ไข'), ['action' => 'edit', $product->id], ['class' => 'btn btn-icon waves-effect waves-light btn-success m-b-5', 'escape' => false]) ?>
+                                <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $product->id], ['confirm' => __('โปรดตรวจสอบ!!...รายการสินค้าที่อยู่ในยี่ห้อนี้ทั้งหมดจะถูกลบไปด้วย\n ยืนยันการลบ #{0}?', $product->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
                             </td>
                         </tr>
-<?php endforeach; ?>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -126,7 +126,7 @@
 <?php echo $this->Form->control('qty', ['id' => 'edit_qty', 'type' => 'number', 'class' => 'form-control', 'label' => false]); ?>
                                 </div>
                             </div>
-                        <?php echo $this->Form->control('productID', ['id' => 'edit_productID', 'class' => 'form-control', 'type' => 'hidden', 'label' => false]); ?>
+                        <?php echo $this->Form->control('productID', ['id' => 'edit_product_qty', 'class' => 'form-control', 'type' => 'hidden', 'label' => false]); ?>
                         </div>
                     </div>
                 </fieldset>
@@ -152,7 +152,7 @@
                 <h5 class="modal-title" id="editPriceProductModalLabel">แก้ไขราคาสินค้า <span id="product_price_name"></span></h5>
             </div>
             <div class="modal-body">
-<?= $this->Form->create('productQty', ['url' => ['controller' => 'products', 'action' => 'setprice'], 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'frm_price_edit']) ?>
+                <?= $this->Form->create('productQty', ['url' => ['controller' => 'products', 'action' => 'setprice'], 'class' => 'form-horizontal', 'role' => 'form', 'id' => 'frm_price_edit']) ?>
                 <fieldset>
                     <div class="row">
                         <div class="col-12 px-3">
@@ -168,21 +168,21 @@
                             <div class="form-group row pt-1">
                                 <label class="col-4 col-form-label">แก้ไขราคาพิเศษ : </label>
                                 <div class="col-5">
-<?php echo $this->Form->control('special_price', ['id' => 'edit_special_price', 'type' => 'number', 'class' => 'form-control', 'label' => false]); ?>
+                                    <?php echo $this->Form->control('special_price', ['id' => 'edit_special_price', 'type' => 'number', 'class' => 'form-control', 'label' => false]); ?>
                                 </div>
                             </div>
-                        <?php echo $this->Form->control('productID', ['id' => 'edit_productID', 'class' => 'form-control', 'type' => 'hidden', 'label' => false]); ?>
+                        <?php echo $this->Form->control('productID', ['id' => 'edit_product_price', 'class' => 'form-control', 'type' => 'hidden', 'label' => false]); ?>
                         </div>
                     </div>
                 </fieldset>
                 <br>
                 <div class="form-group row">
                     <div class="col-12 text-center">
-<?= $this->Form->button(__('<i class="mdi mdi-content-save"></i> SAVE'), ['class' => 'btn btn-primary btn-custom waves-effect w-md waves-light m-b-5', 'escape' => false]) ?>
-<?= $this->Form->button(__('<i class="mdi mdi-close-circle"></i> Cancel'), ['class' => 'btn btn-secondary btn-custom waves-effect w-md waves-light m-b-5', 'data-dismiss' => 'modal', 'escape' => false]) ?>
+                        <?= $this->Form->button(__('<i class="mdi mdi-content-save"></i> SAVE'), ['class' => 'btn btn-primary btn-custom waves-effect w-md waves-light m-b-5', 'escape' => false]) ?>
+                        <?= $this->Form->button(__('<i class="mdi mdi-close-circle"></i> Cancel'), ['class' => 'btn btn-secondary btn-custom waves-effect w-md waves-light m-b-5', 'data-dismiss' => 'modal', 'escape' => false]) ?>
                     </div>
                 </div>
-<?= $this->Form->end() ?>
+                <?= $this->Form->end() ?>
             </div>
         </div>
     </div>

@@ -58,13 +58,23 @@ class ProductsController extends AppController
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'upload-product-image?id='.$product->id]);
             }
             $this->Flash->error(__('The product could not be saved. Please, try again.'));
         }
         $brands = $this->Products->Brands->find('list', ['limit' => 200]);
         $productCategories = $this->Products->ProductCategories->find('list', ['limit' => 200]);
         $this->set(compact('product', 'brands', 'productCategories'));
+    }
+
+    public function uploadproductimage ($id = null) {
+        $postData = $this->request->getData();
+
+        if ($this->request->is(['post', 'ajax'])) {
+            foreach($postData as $pdata) {
+                $this->log($pdata, 'debug');
+            }
+        }
     }
 
     /**

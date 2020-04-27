@@ -15,6 +15,7 @@
 
         <?= $this->Html->css('assets/libs/datatables/dataTables.bootstrap4.css') ?>
         <?= $this->Html->css('assets/switchery/switchery.min.css')?>
+        <?= $this->Html->css('assets/libs/dropzone/dropzone.min.css') ?>
 
         <?= $this->Html->css('assets/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') ?>
         <?= $this->Html->css('assets/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') ?>
