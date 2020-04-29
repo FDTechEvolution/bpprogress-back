@@ -18,7 +18,7 @@
  */
 require __DIR__ . '/paths.php';
 require __DIR__ . '/constants.php';
-
+require __DIR__ . '/app_config.php';
 /*
  * Bootstrap CakePHP.
  *

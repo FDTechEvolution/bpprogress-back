@@ -46,7 +46,6 @@ class ProductsTable extends Table
 
         $this->belongsTo('Brands', [
             'foreignKey' => 'brand_id',
-            'joinType' => 'INNER',
         ]);
         $this->belongsTo('ProductCategories', [
             'foreignKey' => 'product_category_id',

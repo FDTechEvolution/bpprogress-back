@@ -7,21 +7,19 @@
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-       
+
         <!-- App css -->
-        <?= $this->Html->css('assets/css/bootstrap.min.css')?>
-        <?= $this->Html->css('assets/css/icons.min.css')?>
-        <?= $this->Html->css('assets/css/app.min.css')?>
+        <?= $this->Html->css('assets/css/bootstrap.min.css') ?>
+        <?= $this->Html->css('assets/css/icons.min.css') ?>
+        <?= $this->Html->css('assets/css/app.min.css') ?>
 
-        <?= $this->Html->css('assets/libs/datatables/dataTables.bootstrap4.css') ?>
-        <?= $this->Html->css('assets/switchery/switchery.min.css')?>
-        <?= $this->Html->css('assets/libs/dropzone/dropzone.min.css') ?>
 
-        <?= $this->Html->css('assets/bootstrap-tagsinput/dist/bootstrap-tagsinput.css') ?>
-        <?= $this->Html->css('assets/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') ?>
 
-        <?= $this->Html->script('assets/modernizr.min.js') ?>
+        <?= $this->Html->script('/css/assets/js/vendor.min.js') ?>
 
+        <script>
+        var siteurl = '<?=SITE_URL?>';
+        </script>
 
     </head>
 
@@ -30,9 +28,9 @@
         <!-- Begin page -->
         <div id="wrapper">
 
-            <?=$this->element('Layout/header')?>
-            <?=$this->element('Layout/leftbar')?>
-            
+            <?= $this->element('Layout/header') ?>
+            <?= $this->element('Layout/leftbar') ?>
+
 
             <!-- ============================================================== -->
             <!-- Start Page Content here -->
@@ -43,14 +41,14 @@
 
                     <!-- Start Content-->
                     <div class="container-fluid">
-                        
-                        <?= $this->fetch('content')?>
-                        
+
+                        <?= $this->fetch('content') ?>
+
                     </div> <!-- container -->
 
                 </div> <!-- content -->
 
-                <?=$this->element('Layout/footer')?>
+                <?= $this->element('Layout/footer') ?>
 
             </div>
 
@@ -69,10 +67,10 @@
                 <!-- User box -->
                 <div class="user-box">
                     <div class="user-img">
-                        <?=$this->Html->image('profile.png',['class'=>'rounded-circle img-fluid'])?>
+                        <?= $this->Html->image('profile.png', ['class' => 'rounded-circle img-fluid']) ?>
                         <a href="javascript:void(0);" class="user-edit"><i class="mdi mdi-pencil"></i></a>
                     </div>
-            
+
                     <h5><a href="javascript: void(0);">Nik G. Patel</a> </h5>
                     <p class="text-muted mb-0"><small>Admin Head</small></p>
                 </div>
@@ -156,7 +154,7 @@
                             <br/>
                             <a href="javascript: void(0);" class="btn btn-outline-success mt-3 btn-sm">Upgrade<i class="ml-1 mdi mdi-arrow-right"></i></a>
                         </div>
-                
+
                     </div>
                     <div class="tab-pane show active" id="messages1">
                         <div>
@@ -204,11 +202,10 @@
         <!-- Right bar overlay-->
         <div class="rightbar-overlay"></div>
 
-        <!-- Vendor js -->
-        <?=$this->Html->script('/css/assets/js/vendor.min.js')?>
+
 
         <!-- App js -->
-        <?=$this->Html->script('/css/assets/js/app.min.js')?>
-        
+        <?= $this->Html->script('/css/assets/js/app.min.js') ?>
+
     </body>
 </html>

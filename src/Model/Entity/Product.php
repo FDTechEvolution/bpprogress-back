@@ -7,7 +7,7 @@ use Cake\ORM\Entity;
  * Product Entity
  *
  * @property string $id
- * @property string $brand_id
+ * @property string|null $brand_id
  * @property string $name
  * @property string $isretail
  * @property string $iswholesale
