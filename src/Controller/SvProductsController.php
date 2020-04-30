@@ -27,7 +27,7 @@ class SvProductsController extends AppController
     public function getAllProducts() {
         if ($this->request->is(['get','ajax'])) {
             // $allProducts = [];
-            $products = $this->Products->find()->toArray();
+            $products = $this->Products->find()->where(['isactive' => 'Y'])->toArray();
             // array_push($this->responData['data'],$products);
             foreach($products as $index => $product) {
                 $product_imgs = $this->ProductImages->find()
