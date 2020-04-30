@@ -147,7 +147,7 @@
 
                             <div class="col-10">
                                 <p>*** ขนาดที่แนะนำควรจะเป็น 1:1</p>
-
+                                
                                 <input name="file" type="file" name="image_file" id="image_file" accept="image/png, image/jpeg" />
 
                                 <div class="row" id="box-image">
@@ -233,7 +233,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: siteurl + 'sv-product-images/upload-product-image',
+                url: siteurl +'sv-product-images/upload-product-image',
                 data: formData,
                 //dataType: 'json',
                 contentType: false,
@@ -243,7 +243,8 @@
 
                 },
                 success: function (response) {
-                    var res = JSON.parse(response);
+                    console.log(response);
+                    var res = response;
                     console.log(res);
                     var html = '<div class="col-2"><image src="' + res.data.fullpath + '" class="img-fluid"/></div>';
                     $('#box-image').append(html);

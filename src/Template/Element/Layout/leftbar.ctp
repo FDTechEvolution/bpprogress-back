@@ -29,10 +29,10 @@
                             <?= $this->Html->link('รับสินค้าเข้า', ['controller' => 'goods-receipt']) ?>
                         </li>
                         <li>
-                            <a href="apps-filemanager.html">นำสินค้าออก</a>
+                            <a href="#">นำสินค้าออก</a>
                         </li>
                         <li>
-                            <a href="apps-tickets.html">ย้ายสินค้า</a>
+                            <a href="#">ย้ายสินค้า</a>
                         </li>
                         <li>
                             <?= $this->Html->link('ยี่ห้อสินค้า', ['controller' => 'brands']) ?>

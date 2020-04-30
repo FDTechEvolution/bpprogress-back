@@ -4,6 +4,7 @@ namespace App\Controller\Component;
 
 use Cake\Controller\Component;
 use Cake\Controller\ComponentRegistry;
+use Cake\I18n\Time;
 
 /**
  * Utils component
@@ -30,6 +31,20 @@ class UtilsComponent extends Component {
     public function startsWith($string, $startString) {
         $len = strlen($startString);
         return (substr($string, 0, $len) === $startString);
+    }
+
+    public function adMDYToYMD($strDate = '') {
+        $ext = explode('/', $strDate);
+
+        $converted = ($ext[2]) . '-' . $ext[1] . '-' . $ext[0];
+        return $converted;
+    }
+
+    public function generateNormalDocNo($prefix = '') {
+        $time = Time::now();
+        $timeStr = $time->i18nFormat('yyMMddHHmm');
+        
+        return $prefix.$timeStr;
     }
 
 }

@@ -1,3 +1,7 @@
+<?= $this->Html->css('assets/libs/datatables/dataTables.bootstrap4.css') ?>
+<?= $this->Html->css('assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.css') ?>
+<?= $this->Html->css('assets/libs/switchery/switchery.min.css') ?>
+
 <div class="row">
     <div class="col-sm-12">
         <div class="page-title-box">
@@ -151,13 +155,17 @@
     </div>
 </div>
 
-<?= $this->Html->script('assets/jquery.min.js') ?>
-<?= $this->Html->script('assets/libs/switchery/switchery.min.js') ?>
+<!-- Plugins Js -->
+<?= $this->Html->script('/css/assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/switchery/switchery.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/multiselect/jquery.multi-select.js') ?>
+<?= $this->Html->script('/css/assets/libs/jquery-quicksearch/jquery.quicksearch.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/select2/select2.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/bootstrap-select/bootstrap-select.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/jquery-mask-plugin/jquery.mask.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/dropzone/dropzone.min.js') ?>
 
-<?= $this->Html->script('assets/libs/datatables/jquery.dataTables.min.js') ?>
-<?= $this->Html->script('assets/libs/datatables/dataTables.bootstrap4.js') ?>
-
-<?= $this->Html->script('assets/jquery.core.js') ?>
 
 <script>
     $(document).ready(function () {
@@ -177,3 +185,5 @@
         var table = $('#datatable').DataTable();
     });
 </script>
+<!-- init js -->
+<?= $this->Html->script('/css/assets/js/pages/form-advanced.init.js') ?>

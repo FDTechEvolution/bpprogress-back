@@ -74,5 +74,14 @@ class MyAuthenComponent extends Component {
             }
         }
     }
+    
+     public function getLogedUserId(){
+        $userId = $this->request->getSession()->read('MyAuthen.user.id');
+        if(is_null($userId)){
+            $user = $this->Cookie->read('MyAuthen.user');
+            $this->request->getSession()->write('MyAuthen.user', $user);
+        }
+        return $userId;
+    }
 
 }

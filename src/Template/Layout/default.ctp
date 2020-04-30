@@ -15,10 +15,12 @@
 
 
 
+        <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
         <?= $this->Html->script('/css/assets/js/vendor.min.js') ?>
         <?= $this->Html->script('utils.js') ?>
         <script>
         var siteurl = '<?=SITE_URL?>';
+        var fwurl = 'https://cors-anywhere.herokuapp.com/';
         </script>
 
     </head>

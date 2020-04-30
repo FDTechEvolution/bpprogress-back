@@ -1,3 +1,17 @@
+<?= $this->Html->css('assets/libs/datatables/dataTables.bootstrap4.css') ?>
+<?= $this->Html->css('assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.css') ?>
+<?= $this->Html->css('assets/libs/switchery/switchery.min.css') ?>
+<div class="row mt-2">
+    <div class="col-lg-12">
+        <div class="card-box">
+            <div class="button-list">
+                <?= $this->Html->link(__('<i class="mdi mdi-plus-circle-outline"></i> เพิ่มรายการรับสินค้าเข้าระบบ'), ['action' => 'add'], ['class' => 'btn btn-outline-primary waves-effect waves-light', 'escape' => false]) ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-sm-12">
         <div class="page-title-box">
@@ -9,11 +23,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card-box">
-            <div class="row pb-3">
-                <div class="col-md-12 text-right">
-                    <?= $this->Html->link(__('<i class="mdi mdi-plus-circle-outline"></i> เพิ่มประเภทสินค้า'), ['action' => 'add'], ['class' => 'btn btn-primary btn-rounded w-md waves-effect waves-light m-b-5', 'data-toggle' => 'modal', 'data-target' => '#addCateModal', 'escape' => false]) ?>
-                </div>
-            </div>
+
             <table id="datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr style="background-color: #3b73da91; color: #000;">
@@ -146,28 +156,16 @@
         </div>
     </div>
 </div>
+<!-- Plugins Js -->
+<?= $this->Html->script('/css/assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/switchery/switchery.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/multiselect/jquery.multi-select.js') ?>
+<?= $this->Html->script('/css/assets/libs/jquery-quicksearch/jquery.quicksearch.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/select2/select2.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/bootstrap-select/bootstrap-select.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/jquery-mask-plugin/jquery.mask.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/dropzone/dropzone.min.js') ?>
 
-<?= $this->Html->script('assets/jquery.min.js') ?>
-<?= $this->Html->script('assets/libs/switchery/switchery.min.js') ?>
-
-<?= $this->Html->script('assets/libs/datatables/jquery.dataTables.min.js') ?>
-<?= $this->Html->script('assets/libs/datatables/dataTables.bootstrap4.js') ?>
-
-<?= $this->Html->script('assets/jquery.core.js') ?>
-
-<script>
-    $(document).ready(function () {
-        $('#editCateModal').on('show.bs.modal', function (e) {
-            var cateId = $(e.relatedTarget).data('id');
-            var name = $(e.relatedTarget).data('name');
-            var description = $(e.relatedTarget).data('description');
-            
-            $(e.currentTarget).find('input[id="edit_cateID"]').val(cateId);
-            $('#frm_edit input[id="edit_name"]').val(name);
-            $('#frm_edit textarea[id="edit_description"]').val(description);
-        });
-
-        $.noConflict();
-        var table = $('#datatable').DataTable();
-    });
-</script>
+<!-- init js -->
+<?= $this->Html->script('/css/assets/js/pages/form-advanced.init.js') ?>

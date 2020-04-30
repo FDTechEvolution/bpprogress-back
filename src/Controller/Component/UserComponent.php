@@ -85,4 +85,6 @@ class UserComponent extends Component
         return Security::decrypt($password, $this->Key);
         //return (new DefaultPasswordHasher)->check($password);
     }
+    
+   
 }

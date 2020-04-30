@@ -116,11 +116,14 @@ class ProductsController extends AppController {
         $result = $this->WholesaleRates->deleteAll(['WholesaleRates.product_id' => $productId]);
 
         foreach ($wholesales['startqty'] as $index => $startQty) {
+            $endQty = $wholesales['endqty'][$index];
+            $price = $wholesales['price'][$index];
+            
             $wholesale = $this->WholesaleRates->newEntity();
             $wholesale->seq = $index;
-            $wholesale->startqty = $startQty;
-            $wholesale->endqty = $wholesales['endqty'][$index];
-            $wholesale->price = $wholesales['price'][$index];
+            $wholesale->startqty = is_null($startQty) || $startQty==''?0:$startQty;
+            $wholesale->endqty = is_null($endQty) || $endQty==''?0:$endQty;
+            $wholesale->price =is_null($price) || $price==''?0:$price;
             $wholesale->product_id = $productId;
 
             $this->WholesaleRates->save($wholesale);

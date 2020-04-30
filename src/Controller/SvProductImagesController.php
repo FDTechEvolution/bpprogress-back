@@ -26,9 +26,14 @@ class SvProductImagesController extends AppController {
         $this->Products = TableRegistry::get('Products');
         $this->ProductImages = TableRegistry::get('ProductImages');
         $this->Images = TableRegistry::get('Images');
+
+        $this->autoRender = false;
     }
 
     public function uploadProductImage() {
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+
         $this->loadComponent('UploadImage');
         if ($this->request->is(['post', 'ajax'])) {
             $postData = $this->request->getData();
@@ -56,8 +61,12 @@ class SvProductImagesController extends AppController {
                 $this->responData['data'] = $image;
             }
         }
-        $json = json_encode($this->responData);
-        $this->set(compact('json'));
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
     }
 
 }

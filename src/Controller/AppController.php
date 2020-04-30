@@ -40,6 +40,15 @@ class AppController extends Controller {
         }
     }
 
+    public function modifyHeader() {
+        $this->response = $this->response
+                ->cors($this->request)
+                ->allowOrigin(['*'])
+                ->allowMethods(['GET', 'POST'])
+                // ->exposeHeaders(['Link'])
+                //->maxAge(300)
+                ->build();
+    }
 
     /**
      * Initialization hook method.

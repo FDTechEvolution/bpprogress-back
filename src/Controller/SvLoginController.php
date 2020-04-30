@@ -26,6 +26,8 @@ class SvLoginController extends AppController {
         $this->Otps = TableRegistry::get('user_otps');
 
         $this->loadComponent('User');
+         $this->autoRender = false;
+        $this->modifyHeader();
     }
 
     public function login() {
@@ -61,11 +63,15 @@ class SvLoginController extends AppController {
                 $this->responData['msg'] = 'post field(s) is invalid.';
             }
         }
+        
+        
+        $this->RequestHandler->respondAs('json');
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
 
-        $json = json_encode($this->responData);
-        $this->set(compact('json'));
+        return $this->response;
 
-        //return $this->json($this->responData);
     }
 
     public function onlogged() {
