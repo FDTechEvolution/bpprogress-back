@@ -90,23 +90,50 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12" id="box-wholesales-input">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <input type="number" name="wholesales[startqty][]" class="form-control" />
+                                        <?php if (sizeof($product->wholesale_rates) == 0) { ?>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" name="wholesales[startqty][]" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" name="wholesales[endqty][]" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <div class="form-group">
+                                                        <input type="number" name="wholesales[price][]" class="form-control" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-4">
-                                                <div class="form-group">
-                                                    <input type="number" name="wholesales[endqty][]" class="form-control" />
+                                        <?php } else { ?>
+                                            <?php foreach ($product->wholesale_rates as $item): ?>
+                                                <div class="row" id="<?= $item['id'] ?>">
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <input type="number" name="wholesales[startqty][]" class="form-control" value="<?=$item['startqty']?>" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <input type="number" name="wholesales[endqty][]" class="form-control" value="<?=$item['endqty']?>"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="form-group">
+                                                            <input type="number" name="wholesales[price][]" class="form-control" value="<?=$item['price']?>"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="form-group">
+                                                            <button type="button" class="btn btn-outline-secondary waves-effect waves-light" onclick="removeElementById('<?= $item['id'] ?>');">ลบ</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-2">
-                                                <div class="form-group">
-                                                    <input type="number" name="wholesales[price][]" class="form-control" />
-                                                </div>
-                                            </div>
-                                        </div>
+                                            <?php endforeach; ?>
+                                        <?php } ?>
                                     </div>
 
                                 </div>
@@ -192,7 +219,7 @@
 
 
 <script>
-    
+
     $(document).ready(function () {
         $('#image_file').on('change', function (e) {
             e.preventDefault();
@@ -227,7 +254,7 @@
         $('#bt-add-wholesales-rate').on('click', function () {
             var idRandom = generateCode(20);
             var btHtml = '';
-            btHtml += '<div class="row" id="'+idRandom+'">';
+            btHtml += '<div class="row" id="' + idRandom + '">';
             btHtml += '<div class="col-4">';
             btHtml += ' <div class="form-group">';
             btHtml += '     <input type="number" name="wholesales[startqty][]" class="form-control" />';
@@ -245,7 +272,7 @@
             btHtml += '</div>';
             btHtml += '<div class="col-2">';
             btHtml += ' <div class="form-group">';
-            btHtml += '     <button type="button" class="btn btn-outline-secondary waves-effect waves-light" onclick="removeElementById(\''+idRandom+'\');">ลบ</button>';
+            btHtml += '     <button type="button" class="btn btn-outline-secondary waves-effect waves-light" onclick="removeElementById(\'' + idRandom + '\');">ลบ</button>';
             btHtml += ' </div>';
             btHtml += '</div>';
             btHtml += '</div>';

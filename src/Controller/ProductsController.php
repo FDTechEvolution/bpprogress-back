@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Products Controller
@@ -12,6 +13,8 @@ use App\Controller\AppController;
  * @method \App\Model\Entity\Product[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ProductsController extends AppController {
+
+    public $WholesaleRates = null;
 
     /**
      * Index method
@@ -85,13 +88,18 @@ class ProductsController extends AppController {
     public function update($id = null) {
 
         $product = $this->Products->find()
-                ->contain(['ProductImages'=>['Images']])
-                ->where(['Products.id'=>$id])
+                ->contain(['ProductImages' => ['Images'],'WholesaleRates'])
+                ->where(['Products.id' => $id])
                 ->first();
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $product = $this->Products->patchEntity($product, $this->request->getData());
+            $postData = $this->request->getData();
+            $this->log($postData, 'debug');
+            $product = $this->Products->patchEntity($product, $postData);
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
+
+                //Wholesales
+                $this->wholesalesPrice($id, $postData['wholesales']);
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -100,6 +108,23 @@ class ProductsController extends AppController {
         $brands = $this->Products->Brands->find('list', ['limit' => 200]);
         $productCategories = $this->Products->ProductCategories->find('list', ['limit' => 200]);
         $this->set(compact('product', 'brands', 'productCategories'));
+    }
+
+    private function wholesalesPrice($productId = null, $wholesales = []) {
+        $this->WholesaleRates = TableRegistry::get('WholesaleRates');
+
+        $result = $this->WholesaleRates->deleteAll(['WholesaleRates.product_id' => $productId]);
+
+        foreach ($wholesales['startqty'] as $index => $startQty) {
+            $wholesale = $this->WholesaleRates->newEntity();
+            $wholesale->seq = $index;
+            $wholesale->startqty = $startQty;
+            $wholesale->endqty = $wholesales['endqty'][$index];
+            $wholesale->price = $wholesales['price'][$index];
+            $wholesale->product_id = $productId;
+
+            $this->WholesaleRates->save($wholesale);
+        }
     }
 
     public function setqty() {

@@ -106,10 +106,12 @@ class ProductsTable extends Table
 
         $validator
             ->scalar('short_description')
+            ->maxLength('short_description', 4294967295)
             ->allowEmptyString('short_description');
 
         $validator
             ->scalar('description')
+            ->maxLength('description', 4294967295)
             ->allowEmptyString('description');
 
         $validator
