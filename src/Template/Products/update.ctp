@@ -7,6 +7,10 @@
 <?= $this->Html->css('assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css') ?>
 <?= $this->Html->css('assets/libs/dropzone/dropzone.min.css') ?>
 
+<!-- Summernote css -->
+<?= $this->Html->css('assets/libs/summernote/summernote-bs4.css') ?>
+<!-- Summernote js -->
+<?= $this->Html->script('/css/assets/libs/summernote/summernote-bs4.min.js') ?>
 
 
 <div class="row">
@@ -25,7 +29,7 @@
                 <?= $this->Html->link(__('< ย้อนกลับ'), ['action' => 'index'], ['class' => 'btn btn-primary btn-sm btn-rounded w-md waves-effect waves-light m-b-5', 'escape' => false]) ?>
             </div>
         </div>
-        <?= $this->Form->create($product) ?>
+        <?= $this->Form->create($product, ['id' => 'frm-product', 'novalidate' => 'novalidate']) ?>
         <?= $this->Form->hidden('product_id', ['value' => $product->id, 'id' => 'product_id']) ?>
         <fieldset>
             <div class="card-box">
@@ -75,23 +79,39 @@
                                 <?= $this->Form->checkbox(__('iswholesale'), ['id' => 'iswholesale', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'value' => 'Y', 'escape' => false]) ?>
                                 <div class="row mt-2">
                                     <div class="col-4">
-                                        <div class="form-group">
-                                            <label>ตั้งแต่จำนวน</label>
-                                            <input type="number" name="" class="form-control" />
-                                        </div>
+                                        <label>ตั้งแต่จำนวน</label>
                                     </div>
                                     <div class="col-4">
-                                        <div class="form-group">
-                                            <label>ถึงจำนวน</label>
-                                            <input type="number" name="" class="form-control" />
-                                        </div>
+                                        <label>ถึงจำนวน</label>
                                     </div>
                                     <div class="col-2">
-                                        <div class="form-group">
-                                            <label>ราคาขายส่ง</label>
-                                            <input type="number" name="" class="form-control" />
+                                        <label>ราคาขายส่ง</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12" id="box-wholesales-input">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input type="number" name="wholesales[startqty][]" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <input type="number" name="wholesales[endqty][]" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="col-2">
+                                                <div class="form-group">
+                                                    <input type="number" name="wholesales[price][]" class="form-control" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-12"><button type="button" class="btn btn-outline-success" id="bt-add-wholesales-rate">เพิ่มราคาส่ง</button></div>
                                 </div>
                             </div>
                         </div>
@@ -100,21 +120,22 @@
 
                             <div class="col-10">
                                 <p>*** ขนาดที่แนะนำควรจะเป็น 1:1</p>
-                                <form enctype="multipart/form-data" method="post" id="imageForm">
-                                    <input name="file" type="file" name="image_file" id="image_file" accept="image/png, image/jpeg" />
-                                </form>
+
+                                <input name="file" type="file" name="image_file" id="image_file" accept="image/png, image/jpeg" />
+
                                 <div class="row" id="box-image">
-                                    <?php foreach ($product->product_images as $productImage):?>
-                                    <div class="col-md-2">
-                                        <image src="<?=$productImage->image->fullpath?>" class="img-fluid" />
-                                    </div>
-                                    <?php endforeach;?>
+                                    <?php foreach ($product->product_images as $productImage): ?>
+                                        <div class="col-md-2">
+                                            <image src="<?= $productImage->image->fullpath ?>" class="img-fluid" />
+                                        </div>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <div class="card-box">
                 <div class="row">
@@ -125,16 +146,17 @@
                         <hr>
                         <div class="row pb-2 py-2 px-3">
                             <label class="col-2 col-form-label">รายละเอียดโดยย่อ</label>
+
                             <div class="col-9">
-                                <?php echo $this->Form->textarea('short_description', ['id' => 'elm1', 'maxlength' => 255]) ?>
-                                <!-- <textarea id="elm1" name=""></textarea> -->
+
+                                <?= $this->Form->control('short_description', ['id' => 'short_description']) ?>
                             </div>
                         </div>
                         <div class="row pt-2 py-2 px-3">
                             <label class="col-2 col-form-label">รายละเอียดสินค้าแบบเต็ม</label>
+
                             <div class="col-9">
-                                <?php echo $this->Form->textarea('description', ['id' => 'elm1']) ?>
-                                <!-- <textarea id="elm1" name=""></textarea> -->
+                                <?= $this->Form->control('description', ['id' => 'description']) ?>
                             </div>
                         </div>
                     </div>
@@ -143,7 +165,8 @@
         </fieldset>
         <div class="form-group row">
             <div class="col-12 text-center">
-                <?= $this->Form->button(__('<i class="mdi mdi-content-save"></i> SAVE'), ['class' => 'btn btn-primary btn-custom waves-effect w-md waves-light m-b-5', 'escape' => false]) ?>
+                <button type="submit" id="bt-save" class="btn btn-primary btn-custom waves-effect w-md waves-light m-b-5"><i class="mdi mdi-content-save"></i> SAVE</button>
+
                 <?= $this->Form->button(__('<i class="mdi mdi-close-circle"></i> Cancel'), ['class' => 'btn btn-secondary btn-custom waves-effect w-md waves-light m-b-5', 'data-dismiss' => 'modal', 'escape' => false]) ?>
             </div>
         </div>
@@ -151,17 +174,6 @@
 
     </div>
 </div>
-
-
-
-<style>
-    strong {
-        font-weight: 700;
-    }
-    .mce-menubar {
-        display: none;
-    }
-</style>
 
 <!-- Plugins Js -->
 <?= $this->Html->script('/css/assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js') ?>
@@ -177,7 +189,10 @@
 <!-- init js -->
 <?= $this->Html->script('/css/assets/js/pages/form-advanced.init.js') ?>
 
+
+
 <script>
+    
     $(document).ready(function () {
         $('#image_file').on('change', function (e) {
             e.preventDefault();
@@ -209,6 +224,50 @@
             });
         });
 
+        $('#bt-add-wholesales-rate').on('click', function () {
+            var idRandom = generateCode(20);
+            var btHtml = '';
+            btHtml += '<div class="row" id="'+idRandom+'">';
+            btHtml += '<div class="col-4">';
+            btHtml += ' <div class="form-group">';
+            btHtml += '     <input type="number" name="wholesales[startqty][]" class="form-control" />';
+            btHtml += ' </div>';
+            btHtml += '</div>';
+            btHtml += '<div class="col-4">';
+            btHtml += ' <div class="form-group">';
+            btHtml += '     <input type="number" name="wholesales[endqty][]" class="form-control" />';
+            btHtml += ' </div>';
+            btHtml += '</div>';
+            btHtml += '<div class="col-2">';
+            btHtml += ' <div class="form-group">';
+            btHtml += '     <input type="number" name="wholesales[price][]" class="form-control" />';
+            btHtml += ' </div>';
+            btHtml += '</div>';
+            btHtml += '<div class="col-2">';
+            btHtml += ' <div class="form-group">';
+            btHtml += '     <button type="button" class="btn btn-outline-secondary waves-effect waves-light" onclick="removeElementById(\''+idRandom+'\');">ลบ</button>';
+            btHtml += ' </div>';
+            btHtml += '</div>';
+            btHtml += '</div>';
+
+            $('#box-wholesales-input').append(btHtml);
+        });
+
+        $('#short_description').summernote({
+            height: 150, //set editable area's height
+            codemirror: {// codemirror options
+                theme: 'monokai'
+            }
+        });
+        $('#description').summernote({
+            height: 300, //set editable area's height
+            codemirror: {// codemirror options
+                theme: 'monokai'
+            }
+        });
+        $('#bt-save').on('click', function () {
+            $('frm-product').submit();
+        });
 
     });
 

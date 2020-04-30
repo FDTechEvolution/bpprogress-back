@@ -16,7 +16,7 @@
 
 
         <?= $this->Html->script('/css/assets/js/vendor.min.js') ?>
-
+        <?= $this->Html->script('utils.js') ?>
         <script>
         var siteurl = '<?=SITE_URL?>';
         </script>
