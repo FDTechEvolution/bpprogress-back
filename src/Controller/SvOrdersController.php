@@ -42,17 +42,29 @@ class SvOrdersController extends AppController {
                 $order = $this->Orders->newEntity();
                 $order->shop_id = $postData['shop_id'];
                 $order->user_id = $postData['user_id'];
-                $order->docdate =  new Date();
+                $order->docdate = new Date();
                 $order->status = 'DR';
-                
-                if($this->Orders->save($order)){
+
+                if ($this->Orders->save($order)) {
                     $this->createOrderLine($order->id, $postData['order_lines']);
-                    
+
                     //Update final order
+                    $order = $this->Orders->find()
+                            ->contain(['OrderLines'])
+                            ->where(['Orders.id'=>$order->id])
+                            ->first();
+                    $totalamt = 0;
+                    foreach ($order->order_lines as $index=>$orderLine){
+                        $totalamt += $orderLine->amount;
+                    }
                     
+                    $order->totalamt = $totalamt;
+                    $order->status = 'NEW';
+                    $this->Orders->save($order);
+                    
+                     $this->responData['data'] = $order;
+                     $this->responData['status'] = 200;
                 }
-                
-                
             } else {
                 $this->responData['msg'] = 'please check require field(s),' . $result['msg'];
             }
@@ -65,8 +77,27 @@ class SvOrdersController extends AppController {
         return $this->response;
     }
 
-    private function createOrderLine($orderId=null,$orderLines = null) {
-        
+    private function createOrderLine($orderId = null, $orderLines = null) {
+        foreach ($orderLines as $index => $line) {
+            $product = $this->Products->find()->contain(['WholesaleRates'])->where(['Products.id' => $line['product_id']])->first();
+            if (!is_null($product)) {
+                $orderLine = $this->OrderLines->newEntity();
+                $orderLine->order_id = $orderId;
+                $orderLine->product_id = $product->id;
+                $orderLine->qty = $line['qty'];
+                
+                $unitPrice = 0;
+                if($product->iswholesale =='Y'){
+                    
+                }else{
+                    $unitPrice = $product->special_price;
+                }
+                $orderLine->unit_price = $unitPrice;
+                $orderLine->amount = ($orderLine->qty*$orderLine->unit_price);
+                
+                $this->OrderLines->save($orderLine);
+            }
+        }
     }
 
     private function verifyOrderFields($fields = []) {
