@@ -83,4 +83,33 @@ class SvProductsController extends AppController
         $this->set(compact('json'));
     }
 
+    public function getProductCategory () {
+        if ($this->request->is(['get','ajax'])) {
+            $id = $this->request->getQuery('id');
+            $this->log($id, 'debug');
+            $products = $this->Products->find()
+                        ->contain(['ProductCategories'])
+                        ->where(['ProductCategories.id' => $id, 'Products.isactive' => 'Y'])
+                        ->order(['Products.created' => 'DESC'])
+                        ->limit(20)
+                        ->toArray();
+            if($products){
+                foreach($products as $index => $product) {
+                    $product_img = $this->ProductImages->find()
+                                    ->contain(['Images'])
+                                    ->where(['ProductImages.product_id' => $product->id, 'ProductImages.type' => 'DEFAULT'])
+                                    ->first();
+                    $products[$index]['images'] = $product_img->image->fullpath;
+                }
+                $this->responData['status'] = 200;
+                $this->responData['data'] = $products;
+            }else{
+                $this->responData['status'] = 400;
+            }
+        }
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->set(compact('json'));
+    }
+
 }
