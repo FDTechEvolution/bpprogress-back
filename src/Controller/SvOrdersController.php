@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -36,7 +35,9 @@ class SvOrdersController extends AppController {
         $this->RequestHandler->respondAs('json');
 
         if ($this->request->is(['post', 'ajax'])) {
+            //$postData = $this->request->getData();
             $postData = $this->request->getData();
+            //$this->log($postData,'debug');
             $result = $this->verifyOrderFields($postData);
             if ($result['status'] == true) {
                 $order = $this->Orders->newEntity();
@@ -51,22 +52,23 @@ class SvOrdersController extends AppController {
                     //Update final order
                     $order = $this->Orders->find()
                             ->contain(['OrderLines'])
-                            ->where(['Orders.id'=>$order->id])
+                            ->where(['Orders.id' => $order->id])
                             ->first();
                     $totalamt = 0;
-                    foreach ($order->order_lines as $index=>$orderLine){
+                    foreach ($order->order_lines as $index => $orderLine) {
                         $totalamt += $orderLine->amount;
                     }
-                    
+
                     $order->totalamt = $totalamt;
                     $order->status = 'NEW';
                     $this->Orders->save($order);
-                    
-                     $this->responData['data'] = $order;
-                     $this->responData['status'] = 200;
+
+                    $this->responData['data'] = $order;
+                    $this->responData['status'] = 200;
                 }
             } else {
                 $this->responData['msg'] = 'please check require field(s),' . $result['msg'];
+                $this->responData['data'] = $postData;
             }
         }
 
@@ -75,6 +77,9 @@ class SvOrdersController extends AppController {
         $this->response = $this->response->withType('json');
 
         return $this->response;
+
+       // echo json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        
     }
 
     private function createOrderLine($orderId = null, $orderLines = null) {
@@ -85,16 +90,16 @@ class SvOrdersController extends AppController {
                 $orderLine->order_id = $orderId;
                 $orderLine->product_id = $product->id;
                 $orderLine->qty = $line['qty'];
-                
+
                 $unitPrice = 0;
-                if($product->iswholesale =='Y'){
+                if ($product->iswholesale == 'Y') {
                     
-                }else{
+                } else {
                     $unitPrice = $product->special_price;
                 }
                 $orderLine->unit_price = $unitPrice;
-                $orderLine->amount = ($orderLine->qty*$orderLine->unit_price);
-                
+                $orderLine->amount = ($orderLine->qty * $orderLine->unit_price);
+
                 $this->OrderLines->save($orderLine);
             }
         }
@@ -104,7 +109,7 @@ class SvOrdersController extends AppController {
         $status = true;
         $msg = '';
 
-        if (!isset($fields['shop_id']) || $fields['shop_id'] == NULL || $fields['shop_id'] == '') {
+        if (!(isset($fields['shop_id'])) || $fields['shop_id'] == NULL || $fields['shop_id'] == '') {
             $status = false;
             $msg .= 'shop_id, ';
         }
@@ -112,7 +117,7 @@ class SvOrdersController extends AppController {
             $status = false;
             $msg .= 'user_id, ';
         }
-        if (!is_array($fields['order_lines'])) {
+        if (!isset($fields['order_lines']) || !is_array($fields['order_lines'])) {
             $status = false;
             $msg .= 'order_lines, ';
         } else {

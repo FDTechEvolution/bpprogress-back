@@ -47,7 +47,7 @@ class AppController extends Controller {
         $this->response = $this->response
                 ->cors($this->request)
                 ->allowOrigin(['*'])
-                ->allowMethods(['GET', 'POST'])
+                ->allowMethods(['GET', 'POST','AJAX'])
                 // ->exposeHeaders(['Link'])
                 //->maxAge(300)
                 ->build();
