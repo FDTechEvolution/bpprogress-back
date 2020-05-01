@@ -7,10 +7,12 @@
                 <li class="menu-title">Navigation</li>
                 <li>
                     <a href="javascript: void(0);" class="waves-effect">
-                        <i class="remixicon-dashboard-line"></i>
-                        <span class="badge badge-warning badge-pill float-right">2</span>
+                       
                         <span> Dashboards </span>
                     </a>
+                </li>
+                <li>
+                    <?= $this->Html->link('<i class="mdi mdi-cart-plus"></i><span class="badge badge-danger badge-pill float-right">2</span><span> รายการสั่งซื้อ </span>',['controller'=>'orders'],['class'=>'waves-effect','escape'=>false])?>
                 </li>
                 <li class="mm-active">
                     <a href="javascript: void(0);" class="waves-effect">
