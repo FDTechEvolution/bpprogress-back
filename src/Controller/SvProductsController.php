@@ -26,18 +26,13 @@ class SvProductsController extends AppController
 
     public function getAllProducts() {
         if ($this->request->is(['get','ajax'])) {
-            // $allProducts = [];
-            $products = $this->Products->find()->where(['isactive' => 'Y'])->toArray();
-            // array_push($this->responData['data'],$products);
+            $products = $this->Products->find()->where(['isactive' => 'Y'])->order(['created' => 'DESC'])->limit(20)->toArray();
             foreach($products as $index => $product) {
-                $product_imgs = $this->ProductImages->find()
+                $product_img = $this->ProductImages->find()
                                 ->contain(['Images'])
-                                ->where(['ProductImages.product_id' => $product->id])
-                                ->toArray();
-                foreach($product_imgs as $product_img){
-                    $products[$index]['images'] = $product_img->image->fullpath;
-                }
-                // array_push($this->responData['data'], $product_imgs);
+                                ->where(['ProductImages.product_id' => $product->id, 'ProductImages.type' => 'DEFAULT'])
+                                ->first();
+                $products[$index]['images'] = $product_img->image->fullpath;
             }
             $this->responData['status'] = 200;
             $this->responData['data'] = $products;
@@ -55,15 +50,31 @@ class SvProductsController extends AppController
                         ->where(['Products.id' => $id])
                         ->first();
             if($products) {
-                $product_imgs = $this->ProductImages->find()
+                $product_img = $this->ProductImages->find()
                                 ->contain(['Images'])
-                                ->where(['ProductImages.product_id' => $products->id])
-                                ->toArray();
-                foreach($product_imgs as $product_img){
-                    $products['images'] = $product_img->image->fullpath;
-                }
+                                ->where(['ProductImages.product_id' => $products->id, 'ProductImages.type' => 'DEFAULT'])
+                                ->first();
+                $products['images'] = $product_img->image->fullpath;
             }
 
+            $this->responData['status'] = 200;
+            $this->responData['data'] = $products;
+        }
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->set(compact('json'));
+    }
+
+    public function getNewProducts() { // home new product ชั่วคราว
+        if ($this->request->is(['get','ajax'])) {
+            $products = $this->Products->find()->where(['isactive' => 'Y'])->order(['created' => 'DESC'])->limit(10)->toArray();
+            foreach($products as $index => $product) {
+                $product_img = $this->ProductImages->find()
+                                ->contain(['Images'])
+                                ->where(['ProductImages.product_id' => $product->id, 'ProductImages.type' => 'DEFAULT'])
+                                ->first();
+                $products[$index]['images'] = $product_img->image->fullpath;
+            }
             $this->responData['status'] = 200;
             $this->responData['data'] = $products;
         }
