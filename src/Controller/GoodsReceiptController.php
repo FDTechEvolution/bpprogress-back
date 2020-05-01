@@ -31,7 +31,13 @@ class GoodsReceiptController extends AppController {
      * @return \Cake\Http\Response|null
      */
     public function index() {
+        $userId = $this->MyAuthen->getLogedUserId();
+        $goodsReceipts = $this->GoodsTransactions->find()
+                ->contain(['Warehouses'])
+                ->where(['GoodsTransactions.user_id'=>$userId])
+                ->toArray();
         
+        $this->set(compact('goodsReceipts'));
     }
 
     public function add() {
@@ -59,7 +65,13 @@ class GoodsReceiptController extends AppController {
     }
 
     public function update($id = null) {
+        $goodsReceipt = $this->GoodsTransactions->find()
+                ->where(['GoodsTransactions.id'=>$id])
+                ->first();
         
+        
+         $warehouses = $this->Warehouses->find('list');
+        $this->set(compact('goodsReceipt','warehouses'));
     }
 
 }

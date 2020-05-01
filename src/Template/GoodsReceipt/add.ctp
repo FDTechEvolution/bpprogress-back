@@ -3,8 +3,6 @@
 <?= $this->Html->css('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css') ?>
 <?= $this->Html->css('assets/libs/bootstrap-daterangepicker/daterangepicker.css') ?>
 
-
-
 <div class="row">
     <div class="col-sm-12">
         <div class="page-title-box">

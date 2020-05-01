@@ -88,6 +88,11 @@ class GoodsTransactionsTable extends Table
             ->maxLength('description', 255)
             ->allowEmptyString('description');
 
+        $validator
+            ->scalar('status')
+            ->maxLength('status', 45)
+            ->notEmptyString('status');
+
         return $validator;
     }
 

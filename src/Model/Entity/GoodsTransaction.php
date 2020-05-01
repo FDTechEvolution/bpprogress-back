@@ -15,6 +15,7 @@ use Cake\ORM\Entity;
  * @property string|null $description
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
+ * @property string $status
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Warehouse $warehouse
@@ -40,6 +41,7 @@ class GoodsTransaction extends Entity
         'description' => true,
         'created' => true,
         'modified' => true,
+        'status' => true,
         'user' => true,
         'warehouse' => true,
         'goods_lines' => true,
