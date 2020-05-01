@@ -52,9 +52,7 @@
                         <li>
                             <?= $this->Html->link('ยี่ห้อสินค้า', ['controller' => 'brands']) ?>
                         </li>
-                        <li>
-                            <?= $this->Html->link('บริษัทขนส่ง', ['controller' => 'shippings']) ?>
-                        </li>
+                       
                     </ul>
                 </li>
 

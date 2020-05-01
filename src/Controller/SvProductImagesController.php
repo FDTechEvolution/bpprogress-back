@@ -50,10 +50,11 @@ class SvProductImagesController extends AppController {
                 $image->name = $result['image_name'];
                 $this->Images->save($image);
 
+                $count = $this->ProductImages->find()->where(['product_id'=>$productId])->count();
                 $productImage = $this->ProductImages->newEntity();
                 $productImage->product_id = $productId;
                 $productImage->image_id = $image->id;
-                $productImage->type = 'NORMAL';
+                $productImage->type = $count==0?'DEFAULT':'NORMAL';
                 $productImage->seq = 1;
                 $this->ProductImages->save($productImage);
 
