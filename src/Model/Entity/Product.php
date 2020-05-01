@@ -22,11 +22,13 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string|null $note
  * @property int|null $qty
+ * @property string $shop_id
  *
  * @property \App\Model\Entity\Brand $brand
  * @property \App\Model\Entity\ProductCategory $product_category
  * @property \App\Model\Entity\GoodsLine[] $goods_lines
  * @property \App\Model\Entity\ProductImage[] $product_images
+ * @property \App\Model\Entity\WarehouseProduct[] $warehouse_products
  * @property \App\Model\Entity\WholesaleRate[] $wholesale_rates
  */
 class Product extends Entity
@@ -56,10 +58,12 @@ class Product extends Entity
         'modified' => true,
         'note' => true,
         'qty' => true,
+        'shop_id' => true,
         'brand' => true,
         'product_category' => true,
         'goods_lines' => true,
         'product_images' => true,
+        'warehouse_products' => true,
         'wholesale_rates' => true,
     ];
 }

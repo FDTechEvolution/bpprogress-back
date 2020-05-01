@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title><?=PAGE_TITLE?></title>
+        <title><?= PAGE_TITLE ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -19,8 +19,8 @@
         <?= $this->Html->script('/css/assets/js/vendor.min.js') ?>
         <?= $this->Html->script('utils.js') ?>
         <script>
-        var siteurl = '<?=SITE_URL?>';
-        var fwurl = 'https://cors-anywhere.herokuapp.com/';
+            var siteurl = '<?= SITE_URL ?>';
+            var fwurl = 'https://cors-anywhere.herokuapp.com/';
         </script>
 
     </head>
@@ -31,7 +31,12 @@
         <div id="wrapper">
 
             <?= $this->element('Layout/header') ?>
-            <?= $this->element('Layout/leftbar') ?>
+
+            <?php if ($loggedUser->type == 'SELLER') { ?>
+                <?= $this->element('Layout/leftbar_seller') ?>
+            <?php } elseif ($loggedUser->type == 'ADMIN') { ?>
+                <?= $this->element('Layout/leftbar_admin') ?>
+            <?php } ?>
 
 
             <!-- ============================================================== -->

@@ -38,6 +38,9 @@ class AppController extends Controller {
         if (!$this->Utils->startsWith(strtolower($controllerName), 'sv')) {
             $this->MyAuthen->authen($controllerName, $actionName);
         }
+        
+        $loggedUser = $this->MyAuthen->getLogedUser();
+        $this->set(compact('loggedUser'));
     }
 
     public function modifyHeader() {

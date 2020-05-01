@@ -11,9 +11,11 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\BrandsTable&\Cake\ORM\Association\BelongsTo $Brands
  * @property \App\Model\Table\ProductCategoriesTable&\Cake\ORM\Association\BelongsTo $ProductCategories
+ * @property &\Cake\ORM\Association\BelongsTo $Shops
  * @property \App\Model\Table\GoodsLinesTable&\Cake\ORM\Association\HasMany $GoodsLines
+ * @property &\Cake\ORM\Association\HasMany $OrderLines
  * @property \App\Model\Table\ProductImagesTable&\Cake\ORM\Association\HasMany $ProductImages
- * @property &\Cake\ORM\Association\HasMany $WarehouseProducts
+ * @property \App\Model\Table\WarehouseProductsTable&\Cake\ORM\Association\HasMany $WarehouseProducts
  * @property \App\Model\Table\WholesaleRatesTable&\Cake\ORM\Association\HasMany $WholesaleRates
  *
  * @method \App\Model\Entity\Product get($primaryKey, $options = [])
@@ -52,7 +54,14 @@ class ProductsTable extends Table
             'foreignKey' => 'product_category_id',
             'joinType' => 'INNER',
         ]);
+        $this->belongsTo('Shops', [
+            'foreignKey' => 'shop_id',
+            'joinType' => 'INNER',
+        ]);
         $this->hasMany('GoodsLines', [
+            'foreignKey' => 'product_id',
+        ]);
+        $this->hasMany('OrderLines', [
             'foreignKey' => 'product_id',
         ]);
         $this->hasMany('ProductImages', [
@@ -141,6 +150,7 @@ class ProductsTable extends Table
     {
         $rules->add($rules->existsIn(['brand_id'], 'Brands'));
         $rules->add($rules->existsIn(['product_category_id'], 'ProductCategories'));
+        $rules->add($rules->existsIn(['shop_id'], 'Shops'));
 
         return $rules;
     }

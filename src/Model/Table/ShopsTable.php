@@ -9,6 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Shops Model
  *
+ * @property &\Cake\ORM\Association\HasMany $Orders
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\HasMany $Users
  * @property \App\Model\Table\WarehousesTable&\Cake\ORM\Association\HasMany $Warehouses
  *
@@ -41,6 +42,9 @@ class ShopsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->hasMany('Orders', [
+            'foreignKey' => 'shop_id',
+        ]);
         $this->hasMany('Users', [
             'foreignKey' => 'shop_id',
         ]);
@@ -76,8 +80,7 @@ class ShopsTable extends Table
         $validator
             ->scalar('username')
             ->maxLength('username', 50)
-            ->requirePresence('username', 'create')
-            ->notEmptyString('username');
+            ->allowEmptyString('username');
 
         $validator
             ->scalar('isactive')

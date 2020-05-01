@@ -24,6 +24,7 @@ class ShopsTableTest extends TestCase
      */
     public $fixtures = [
         'app.Shops',
+        'app.Orders',
         'app.Users',
         'app.Warehouses',
     ];

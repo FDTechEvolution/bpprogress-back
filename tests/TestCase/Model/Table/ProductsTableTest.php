@@ -28,6 +28,7 @@ class ProductsTableTest extends TestCase
         'app.ProductCategories',
         'app.GoodsLines',
         'app.ProductImages',
+        'app.WarehouseProducts',
         'app.WholesaleRates',
     ];
 

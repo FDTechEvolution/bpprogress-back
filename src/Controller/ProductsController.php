@@ -56,6 +56,9 @@ class ProductsController extends AppController {
         $product = $this->Products->newEntity();
         if ($this->request->is('post')) {
             $product = $this->Products->patchEntity($product, $this->request->getData());
+            $user = $this->MyAuthen->getLogedUser();
+            $product->shop_id = $user['shop_id'];
+            
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
 

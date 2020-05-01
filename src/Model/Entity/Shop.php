@@ -9,12 +9,13 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string $name
  * @property string $code
- * @property string $username
+ * @property string|null $username
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string|null $isactive
  *
- * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Order[] $orders
+ * @property \App\Model\Entity\User[] $users
  * @property \App\Model\Entity\Warehouse[] $warehouses
  */
 class Shop extends Entity
@@ -35,7 +36,8 @@ class Shop extends Entity
         'created' => true,
         'modified' => true,
         'isactive' => true,
-        'user' => true,
+        'orders' => true,
+        'users' => true,
         'warehouses' => true,
     ];
 }
