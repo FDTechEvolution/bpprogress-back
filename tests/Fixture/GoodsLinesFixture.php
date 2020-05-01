@@ -40,12 +40,12 @@ class GoodsLinesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '89672dbe-033d-4b4c-97c6-4a45d2d3aeab',
-                'goods_transaction_id' => 'f1bbc6ed-bb4d-483b-8630-e1ba4cb5bba6',
-                'product_id' => '20c1a1b0-38d4-49ad-90ca-2e8180c8b534',
+                'id' => '130ebbce-f2f9-422b-b2cb-8d180255efd0',
+                'goods_transaction_id' => '3ab1c162-82f1-4503-8503-50b177cd0d14',
+                'product_id' => '3f51f07c-4aae-4624-86eb-6934a517a2ad',
                 'qty' => 1,
-                'created' => '2020-04-25 07:40:02',
-                'modified' => '2020-04-25 07:40:02',
+                'created' => '2020-05-01 08:31:11',
+                'modified' => '2020-05-01 08:31:11',
                 'description' => 'Lorem ipsum dolor sit amet',
             ],
         ];

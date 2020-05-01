@@ -13,6 +13,7 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\ProductCategoriesTable&\Cake\ORM\Association\BelongsTo $ProductCategories
  * @property \App\Model\Table\GoodsLinesTable&\Cake\ORM\Association\HasMany $GoodsLines
  * @property \App\Model\Table\ProductImagesTable&\Cake\ORM\Association\HasMany $ProductImages
+ * @property &\Cake\ORM\Association\HasMany $WarehouseProducts
  * @property \App\Model\Table\WholesaleRatesTable&\Cake\ORM\Association\HasMany $WholesaleRates
  *
  * @method \App\Model\Entity\Product get($primaryKey, $options = [])
@@ -55,6 +56,9 @@ class ProductsTable extends Table
             'foreignKey' => 'product_id',
         ]);
         $this->hasMany('ProductImages', [
+            'foreignKey' => 'product_id',
+        ]);
+        $this->hasMany('WarehouseProducts', [
             'foreignKey' => 'product_id',
         ]);
         $this->hasMany('WholesaleRates', [

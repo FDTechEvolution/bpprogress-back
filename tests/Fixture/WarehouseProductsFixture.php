@@ -4,9 +4,9 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * WarehousesFixture
+ * WarehouseProductsFixture
  */
-class WarehousesFixture extends TestFixture
+class WarehouseProductsFixture extends TestFixture
 {
     /**
      * Fields
@@ -16,12 +16,12 @@ class WarehousesFixture extends TestFixture
     // @codingStandardsIgnoreStart
     public $fields = [
         'id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
-        'name' => ['type' => 'string', 'length' => 50, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'warehouse_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        'product_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        'qty' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        'isactive' => ['type' => 'string', 'length' => null, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'description' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'shop_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -40,13 +40,13 @@ class WarehousesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '10720c0b-33e5-499a-a66b-d67fb74d873d',
-                'name' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-01 09:21:44',
-                'modified' => '2020-05-01 09:21:44',
-                'isactive' => 'Lorem ipsum dolor sit amet',
+                'id' => '1be34d01-b09e-454f-b885-1ee41756d243',
+                'warehouse_id' => '6717aa0f-ec9e-4573-9fcc-f320ddbcdab5',
+                'product_id' => '68205caa-5c38-4d52-878e-eee725d595bc',
+                'qty' => 1,
+                'created' => '2020-05-01 09:21:30',
+                'modified' => '2020-05-01 09:21:30',
                 'description' => 'Lorem ipsum dolor sit amet',
-                'shop_id' => 'b9f64f3a-0be5-4de2-9bfc-29dd6eab5e79',
             ],
         ];
         parent::init();

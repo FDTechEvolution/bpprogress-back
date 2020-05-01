@@ -30,26 +30,28 @@
                         <th>วันที่</th>
                         <th>หมายเลขเอกสาร</th>
                         <th>สถานะ</th>
-                        
+
                         <th>รับเข้าคลัง</th>
                         <th>รายละเอียด</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($goodsReceipts as $index=>$item): ?>
-                    <tr>
-                        <td><?=$item->docdate?></td>
-                        <td><?=$item->docno?></td>
-                        <td><?=$item->status?></td>
-                        <td><?=$item->warehouse->name?></td>
-                        <td></td>
-                        <td class="text-right">
-                            <?=$this->Html->link('<i class="remixicon-list-check"></i>',['action'=>'view',$item->id],['class'=>'btn btn-icon btn-secondary','escape'=>false])?>
-                            <?=$this->Html->link('<i class="remixicon-pencil-fill"></i>',['action'=>'update',$item->id],['class'=>'btn btn-icon btn-warning','escape'=>false])?>
-                            <?=$this->Html->link('<i class="remixicon-delete-bin-2-line"></i>',['action'=>'delete',$item->id],['class'=>'btn btn-icon btn-danger','escape'=>false])?>
-                        </td>
-                    </tr>
+                    <?php foreach ($goodsReceipts as $index => $item): ?>
+                        <tr>
+                            <td><?= $item->docdate ?></td>
+                            <td><?= $item->docno ?></td>
+                            <td><?= $item->status ?></td>
+                            <td><?= $item->warehouse->name ?></td>
+                            <td></td>
+                            <td class="text-right">
+                                <?= $this->Html->link('<i class="remixicon-list-check"></i>', ['action' => 'confirm', $item->id], ['class' => 'btn btn-icon btn-secondary', 'escape' => false]) ?>
+                                <?php if ($item->status != 'CF') { ?>
+                                    <?= $this->Html->link('<i class="remixicon-pencil-fill"></i>', ['action' => 'update', $item->id], ['class' => 'btn btn-icon btn-warning', 'escape' => false]) ?>
+                                    <?= $this->Html->link('<i class="remixicon-delete-bin-2-line"></i>', ['action' => 'delete', $item->id], ['class' => 'btn btn-icon btn-danger', 'escape' => false]) ?>
+                                <?php } ?>
+                            </td>
+                        </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>

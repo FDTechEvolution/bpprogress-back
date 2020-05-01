@@ -10,6 +10,8 @@ use Cake\Validation\Validator;
  * Warehouses Model
  *
  * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
+ * @property &\Cake\ORM\Association\HasMany $GoodsTransactions
+ * @property &\Cake\ORM\Association\HasMany $WarehouseProducts
  *
  * @method \App\Model\Entity\Warehouse get($primaryKey, $options = [])
  * @method \App\Model\Entity\Warehouse newEntity($data = null, array $options = [])
@@ -43,6 +45,12 @@ class WarehousesTable extends Table
         $this->belongsTo('Shops', [
             'foreignKey' => 'shop_id',
             'joinType' => 'INNER',
+        ]);
+        $this->hasMany('GoodsTransactions', [
+            'foreignKey' => 'warehouse_id',
+        ]);
+        $this->hasMany('WarehouseProducts', [
+            'foreignKey' => 'warehouse_id',
         ]);
     }
 
