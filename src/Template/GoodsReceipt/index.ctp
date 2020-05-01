@@ -39,7 +39,7 @@
                 <tbody>
                     <?php foreach ($goodsReceipts as $index => $item): ?>
                         <tr>
-                            <td><?= $item->docdate ?></td>
+                            <td><?= $item->docdate->i18nFormat(DATE_FORMATE, null, NULL) ?></td>
                             <td><?= $item->docno ?></td>
                             <td><?= $item->status ?></td>
                             <td><?= $item->warehouse->name ?></td>

@@ -54,7 +54,7 @@
                             <table class="table" id="tb-product-selected">
                                 <thead>
                                     <tr>
-                                       
+
                                         <th></th>
                                         <th>ชื่อสินค้า</th>
                                         <th class="text-right">จำนวนที่นำเข้า</th>
@@ -64,7 +64,7 @@
                                 <tbody>
                                     <?php foreach ($goodsReceipt->goods_lines as $index => $line): ?>
                                         <tr id="<?= $line->product->id ?>">
-                                           
+
                                             <td>
                                                 <?php
                                                 $imgUrl = $line->product->product_images[0]['image']['fullpath'];
@@ -89,9 +89,9 @@
             </div>
             <div class="row">
                 <div class="col-12 text-right">
-                    <button type="submit" id="" class="btn btn-outline-primary btn-lg">บันทึก</button>
-                    <?= $this->Html->link('ยืนยันการนำเข้า',['action'=>'confirm',$goodsReceipt->id],['class'=>'btn btn-primary btn-lg'])?>
-                    
+                    <button type="submit" id="" class="btn btn-outline-primary btn-lg" id="bt-save">บันทึก</button>
+                    <?= $this->Html->link('ยืนยันการนำเข้า', ['action' => 'confirm', $goodsReceipt->id], ['class' => 'btn btn-primary btn-lg', 'id' => 'bt-confirm']) ?>
+
                 </div>
             </div>
             <?= $this->Form->end() ?>
@@ -105,7 +105,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myExtraLargeModalLabel">รายการสินค้าในระบบ</h4>
-
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
                 <table class="table table-sm">
@@ -130,7 +130,7 @@
                                     <?php } ?>
                                 </td>
                                 <td><?= $product->name ?></td>
-                                <td>0</td>
+                                <td><?= number_format($product->qty) ?></td>
                                 <td>
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox">
@@ -190,7 +190,7 @@
                                 //tb-product-selected
                                 var strContent = '';
                                 strContent += '<tr id="' + product.id + '">';
-                              
+
                                 strContent += '<td><image src="' + product.images + '" width="70"/></td>';
                                 strContent += '<td>' + product.name + '</td>';
                                 strContent += '<td>';
@@ -204,7 +204,7 @@
                             }
 
                         });
-
+                removeElementById('bt-confirm');
             });
 
             //console.log(productIds);

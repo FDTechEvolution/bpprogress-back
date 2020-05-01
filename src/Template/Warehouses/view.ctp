@@ -1,50 +1,92 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Warehouse $warehouse
- */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Warehouse'), ['action' => 'edit', $warehouse->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Warehouse'), ['action' => 'delete', $warehouse->id], ['confirm' => __('Are you sure you want to delete # {0}?', $warehouse->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Warehouses'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Warehouse'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Shops'), ['controller' => 'Shops', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Shop'), ['controller' => 'Shops', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="warehouses view large-9 medium-8 columns content">
-    <h3><?= h($warehouse->name) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= h($warehouse->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Name') ?></th>
-            <td><?= h($warehouse->name) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Isactive') ?></th>
-            <td><?= h($warehouse->isactive) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Description') ?></th>
-            <td><?= h($warehouse->description) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Shop') ?></th>
-            <td><?= $warehouse->has('shop') ? $this->Html->link($warehouse->shop->name, ['controller' => 'Shops', 'action' => 'view', $warehouse->shop->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created') ?></th>
-            <td><?= h($warehouse->created) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Modified') ?></th>
-            <td><?= h($warehouse->modified) ?></td>
-        </tr>
-    </table>
+<div class="row mt-3">
+    <div class="col-12">
+        
+    </div>
+</div>     
+
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            <!-- Logo & title -->
+            <div class="clearfix">
+                <div class="float-left">
+                    <?= $this->Html->image('logo/logo-light.png', ['height' => '30']) ?>
+                </div>
+                <div class="float-right">
+                    <h3 class="m-0 d-print-none font">รายการสินค้าของ <strong>"<?=$warehouse->name?>"</strong></h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>บริษัท บี.พี.โปรเกรส อินเตอร์เนชั่นแนล จำกัด</h5>
+                    <address>
+                        สำนักงานใหญ่ นครราชสีมา<br>
+                        เลขที่ 969/22 ม.3 ถ.มิตรภาพ<br>
+                        ต.จอหอ อ.เมือง จ.นครราชสีมา<br>
+                        <abbr title="Phone">P:</abbr> โทร.044-276886  แฟ๊กซ์ 044-928504
+                    </address>
+
+                </div><!-- end col -->
+               
+            </div>
+            <!-- end row -->
+
+
+            <?php $finalQty = 0; ?>
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table mt-4 table-centered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                
+                                    <th>รายการ</th>
+
+                                    <th class="text-right">จำนวน</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($warehouse->warehouse_products as $index => $line): ?>
+                                    <tr id="<?= $line->product->id ?>">
+                                        <td><?= $index + 1 ?></td>
+                                       
+                                        <td><?= $line->product->name ?></td>
+                                        <td class="text-right"><?= number_format($line->qty) ?></td>
+
+                                    </tr>
+                                    <?php $finalQty += $line->qty; ?>
+                                <?php endforeach; ?>
+
+                            </tbody>
+                        </table>
+                    </div> <!-- end table-responsive -->
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+
+            <div class="row">
+                <div class="col-sm-6">
+
+                </div> <!-- end col -->
+                <div class="col-sm-6">
+                    <div class="float-right">
+
+                        <h3>รวมทั้งหมด <?= number_format($finalQty) ?> ชิ้น</h3>
+                    </div>
+                    <div class="clearfix"></div>
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+
+            <div class="mt-4 mb-1">
+                <div class="text-right d-print-none">
+
+                    <a href="javascript:window.print()" class="btn btn-primary waves-effect waves-light btn-lg"><i class="mdi mdi-printer mr-1"></i> Print</a>
+                </div>
+            </div>
+        </div> <!-- end card-box -->
+    </div> <!-- end col -->
 </div>
+<!-- end row -->

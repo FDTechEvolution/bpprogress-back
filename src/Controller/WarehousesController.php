@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -10,15 +11,14 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Warehouse[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class WarehousesController extends AppController
-{
+class WarehousesController extends AppController {
+
     /**
      * Index method
      *
      * @return \Cake\Http\Response|null
      */
-    public function index()
-    {
+    public function index() {
         $this->paginate = [
             'contain' => ['Shops']
         ];
@@ -34,11 +34,12 @@ class WarehousesController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $warehouse = $this->Warehouses->get($id, [
-            'contain' => ['Shops'],
-        ]);
+    public function view($id = null) {
+
+        $warehouse = $this->Warehouses->find()
+                ->contain(['WarehouseProducts' => ['Products']])
+                ->where(['Warehouses.id' => $id])
+                ->first();
 
         $this->set('warehouse', $warehouse);
     }
@@ -48,16 +49,15 @@ class WarehousesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
-    {
+    public function add() {
         $warehouse = $this->Warehouses->newEntity();
         if ($this->request->is('post')) {
             $warehouse_name = $postData['name'];
             $checkNameDuplicate = $this->Warehouses->find()->where(['name' => $warehouse_name, 'shop_id' => $postData['shop_id']])->first();
-            if(!is_null($checkNameDuplicate)){
+            if (!is_null($checkNameDuplicate)) {
                 echo "<script>alert('คลังสินค้า $warehouse_name มีอยู่ในระบบแล้ว...กรุณาตรวจสอบ');</script>";
                 echo "<script>setTimeout('window.location.href=\"index\";', 0)</script>";
-            }else{
+            } else {
                 $warehouse = $this->Warehouses->patchEntity($warehouse, $this->request->getData());
                 if ($this->Warehouses->save($warehouse)) {
                     $this->Flash->success(__('The warehouse has been saved.'));
@@ -78,8 +78,7 @@ class WarehousesController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit()
-    {
+    public function edit() {
         if ($this->request->is(['patch', 'post', 'put'])) {
             $postData = $this->request->getData();
             $this->log($postData, 'debug');
@@ -90,10 +89,10 @@ class WarehousesController extends AppController
             ]);
 
             $checkNameDuplicate = $this->Warehouses->find()->where(['name' => $warehouse_name, 'id !=' => $id, 'shop_id' => $postData['shop_id']])->first();
-            if(!is_null($checkNameDuplicate)) {
+            if (!is_null($checkNameDuplicate)) {
                 echo "<script>alert('คลังสินค้า $warehouse_name มีอยู่ในระบบแล้ว...กรุณาตรวจสอบ');</script>";
                 echo "<script>setTimeout('window.location.href=\"index\";', 0)</script>";
-            }else{
+            } else {
                 $warehouse = $this->Warehouses->patchEntity($warehouse, $this->request->getData());
                 if ($this->Warehouses->save($warehouse)) {
                     $this->Flash->success(__('The warehouse has been saved.'));
@@ -107,8 +106,7 @@ class WarehousesController extends AppController
         $this->set(compact('warehouse', 'shops'));
     }
 
-    public function status()
-    {
+    public function status() {
         if ($this->request->is(['patch', 'post', 'put'])) {
             $postData = $this->request->getData();
             $id = $postData['WH_ID'];
@@ -134,8 +132,7 @@ class WarehousesController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
+    public function delete($id = null) {
         $this->request->allowMethod(['post', 'delete']);
         $warehouse = $this->Warehouses->get($id);
         if ($this->Warehouses->delete($warehouse)) {
@@ -146,4 +143,5 @@ class WarehousesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
 }

@@ -53,7 +53,7 @@ class GoodsReceiptController extends AppController {
             $receipt->user_id = $this->MyAuthen->getLogedUserId();
 
             if ($this->GoodsTransactions->save($receipt)) {
-
+                $this->Flash->success(__('สร้างและบันทึกเรียบร้อยแล้ว'));
                 return $this->redirect(['controller' => 'goods-receipt', 'action' => 'update', $receipt->id]);
             } else {
                 $this->log($receipt->getErrors(), 'debug');
@@ -80,6 +80,8 @@ class GoodsReceiptController extends AppController {
 
             $lines = isset($postData['lines']) ? $postData['lines'] : [];
             $this->goodsLine($id, $lines);
+            
+            $this->Flash->success(__('สร้างและบันทึกเรียบร้อยแล้ว'));
             return $this->redirect(['controller' => 'goods-receipt', 'action' => 'update', $id]);
         }
 
@@ -122,6 +124,11 @@ class GoodsReceiptController extends AppController {
             $goodsReceipt->status = $postData['status'];
             $this->GoodsTransactions->save($goodsReceipt);
             
+            //Update warehouse
+            $this->loadComponent('Warehouse');
+            $this->Warehouse->updateByGoodsRceipt($goodsReceipt->id);
+            
+            $this->Flash->success(__('ยืนยันการนำเข้าสินค้าเรียบร้อยแล้ว'));
             return $this->redirect(['action'=>'confirm',$id]);
         }
 
