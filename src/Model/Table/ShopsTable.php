@@ -9,7 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Shops Model
  *
- * @property &\Cake\ORM\Association\HasMany $Orders
+ * @property &\Cake\ORM\Association\HasMany $Addresses
+ * @property \App\Model\Table\OrdersTable&\Cake\ORM\Association\HasMany $Orders
+ * @property &\Cake\ORM\Association\HasMany $Products
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\HasMany $Users
  * @property \App\Model\Table\WarehousesTable&\Cake\ORM\Association\HasMany $Warehouses
  *
@@ -42,7 +44,13 @@ class ShopsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->hasMany('Addresses', [
+            'foreignKey' => 'shop_id',
+        ]);
         $this->hasMany('Orders', [
+            'foreignKey' => 'shop_id',
+        ]);
+        $this->hasMany('Products', [
             'foreignKey' => 'shop_id',
         ]);
         $this->hasMany('Users', [

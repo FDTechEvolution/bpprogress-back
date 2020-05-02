@@ -10,7 +10,10 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\ImagesTable&\Cake\ORM\Association\BelongsTo $Images
- * @property &\Cake\ORM\Association\BelongsTo $Shops
+ * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
+ * @property &\Cake\ORM\Association\HasMany $Addresses
+ * @property &\Cake\ORM\Association\HasMany $GoodsTransactions
+ * @property &\Cake\ORM\Association\HasMany $Orders
  * @property \App\Model\Table\UserAuthensTable&\Cake\ORM\Association\HasMany $UserAuthens
  * @property \App\Model\Table\UserOtpsTable&\Cake\ORM\Association\HasMany $UserOtps
  *
@@ -48,6 +51,15 @@ class UsersTable extends Table
         ]);
         $this->belongsTo('Shops', [
             'foreignKey' => 'shop_id',
+        ]);
+        $this->hasMany('Addresses', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('GoodsTransactions', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('Orders', [
+            'foreignKey' => 'user_id',
         ]);
         $this->hasMany('UserAuthens', [
             'foreignKey' => 'user_id',

@@ -21,6 +21,7 @@ use Cake\ORM\Entity;
  * @property string|null $shop_id
  *
  * @property \App\Model\Entity\Image $image
+ * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\UserAuthen[] $user_authens
  * @property \App\Model\Entity\UserOtp[] $user_otps
  */
@@ -49,6 +50,7 @@ class User extends Entity
         'type' => true,
         'shop_id' => true,
         'image' => true,
+        'shop' => true,
         'user_authens' => true,
         'user_otps' => true,
     ];

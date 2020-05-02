@@ -40,12 +40,12 @@ class ShopsFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '728d18a7-8cab-4a5f-b59c-05c77a5baba9',
+                'id' => 'dd03272e-cef1-40d9-88b6-5d8d1186bea2',
                 'name' => 'Lorem ipsum dolor sit amet',
                 'code' => 'Lorem ipsum dolor sit amet',
                 'username' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-01 10:18:49',
-                'modified' => '2020-05-01 10:18:49',
+                'created' => '2020-05-02 06:06:35',
+                'modified' => '2020-05-02 06:06:35',
                 'isactive' => 'Lorem ipsum dolor sit amet',
             ],
         ];
