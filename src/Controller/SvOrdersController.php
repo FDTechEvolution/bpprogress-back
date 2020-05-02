@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -29,18 +30,28 @@ class SvOrdersController extends AppController {
 
         $this->autoRender = false;
     }
-    
-    public function getOrder($id = null){
+
+    public function getOrder($id = null) {
         $this->modifyHeader();
         $this->RequestHandler->respondAs('json');
-        
+
         $order = $this->Orders->find()
-                ->contain(['OrderLines'=>['Products'=>['ProductImages'=>['Images']],'Shops','Users']])
-                ->where(['Orders.id'=>$id])
+                ->contain([
+                    'OrderLines' => [
+                        'Products' => [
+                            'ProductImages'=> function ($query) {
+                                return $query->contain(['Images'])
+                                        ->where(['ProductImages.type' => 'DEFAULT']);
+                            }] 
+                    ],
+                    'Shops',
+                    'Users'
+                ])
+                ->where(['Orders.id' => $id])
                 ->first();
-        
+
         $this->responData = ['status' => 200, 'msg' => '', 'data' => $order];
-        
+
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
         $this->response = $this->response->withStringBody($json);
         $this->response = $this->response->withType('json');
@@ -96,8 +107,7 @@ class SvOrdersController extends AppController {
 
         return $this->response;
 
-       // echo json_encode($this->responData, JSON_UNESCAPED_UNICODE);
-        
+        // echo json_encode($this->responData, JSON_UNESCAPED_UNICODE);
     }
 
     private function createOrderLine($orderId = null, $orderLines = null) {
