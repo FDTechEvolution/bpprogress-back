@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
+ * @property &\Cake\ORM\Association\HasMany $Orders
  *
  * @method \App\Model\Entity\Address get($primaryKey, $options = [])
  * @method \App\Model\Entity\Address newEntity($data = null, array $options = [])
@@ -46,6 +47,9 @@ class AddressesTable extends Table
         ]);
         $this->belongsTo('Shops', [
             'foreignKey' => 'shop_id',
+        ]);
+        $this->hasMany('Orders', [
+            'foreignKey' => 'address_id',
         ]);
     }
 

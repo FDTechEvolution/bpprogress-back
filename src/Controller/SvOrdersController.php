@@ -39,10 +39,10 @@ class SvOrdersController extends AppController {
                 ->contain([
                     'OrderLines' => [
                         'Products' => [
-                            'ProductImages'=> function ($query) {
+                            'ProductImages' => function ($query) {
                                 return $query->contain(['Images'])
                                         ->where(['ProductImages.type' => 'DEFAULT']);
-                            }] 
+                            }]
                     ],
                     'Shops',
                     'Users'
@@ -89,7 +89,7 @@ class SvOrdersController extends AppController {
                     }
 
                     $order->totalamt = $totalamt;
-                    $order->status = 'NEW';
+                    //$order->status = 'NEW';
                     $this->Orders->save($order);
 
                     $this->responData['data'] = $order;
@@ -108,6 +108,43 @@ class SvOrdersController extends AppController {
         return $this->response;
 
         // echo json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function updateOrder() {
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+
+        if ($this->request->is(['post', 'ajax'])) {
+            $postData = $this->request->getData();
+            $orderId = $postData['order_id'];
+
+            $order = $this->Orders->find()
+                    ->where(['Orders.id' => $orderId])
+                    ->first();
+
+            if (isset($postData['status'])) {
+                $order->status = $postData['status'];
+            }
+            if (isset($postData['totalamt'])) {
+                $order->totalamt = $postData['totalamt'];
+            }
+            if (isset($postData['address_id'])) {
+                $order->address_id = $postData['address_id'];
+            }
+            if (isset($postData['payment_method'])) {
+                $order->payment_method = $postData['payment_method'];
+            }
+
+            $this->Orders->save($order);
+            $this->responData['data'] = $order;
+            $this->responData['status'] = 200;
+        }
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
     }
 
     private function createOrderLine($orderId = null, $orderLines = null) {

@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property &\Cake\ORM\Association\BelongsTo $Addresses
  * @property \App\Model\Table\OrderLinesTable&\Cake\ORM\Association\HasMany $OrderLines
  *
  * @method \App\Model\Entity\Order get($primaryKey, $options = [])
@@ -50,6 +51,9 @@ class OrdersTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+        $this->belongsTo('Addresses', [
+            'foreignKey' => 'address_id',
+        ]);
         $this->hasMany('OrderLines', [
             'foreignKey' => 'order_id',
         ]);
@@ -86,6 +90,11 @@ class OrdersTable extends Table
             ->maxLength('description', 255)
             ->allowEmptyString('description');
 
+        $validator
+            ->scalar('payment_method')
+            ->maxLength('payment_method', 45)
+            ->allowEmptyString('payment_method');
+
         return $validator;
     }
 
@@ -100,6 +109,7 @@ class OrdersTable extends Table
     {
         $rules->add($rules->existsIn(['shop_id'], 'Shops'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->existsIn(['address_id'], 'Addresses'));
 
         return $rules;
     }

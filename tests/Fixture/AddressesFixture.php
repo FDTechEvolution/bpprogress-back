@@ -45,7 +45,7 @@ class AddressesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '2d1fd8ca-76dd-4c3d-83b7-e1eb23ce9c72',
+                'id' => 'f714906c-2d71-4e3c-9512-166ace174a57',
                 'address_line' => 'Lorem ipsum dolor sit amet',
                 'subdistrict' => 'Lorem ipsum dolor sit amet',
                 'district' => 'Lorem ipsum dolor sit amet',
@@ -53,10 +53,10 @@ class AddressesFixture extends TestFixture
                 'zipcode' => 'Lor',
                 'mobile' => 'Lorem ipsum dolor sit amet',
                 'type' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-02 06:06:19',
-                'modified' => '2020-05-02 06:06:19',
-                'user_id' => '424a3344-215d-480b-8e15-1409d7c416cd',
-                'shop_id' => 'e85576cb-05cc-48f1-a776-2d19bbbe1add',
+                'created' => '2020-05-02 09:39:03',
+                'modified' => '2020-05-02 09:39:03',
+                'user_id' => '2fd521ea-894a-4359-aaa5-8126db9d0629',
+                'shop_id' => 'e5c3ec40-aa49-4d19-8d48-84b444033010',
             ],
         ];
         parent::init();

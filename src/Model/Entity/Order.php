@@ -15,6 +15,8 @@ use Cake\ORM\Entity;
  * @property string|null $description
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
+ * @property string|null $address_id
+ * @property string|null $payment_method
  *
  * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\User $user
@@ -40,6 +42,8 @@ class Order extends Entity
         'description' => true,
         'created' => true,
         'modified' => true,
+        'address_id' => true,
+        'payment_method' => true,
         'shop' => true,
         'user' => true,
         'order_lines' => true,
