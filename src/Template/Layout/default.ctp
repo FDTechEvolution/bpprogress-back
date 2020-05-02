@@ -33,9 +33,9 @@
             <?= $this->element('Layout/header') ?>
 
             <?php if ($loggedUser->type == 'SELLER') { ?>
-                <?= $this->element('Layout/leftbar_seller') ?>
+                <?= $this->element('Layout/leftbar') ?>
             <?php } elseif ($loggedUser->type == 'ADMIN') { ?>
-                <?= $this->element('Layout/leftbar_admin') ?>
+                <?= $this->element('Layout/leftbar') ?>
             <?php } ?>
 
 

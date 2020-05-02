@@ -29,6 +29,24 @@ class SvOrdersController extends AppController {
 
         $this->autoRender = false;
     }
+    
+    public function getOrder($id = null){
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+        
+        $order = $this->Orders->find()
+                ->contain(['OrderLines'=>['Products'=>['ProductImages'=>['Images']],'Shops','Users']])
+                ->where(['Orders.id'=>$id])
+                ->first();
+        
+        $this->responData = ['status' => 200, 'msg' => '', 'data' => $order];
+        
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
+    }
 
     public function save() {
         $this->modifyHeader();
