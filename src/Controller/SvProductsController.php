@@ -22,6 +22,7 @@ class SvProductsController extends AppController
 
         $this->Products = TableRegistry::get('Products');
         $this->ProductImages = TableRegistry::get('ProductImages');
+        $this->Wholesales = TableRegistry::get('WholesaleRates');
     }
 
     public function getAllProducts() {
@@ -55,6 +56,14 @@ class SvProductsController extends AppController
                                 ->where(['ProductImages.product_id' => $products->id, 'ProductImages.type' => 'DEFAULT'])
                                 ->first();
                 $products['images'] = $product_img->image->fullpath;
+
+                if($products->iswholesale == 'Y'){
+                    $product_wholesales = $this->Wholesales->find()
+                                        ->where(['product_id' => $id])
+                                        ->order(['seq' => 'ASC'])
+                                        ->toArray();
+                    $products['wholesale_rate'] = $product_wholesales;
+                }
             }
 
             $this->responData['status'] = 200;
@@ -86,7 +95,7 @@ class SvProductsController extends AppController
     public function getProductCategory () {
         if ($this->request->is(['get','ajax'])) {
             $id = $this->request->getQuery('id');
-            $this->log($id, 'debug');
+            // $this->log($id, 'debug');
             $products = $this->Products->find()
                         ->contain(['ProductCategories'])
                         ->where(['ProductCategories.id' => $id, 'Products.isactive' => 'Y'])
