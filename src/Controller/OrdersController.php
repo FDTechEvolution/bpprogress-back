@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -10,104 +11,45 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Order[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class OrdersController extends AppController
-{
+class OrdersController extends AppController {
+
     /**
      * Index method
      *
      * @return \Cake\Http\Response|null
      */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Shops', 'Users'],
-        ];
-        $orders = $this->paginate($this->Orders);
+    public function index() {
 
-        $this->set(compact('orders'));
-    }
+        if ($this->request->is(['POST'])) {
+            $postData = $this->request->getData();
+            $this->Orders->updateAll(['status' => $postData['status']], ['Orders.id' => $postData['order_id']]);
 
-    /**
-     * View method
-     *
-     * @param string|null $id Order id.
-     * @return \Cake\Http\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $order = $this->Orders->get($id, [
-            'contain' => ['Shops', 'Users', 'OrderLines'],
-        ]);
-
-        $this->set('order', $order);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $order = $this->Orders->newEntity();
-        if ($this->request->is('post')) {
-            $order = $this->Orders->patchEntity($order, $this->request->getData());
-            if ($this->Orders->save($order)) {
-                $this->Flash->success(__('The order has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The order could not be saved. Please, try again.'));
+            return $this->redirect(['action' => 'index']);
         }
-        $shops = $this->Orders->Shops->find('list', ['limit' => 200]);
-        $users = $this->Orders->Users->find('list', ['limit' => 200]);
-        $this->set(compact('order', 'shops', 'users'));
+        $status = 'NEW';
+        $orders = $this->getOrderBtStatus($status);
+        $this->set(compact('orders', 'status'));
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Order id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $order = $this->Orders->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $order = $this->Orders->patchEntity($order, $this->request->getData());
-            if ($this->Orders->save($order)) {
-                $this->Flash->success(__('The order has been saved.'));
+    public function waitingDelivery() {
+        if ($this->request->is(['POST'])) {
+            $postData = $this->request->getData();
+            $this->Orders->updateAll(['status' => $postData['status']], ['Orders.id' => $postData['order_id']]);
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The order could not be saved. Please, try again.'));
+            return $this->redirect(['action' => 'waitingDelivery']);
         }
-        $shops = $this->Orders->Shops->find('list', ['limit' => 200]);
-        $users = $this->Orders->Users->find('list', ['limit' => 200]);
-        $this->set(compact('order', 'shops', 'users'));
+        $status = 'WT';
+        $orders = $this->getOrderBtStatus($status);
+        $this->set(compact('orders', 'status'));
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Order id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $order = $this->Orders->get($id);
-        if ($this->Orders->delete($order)) {
-            $this->Flash->success(__('The order has been deleted.'));
-        } else {
-            $this->Flash->error(__('The order could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+    private function getOrderBtStatus($status = null ) {
+        $user = $this->MyAuthen->getLogedUser();
+        $orders = $this->Orders->find()
+                ->contain(['Users'])
+                ->where(['Orders.shop_id' => $user['shop_id'], 'status' => $status])
+                ->toArray();
+        return $orders;
     }
+
 }

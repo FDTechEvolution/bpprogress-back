@@ -59,6 +59,39 @@ class SvOrdersController extends AppController {
         return $this->response;
     }
 
+    public function getOrderByUser($userId = null) {
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+
+        $orders = $this->Orders->find()
+                ->contain([
+                    'OrderLines' => [
+                        'Products' => [
+                            'ProductImages' => function ($query) {
+                                return $query->contain(['Images'])
+                                        ->where(['ProductImages.type' => 'DEFAULT']);
+                            }]
+                    ],
+                    'Shops',
+                    'Users'
+                ])
+                ->where(['Orders.user_id' => $userId])
+                ->order(['Orders.created' => 'DESC'])
+                ->toArray();
+        $_orders = $orders;                 
+        foreach ($_orders as $index=>$order){
+            $orders[$index]['docdate'] = $order->docdate->i18nFormat(DATE_FORMATE, null, NULL);
+        }                    
+
+        $this->responData = ['status' => 200, 'msg' => '', 'data' => $orders];
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
+    }
+
     public function save() {
         $this->modifyHeader();
         $this->RequestHandler->respondAs('json');
@@ -74,6 +107,7 @@ class SvOrdersController extends AppController {
                 $order->user_id = $postData['user_id'];
                 $order->docdate = new Date();
                 $order->status = 'DR';
+                $order->docno = $this->Utils->generateNormalDocNo('OR');
 
                 if ($this->Orders->save($order)) {
                     $this->createOrderLine($order->id, $postData['order_lines']);

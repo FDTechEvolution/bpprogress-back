@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- * @property &\Cake\ORM\Association\BelongsTo $Addresses
+ * @property \App\Model\Table\AddressesTable&\Cake\ORM\Association\BelongsTo $Addresses
  * @property \App\Model\Table\OrderLinesTable&\Cake\ORM\Association\HasMany $OrderLines
  *
  * @method \App\Model\Entity\Order get($primaryKey, $options = [])
@@ -75,6 +75,11 @@ class OrdersTable extends Table
             ->date('docdate')
             ->requirePresence('docdate', 'create')
             ->notEmptyDate('docdate');
+
+        $validator
+            ->scalar('docno')
+            ->maxLength('docno', 45)
+            ->allowEmptyString('docno');
 
         $validator
             ->scalar('status')

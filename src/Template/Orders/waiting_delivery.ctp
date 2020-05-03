@@ -40,7 +40,7 @@
                             <td class="text-right"><?= number_format($order->totalamt) ?></td>
                             <td class="text-right">
 
-                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?=$order->id?>" data-status="WT"> ยืนยัน </button>
+                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?=$order->id?>" data-status="SENT"> ส่งแล้ว </button>
                             </td>
                         </tr>
 

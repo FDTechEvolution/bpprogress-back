@@ -213,6 +213,7 @@
 
         <!-- App js -->
         <?= $this->Html->script('/css/assets/js/app.min.js') ?>
+        <?= $this->Html->script('notifications.js') ?>
 
     </body>
 </html>

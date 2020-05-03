@@ -10,6 +10,7 @@ use Cake\ORM\Entity;
  * @property string $shop_id
  * @property string $user_id
  * @property \Cake\I18n\FrozenDate $docdate
+ * @property string|null $docno
  * @property string|null $status
  * @property float|null $totalamt
  * @property string|null $description
@@ -20,6 +21,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Address $address
  * @property \App\Model\Entity\OrderLine[] $order_lines
  */
 class Order extends Entity
@@ -37,6 +39,7 @@ class Order extends Entity
         'shop_id' => true,
         'user_id' => true,
         'docdate' => true,
+        'docno' => true,
         'status' => true,
         'totalamt' => true,
         'description' => true,
@@ -46,6 +49,7 @@ class Order extends Entity
         'payment_method' => true,
         'shop' => true,
         'user' => true,
+        'address' => true,
         'order_lines' => true,
     ];
 }
