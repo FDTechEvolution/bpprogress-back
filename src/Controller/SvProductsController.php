@@ -60,7 +60,7 @@ class SvProductsController extends AppController
                 if($products->iswholesale == 'Y'){
                     $product_wholesales = $this->Wholesales->find()
                                         ->where(['product_id' => $id])
-                                        ->order(['seq' => 'ASC'])
+                                        ->order(['startqty' => 'ASC'])
                                         ->toArray();
                     $products['wholesale_rate'] = $product_wholesales;
                 }
