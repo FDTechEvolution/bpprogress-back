@@ -18,9 +18,11 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string|null $user_id
  * @property string|null $shop_id
+ * @property string|null $isactive
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Shop $shop
+ * @property \App\Model\Entity\Order[] $orders
  */
 class Address extends Entity
 {
@@ -45,7 +47,9 @@ class Address extends Entity
         'modified' => true,
         'user_id' => true,
         'shop_id' => true,
+        'isactive' => true,
         'user' => true,
         'shop' => true,
+        'orders' => true,
     ];
 }

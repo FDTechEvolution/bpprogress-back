@@ -100,6 +100,11 @@ class OrdersTable extends Table
             ->maxLength('payment_method', 45)
             ->allowEmptyString('payment_method');
 
+        $validator
+            ->scalar('payment_status')
+            ->maxLength('payment_status', 45)
+            ->allowEmptyString('payment_status');
+
         return $validator;
     }
 

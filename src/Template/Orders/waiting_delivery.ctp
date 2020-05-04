@@ -15,7 +15,7 @@
         <div class="card-box">
             <div class="row">
                 <div class="col-12">
-                    <?=$this->element('Orders/menu')?>
+                    <?= $this->element('Orders/menu') ?>
                 </div>
             </div>
             <hr/>
@@ -26,6 +26,8 @@
                         <th>วันที่สั่งซื้อ</th>
                         <th>หมายเลขคำสั่งซื้อ</th>
                         <th>ลูกค้า</th>
+                        <th>สถานะ</th>
+                        <th>สถานะการชำระเงิน</th>
                         <th class="text-right">จำนวนเงิน</th>
                         <th></th>
                     </tr>
@@ -37,10 +39,12 @@
                             <td><?= $order->docdate->i18nFormat(DATE_FORMATE, null, NULL) ?></td>
                             <td><?= $this->Html->link($order->docno, ['controller' => 'orders', 'action' => 'view', $order->id]) ?></td>
                             <td><?= $order->user->fullname ?></td>
+                            <td><?= $orderStatus[$order->status] ?></td>
+                            <td><?= $paymentStatus[$order->payment_status] ?></td>
                             <td class="text-right"><?= number_format($order->totalamt) ?></td>
                             <td class="text-right">
 
-                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?=$order->id?>" data-status="SENT"> ส่งแล้ว </button>
+                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $order->id ?>" data-status="SENT"> ส่งแล้ว </button>
                             </td>
                         </tr>
 
@@ -72,10 +76,10 @@
 
 <script>
     $(document).ready(function () {
-        $('[data-action="update-status"]').on('click',function(){
+        $('[data-action="update-status"]').on('click', function () {
             var order_id = $(this).attr('data-id');
             var status = $(this).attr('data-status');
-            
+
             $('#order_id').val(order_id);
             $('#status').val(status);
             $('#frm-order').submit();

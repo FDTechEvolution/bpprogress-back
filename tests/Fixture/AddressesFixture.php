@@ -27,6 +27,7 @@ class AddressesFixture extends TestFixture
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'user_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'shop_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
+        'isactive' => ['type' => 'string', 'length' => null, 'null' => true, 'default' => 'Y', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -45,7 +46,7 @@ class AddressesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 'f714906c-2d71-4e3c-9512-166ace174a57',
+                'id' => '8e925c90-d9fd-44ff-a93b-e8a4d3ebea97',
                 'address_line' => 'Lorem ipsum dolor sit amet',
                 'subdistrict' => 'Lorem ipsum dolor sit amet',
                 'district' => 'Lorem ipsum dolor sit amet',
@@ -53,10 +54,11 @@ class AddressesFixture extends TestFixture
                 'zipcode' => 'Lor',
                 'mobile' => 'Lorem ipsum dolor sit amet',
                 'type' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-02 09:39:03',
-                'modified' => '2020-05-02 09:39:03',
-                'user_id' => '2fd521ea-894a-4359-aaa5-8126db9d0629',
-                'shop_id' => 'e5c3ec40-aa49-4d19-8d48-84b444033010',
+                'created' => '2020-05-04 05:24:56',
+                'modified' => '2020-05-04 05:24:56',
+                'user_id' => 'b7ef7a89-77cc-4c89-bcdd-d68c5ef053fb',
+                'shop_id' => 'df780074-a9bd-4814-b914-35f542359efc',
+                'isactive' => 'Lorem ipsum dolor sit amet',
             ],
         ];
         parent::init();

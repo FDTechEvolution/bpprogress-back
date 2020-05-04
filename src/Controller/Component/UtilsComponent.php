@@ -42,7 +42,7 @@ class UtilsComponent extends Component {
 
     public function generateNormalDocNo($prefix = '') {
         $time = Time::now();
-        $timeStr = $time->i18nFormat('yyMMddHHmm');
+        $timeStr = $time->i18nFormat('yyMMddHHmmu');
         
         return $prefix.$timeStr;
     }

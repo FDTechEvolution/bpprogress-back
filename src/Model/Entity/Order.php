@@ -18,6 +18,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $modified
  * @property string|null $address_id
  * @property string|null $payment_method
+ * @property string|null $payment_status
  *
  * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\User $user
@@ -47,6 +48,7 @@ class Order extends Entity
         'modified' => true,
         'address_id' => true,
         'payment_method' => true,
+        'payment_status' => true,
         'shop' => true,
         'user' => true,
         'address' => true,

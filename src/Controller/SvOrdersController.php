@@ -157,6 +157,10 @@ class SvOrdersController extends AppController {
                     ->first();
 
             if (isset($postData['status'])) {
+                if($postData['status'] =='NEW' && $order->status =='DR'){
+                    $this->loadComponent('Warehouse');
+                    $this->Warehouse->updateByOrder($orderId);
+                }
                 $order->status = $postData['status'];
             }
             if (isset($postData['totalamt'])) {
@@ -172,6 +176,8 @@ class SvOrdersController extends AppController {
             $this->Orders->save($order);
             $this->responData['data'] = $order;
             $this->responData['status'] = 200;
+            
+            
         }
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
@@ -192,7 +198,15 @@ class SvOrdersController extends AppController {
 
                 $unitPrice = 0;
                 if ($product->iswholesale == 'Y') {
-                    
+                    $wholesale = $this->Products->WholesaleRates->find()
+                            ->where(['WholesaleRates.endqty >='=>$line['qty']])
+                            ->order(['WholesaleRates.endqty'=>'ASC'])
+                            ->first();
+                    if(is_null($wholesale)){
+                        $unitPrice = $product->special_price;
+                    }else{
+                        $unitPrice = $wholesale->price;
+                    }
                 } else {
                     $unitPrice = $product->special_price;
                 }

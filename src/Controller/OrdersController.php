@@ -13,6 +13,18 @@ use App\Controller\AppController;
  */
 class OrdersController extends AppController {
 
+    public $OrderStatus = [
+        'DR'=>'ฉบับร่าง',
+        'NEW'=>'คำสั่งซื้อใหม่',
+        'WT'=>'รอจัดส่ง',
+        'SENT'=>'ส่งแล้ว',
+        'RECEIPT'=>'รับสินค้าแล้ว'
+    ];
+    
+    public $PaymentStatus = [
+        'PAID'=>'ชำระเงินแล้ว',
+        'NOTPAID'=>'ยังไม่ได้ชำระเงิน'
+    ];
     /**
      * Index method
      *
@@ -28,7 +40,9 @@ class OrdersController extends AppController {
         }
         $status = 'NEW';
         $orders = $this->getOrderBtStatus($status);
-        $this->set(compact('orders', 'status'));
+        $orderStatus = $this->OrderStatus;
+        $paymentStatus = $this->PaymentStatus;
+        $this->set(compact('orders', 'status','orderStatus','paymentStatus'));
     }
 
     public function waitingDelivery() {
@@ -40,7 +54,9 @@ class OrdersController extends AppController {
         }
         $status = 'WT';
         $orders = $this->getOrderBtStatus($status);
-        $this->set(compact('orders', 'status'));
+        $orderStatus = $this->OrderStatus;
+        $paymentStatus = $this->PaymentStatus;
+        $this->set(compact('orders', 'status','orderStatus','paymentStatus'));
     }
 
     private function getOrderBtStatus($status = null ) {

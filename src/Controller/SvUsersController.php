@@ -30,7 +30,9 @@ class SvUsersController extends AppController {
 
     public function getUser($id = null) {
         $user = $this->Users->find()
-                ->contain(['Addresses'])
+                ->contain(['Addresses'=>function($q){
+                    return $q->where(['Addresses.isactive'=>'Y']);
+                }])
                 ->where(['Users.id' => $id])
                 ->first();
 
@@ -61,6 +63,31 @@ class SvUsersController extends AppController {
 
 
 
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
+    }
+
+    public function updateAddress() {
+        if ($this->request->is(['POST', 'PUT', 'AJAX'])) {
+            $postData = $this->request->getData();
+            if (isset($postData['address_id']) && $postData['address_id'] != '') {
+                $address = $this->Addresses->find()->where(['Addresses.id' => $postData['address_id']])->first();
+                if (!is_null($address)) {
+                    if(isset($postData['isactive'])){
+                        $address->isactive = $postData['isactive'];
+                    }
+                    
+                    $this->Addresses->save($address);
+                     $this->responData = ['status' => 200, 'msg' => '', 'data' => $address];
+                }
+            }
+        }
+
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
         $this->response = $this->response->withStringBody($json);
         $this->response = $this->response->withType('json');

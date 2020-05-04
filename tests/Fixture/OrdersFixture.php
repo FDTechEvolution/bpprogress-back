@@ -27,6 +27,7 @@ class OrdersFixture extends TestFixture
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'address_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'payment_method' => ['type' => 'string', 'length' => 45, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'payment_status' => ['type' => 'string', 'length' => 45, 'null' => true, 'default' => 'NOTPAID', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -45,18 +46,19 @@ class OrdersFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 'd63bb4f2-6eca-4b6f-886d-bb9122e65057',
-                'shop_id' => '9ab471d5-6715-4897-b072-f003e8821588',
-                'user_id' => '37b8445c-fe1b-422c-93e2-9d1a7f46e90a',
-                'docdate' => '2020-05-02',
+                'id' => '304bd848-1bbf-48fd-89c5-41a07b98856f',
+                'shop_id' => 'c76888c2-a301-4d18-b087-770ad489c1ca',
+                'user_id' => 'e481df86-d483-4c66-8b44-fea7c23b64b4',
+                'docdate' => '2020-05-03',
                 'docno' => 'Lorem ipsum dolor sit amet',
                 'status' => 'Lorem ipsum dolor sit amet',
                 'totalamt' => 1.5,
                 'description' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-02 12:17:06',
-                'modified' => '2020-05-02 12:17:06',
-                'address_id' => 'c8d3c9c8-dbe7-466b-a0c9-ac9e33c371ab',
+                'created' => '2020-05-03 17:16:27',
+                'modified' => '2020-05-03 17:16:27',
+                'address_id' => 'abc02273-ecf6-440b-b8f6-216f62019d78',
                 'payment_method' => 'Lorem ipsum dolor sit amet',
+                'payment_status' => 'Lorem ipsum dolor sit amet',
             ],
         ];
         parent::init();

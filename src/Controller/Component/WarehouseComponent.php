@@ -56,6 +56,10 @@ class WarehouseComponent extends Component {
 
         
     }
+    
+    public function updateByOrder($orderId = null){
+        
+    }
 
     public function updateProductQtyById($id = null) {
         $this->WarehouseProducts = TableRegistry::get('WarehouseProducts');
