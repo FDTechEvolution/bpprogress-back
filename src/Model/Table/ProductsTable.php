@@ -11,9 +11,9 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\BrandsTable&\Cake\ORM\Association\BelongsTo $Brands
  * @property \App\Model\Table\ProductCategoriesTable&\Cake\ORM\Association\BelongsTo $ProductCategories
- * @property &\Cake\ORM\Association\BelongsTo $Shops
+ * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
  * @property \App\Model\Table\GoodsLinesTable&\Cake\ORM\Association\HasMany $GoodsLines
- * @property &\Cake\ORM\Association\HasMany $OrderLines
+ * @property \App\Model\Table\OrderLinesTable&\Cake\ORM\Association\HasMany $OrderLines
  * @property \App\Model\Table\ProductImagesTable&\Cake\ORM\Association\HasMany $ProductImages
  * @property \App\Model\Table\WarehouseProductsTable&\Cake\ORM\Association\HasMany $WarehouseProducts
  * @property \App\Model\Table\WholesaleRatesTable&\Cake\ORM\Association\HasMany $WholesaleRates
@@ -135,6 +135,10 @@ class ProductsTable extends Table
         $validator
             ->integer('qty')
             ->allowEmptyString('qty');
+
+        $validator
+            ->integer('view_count')
+            ->allowEmptyString('view_count');
 
         return $validator;
     }

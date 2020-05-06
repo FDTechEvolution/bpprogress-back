@@ -23,10 +23,13 @@ use Cake\ORM\Entity;
  * @property string|null $note
  * @property int|null $qty
  * @property string $shop_id
+ * @property int|null $view_count
  *
  * @property \App\Model\Entity\Brand $brand
  * @property \App\Model\Entity\ProductCategory $product_category
+ * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\GoodsLine[] $goods_lines
+ * @property \App\Model\Entity\OrderLine[] $order_lines
  * @property \App\Model\Entity\ProductImage[] $product_images
  * @property \App\Model\Entity\WarehouseProduct[] $warehouse_products
  * @property \App\Model\Entity\WholesaleRate[] $wholesale_rates
@@ -59,9 +62,12 @@ class Product extends Entity
         'note' => true,
         'qty' => true,
         'shop_id' => true,
+        'view_count' => true,
         'brand' => true,
         'product_category' => true,
+        'shop' => true,
         'goods_lines' => true,
+        'order_lines' => true,
         'product_images' => true,
         'warehouse_products' => true,
         'wholesale_rates' => true,
