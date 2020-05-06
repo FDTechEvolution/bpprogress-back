@@ -14,6 +14,8 @@ use Cake\ORM\TableRegistry;
 class SvProductsController extends AppController
 {
     public $Products = NULL;
+    public $WholesaleRates = null;
+    
     public $responData = ['status'=>403,'msg'=>'','data'=>[]];
 
     public function beforeFilter(Event $event) {
@@ -22,7 +24,7 @@ class SvProductsController extends AppController
 
         $this->Products = TableRegistry::get('Products');
         $this->ProductImages = TableRegistry::get('ProductImages');
-        $this->Wholesales = TableRegistry::get('WholesaleRates');
+        $this->WholesaleRates = TableRegistry::get('WholesaleRates');
     }
 
     public function getAllProducts() {
@@ -33,7 +35,10 @@ class SvProductsController extends AppController
                                 ->contain(['Images'])
                                 ->where(['ProductImages.product_id' => $product->id, 'ProductImages.type' => 'DEFAULT'])
                                 ->first();
-                $products[$index]['images'] = $product_img->image->fullpath;
+                if(!is_null($product_img)){
+                    $products[$index]['images'] = $product_img->image->fullpath;
+                }
+                
             }
             $this->responData['status'] = 200;
             $this->responData['data'] = $products;
@@ -58,7 +63,7 @@ class SvProductsController extends AppController
                 $products['images'] = $product_img->image->fullpath;
 
                 if($products->iswholesale == 'Y'){
-                    $product_wholesales = $this->Wholesales->find()
+                    $product_wholesales = $this->WholesaleRates->find()
                                         ->where(['product_id' => $id])
                                         ->order(['seq' => 'ASC'])
                                         ->toArray();
@@ -75,21 +80,53 @@ class SvProductsController extends AppController
     }
 
     public function getNewProducts() { // home new product ชั่วคราว
+        $this->autoRender = false;
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+        
         if ($this->request->is(['get','ajax'])) {
-            $products = $this->Products->find()->where(['isactive' => 'Y'])->order(['created' => 'DESC'])->limit(10)->toArray();
+            $products = $this->Products->find()
+                    ->contain([
+                        'ProductImages'=>function($q){
+                            return $q->contain(['Images'])
+                                    ->where(['ProductImages.type'=>'DEFAULT']);
+                        }
+                    ])
+                    ->where(['isactive' => 'Y'])
+                    ->order(['created' => 'DESC'])
+                    ->limit(10)
+                    ->toArray();
+            
             foreach($products as $index => $product) {
-                $product_img = $this->ProductImages->find()
-                                ->contain(['Images'])
-                                ->where(['ProductImages.product_id' => $product->id, 'ProductImages.type' => 'DEFAULT'])
-                                ->first();
-                $products[$index]['images'] = $product_img->image->fullpath;
+                
+                if(sizeof($product['product_images'])!=0){
+                    $products[$index]['image'] = $product['product_images'][0]['image']['fullpath'];
+                }else{
+                     $products[$index]['image'] = null;
+                }
+                if($product['iswholesale'] =='Y'){
+                    $maxPrice = $this->WholesaleRates->find()
+                            ->where(['WholesaleRates.product_id'=>$product['id']])
+                            ->order(['WholesaleRates.price'=>'DESC'])
+                            ->first();
+                    
+                    $minPrice = $this->WholesaleRates->find()
+                            ->where(['WholesaleRates.product_id'=>$product['id']])
+                            ->order(['WholesaleRates.price'=>'ASC'])
+                            ->first();
+                    $products[$index]['wholesale_price'] = sprintf('%s-%s', number_format($minPrice['price']), number_format($maxPrice['price']));
+                }
             }
             $this->responData['status'] = 200;
             $this->responData['data'] = $products;
         }
+        
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
-        $this->set(compact('json'));
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
     }
 
     public function getProductCategory () {

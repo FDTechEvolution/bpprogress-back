@@ -199,8 +199,11 @@ class SvOrdersController extends AppController {
                 $unitPrice = 0;
                 if ($product->iswholesale == 'Y') {
                     $wholesale = $this->Products->WholesaleRates->find()
-                            ->where(['WholesaleRates.endqty >='=>$line['qty']])
-                            ->order(['WholesaleRates.endqty'=>'ASC'])
+                            ->where([
+                                'WholesaleRates.endqty >='=>$line['qty'],
+                                'WholesaleRates.startqty <='=>$line['qty'],
+                                'WholesaleRates.product_id'=>$product->id
+                                    ])
                             ->first();
                     if(is_null($wholesale)){
                         $unitPrice = $product->special_price;

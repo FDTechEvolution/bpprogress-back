@@ -113,17 +113,17 @@
                                                 <div class="row" id="<?= $item['id'] ?>">
                                                     <div class="col-4">
                                                         <div class="form-group">
-                                                            <input type="number" name="wholesales[startqty][]" class="form-control" value="<?=$item['startqty']?>" />
+                                                            <input type="number" name="wholesales[startqty][]" class="form-control" value="<?= $item['startqty'] ?>" />
                                                         </div>
                                                     </div>
                                                     <div class="col-4">
                                                         <div class="form-group">
-                                                            <input type="number" name="wholesales[endqty][]" class="form-control" value="<?=$item['endqty']?>"/>
+                                                            <input type="number" name="wholesales[endqty][]" class="form-control" value="<?= $item['endqty'] ?>"/>
                                                         </div>
                                                     </div>
                                                     <div class="col-2">
                                                         <div class="form-group">
-                                                            <input type="number" name="wholesales[price][]" class="form-control" value="<?=$item['price']?>"/>
+                                                            <input type="number" name="wholesales[price][]" class="form-control" value="<?= $item['price'] ?>"/>
                                                         </div>
                                                     </div>
                                                     <div class="col-2">
@@ -147,13 +147,17 @@
 
                             <div class="col-10">
                                 <p>*** ขนาดที่แนะนำควรจะเป็น 1:1</p>
-                                
+
                                 <input name="file" type="file" name="image_file" id="image_file" accept="image/png, image/jpeg" />
 
-                                <div class="row" id="box-image">
-                                    <?php foreach ($product->product_images as $productImage): ?>
-                                        <div class="col-md-2">
+                                <div class="row mt-2" id="box-image">
+                                    <?php foreach ($product->product_images as $index =>$productImage): ?>
+                                        <div class="col-md-2 text-center" id="<?= $productImage->id ?>">
                                             <image src="<?= $productImage->image->fullpath ?>" class="img-fluid" />
+                                            <?php if($index !=0){?>
+                                            <a href="jacascript:void(0);" data-action="update-default" data-id="<?= $productImage->id ?>">[ตั้งเป็นหน้าปก]</a>
+                                            <?php }?>
+                                            <a href="jacascript:void(0);" data-action="delete-image" data-id="<?= $productImage->id ?>">[ลบ]</a>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
@@ -221,6 +225,48 @@
 <script>
 
     $(document).ready(function () {
+        $('[data-action="delete-image"]').on('click', function () {
+            var product_image_id = $(this).attr('data-id');
+            $.ajax({
+                type: 'POST',
+                url: siteurl + 'sv-product-images/delete-image/' + product_image_id,
+                data: [],
+                //dataType: 'json',
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    console.log(response);
+                    removeElementById(product_image_id);
+                    success('ลบรูปภาพแล้ว');
+                }
+            });
+        });
+        
+        $('[data-action="update-default"]').on('click', function () {
+            var product_image_id = $(this).attr('data-id');
+            $.ajax({
+                type: 'POST',
+                url: siteurl + 'sv-product-images/set-default/' + product_image_id,
+                data: [],
+                //dataType: 'json',
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    console.log(response);
+                    //removeElementById(product_image_id);
+                    success('ตั้งค่าเรียบร้อย');
+                }
+            });
+        });
+
         $('#image_file').on('change', function (e) {
             e.preventDefault();
             var formData = new FormData();
@@ -233,7 +279,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: siteurl +'sv-product-images/upload-product-image',
+                url: siteurl + 'sv-product-images/upload-product-image',
                 data: formData,
                 //dataType: 'json',
                 contentType: false,
@@ -248,6 +294,7 @@
                     console.log(res);
                     var html = '<div class="col-2"><image src="' + res.data.fullpath + '" class="img-fluid"/></div>';
                     $('#box-image').append(html);
+                    success('เพิ่มรูปแล้ว');
                 }
             });
         });

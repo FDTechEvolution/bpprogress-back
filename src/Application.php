@@ -74,12 +74,11 @@ class Application extends BaseApplication {
                     return $next($request, $response)
                             ->withHeader('Access-Control-Allow-Origin', '*')
                             ->withHeader('Access-Control-Allow-Methods', '*')
-                            ->withHeader('Access-Control-Allow-Credentials', 'true')
+                          //  ->withHeader('Access-Control-Allow-Credentials', 'true')
                             ->withHeader('Access-Control-Allow-Headers', '*')
 //                            ->withHeader('Access-Control-Allow-Headers', 'X-CSRF-Token')
                             ->withHeader('Access-Control-Allow-Type', 'application/json');
                 })
-
                 // Add routing middleware.
                 // If you have a large number of routes connected, turning on routes
                 // caching in production could improve performance. For that when

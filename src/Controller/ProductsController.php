@@ -58,7 +58,7 @@ class ProductsController extends AppController {
             $product = $this->Products->patchEntity($product, $this->request->getData());
             $user = $this->MyAuthen->getLogedUser();
             $product->shop_id = $user['shop_id'];
-            
+
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
 
@@ -91,7 +91,12 @@ class ProductsController extends AppController {
     public function update($id = null) {
 
         $product = $this->Products->find()
-                ->contain(['ProductImages' => ['Images'],'WholesaleRates'])
+                ->contain([
+                    'ProductImages' => [
+                        'Images',
+                        'sort'=>['ProductImages.type'=>'ASC']
+                    ], 'WholesaleRates'
+                ])
                 ->where(['Products.id' => $id])
                 ->first();
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -121,12 +126,12 @@ class ProductsController extends AppController {
         foreach ($wholesales['startqty'] as $index => $startQty) {
             $endQty = $wholesales['endqty'][$index];
             $price = $wholesales['price'][$index];
-            
+
             $wholesale = $this->WholesaleRates->newEntity();
             $wholesale->seq = $index;
-            $wholesale->startqty = is_null($startQty) || $startQty==''?0:$startQty;
-            $wholesale->endqty = is_null($endQty) || $endQty==''?0:$endQty;
-            $wholesale->price =is_null($price) || $price==''?0:$price;
+            $wholesale->startqty = is_null($startQty) || $startQty == '' ? 0 : $startQty;
+            $wholesale->endqty = is_null($endQty) || $endQty == '' ? 0 : $endQty;
+            $wholesale->price = is_null($price) || $price == '' ? 0 : $price;
             $wholesale->product_id = $productId;
 
             $this->WholesaleRates->save($wholesale);

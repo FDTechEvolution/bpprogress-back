@@ -89,6 +89,7 @@ class MyAuthenComponent extends Component {
             $user = $this->Cookie->read('MyAuthen.user');
             $this->request->getSession()->write('MyAuthen.user', $user);
         }
+        //$this->log($user,'debug');
         return $user;
     }
 

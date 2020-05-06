@@ -50,11 +50,11 @@ class SvProductImagesController extends AppController {
                 $image->name = $result['image_name'];
                 $this->Images->save($image);
 
-                $count = $this->ProductImages->find()->where(['product_id'=>$productId])->count();
+                $count = $this->ProductImages->find()->where(['product_id' => $productId])->count();
                 $productImage = $this->ProductImages->newEntity();
                 $productImage->product_id = $productId;
                 $productImage->image_id = $image->id;
-                $productImage->type = $count==0?'DEFAULT':'NORMAL';
+                $productImage->type = $count == 0 ? 'DEFAULT' : 'NORMAL';
                 $productImage->seq = 1;
                 $this->ProductImages->save($productImage);
 
@@ -62,6 +62,54 @@ class SvProductImagesController extends AppController {
                 $this->responData['data'] = $image;
             }
         }
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
+    }
+
+    public function deleteImage($productImageId = null) {
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+
+        $productImage = $this->ProductImages->find()->where(['ProductImages.id' => $productImageId])->first();
+        $image = $this->ProductImages->Images->find()->where(['Images.id' => $productImage->image_id])->first();
+
+        $this->ProductImages->Images->delete($image, ['atomic' => false]);
+        $this->ProductImages->delete($productImage, ['atomic' => false]);
+
+        $this->responData['status'] = 200;
+        $this->responData['data'] = [];
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
+    }
+
+    public function setDefault($productImageId = null) {
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+
+
+        $productImage = $this->ProductImages->find()->where(['ProductImages.id' => $productImageId])->first();
+
+        //$productImages = $this->ProductImages->find()->where(['ProductImages.product_id' => $productImage->product_id])->toArray();
+        $query =  $this->ProductImages->query();
+        $query->update()
+                ->set(['type' => 'NORMAL'])
+                ->where(['product_id' => $productImage->product_id])
+                ->execute();
+
+        $productImage = $this->ProductImages->find()->where(['ProductImages.id' => $productImageId])->first();
+        $productImage->type = 'DEFAULT';
+        $this->ProductImages->save($productImage);
+
+        $this->responData['status'] = 200;
+        $this->responData['data'] = $productImage;
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
         $this->response = $this->response->withStringBody($json);

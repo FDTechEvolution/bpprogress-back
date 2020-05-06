@@ -44,8 +44,13 @@ class UploadImageComponent extends Component {
             }
 
             $handle->file_new_name_body = $name;
+            
 
-            //$handle->image_resize = true;
+            $handle->image_resize = true;
+            $handle->image_ratio = true;
+            $handle->image_ratio_crop = true;
+            $handle->image_x = 800;
+            $handle->image_y = 800;
             //$handle->image_x = $image_x;
             //$handle->image_ratio_y = true;
             //$handle->image_ratio_crop = 'L';

@@ -12,11 +12,15 @@
         <?= $this->Html->css('assets/css/bootstrap.min.css') ?>
         <?= $this->Html->css('assets/css/icons.min.css') ?>
         <?= $this->Html->css('assets/css/app.min.css') ?>
+        
+        <?= $this->Html->css('/js/jquery-toast-plugin-master/dist/jquery.toast.min.css') ?>
 
 
 
         <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
         <?= $this->Html->script('/css/assets/js/vendor.min.js') ?>
+        <?= $this->Html->script('jquery-toast-plugin-master/dist/jquery.toast.min.js') ?>
+        <?= $this->Html->script('notis.js') ?>
         <?= $this->Html->script('utils.js') ?>
         <script>
             var siteurl = '<?= SITE_URL ?>';
@@ -32,9 +36,9 @@
 
             <?= $this->element('Layout/header') ?>
 
-            <?php if ($loggedUser->type == 'SELLER') { ?>
+            <?php if ($loggedUser['type'] == 'SELLER') { ?>
                 <?= $this->element('Layout/leftbar') ?>
-            <?php } elseif ($loggedUser->type == 'ADMIN') { ?>
+            <?php } elseif ($loggedUser['type'] == 'ADMIN') { ?>
                 <?= $this->element('Layout/leftbar') ?>
             <?php } ?>
 
