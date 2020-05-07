@@ -1,6 +1,3 @@
-<?= $this->Html->css('assets/libs/datatables/dataTables.bootstrap4.css') ?>
-<?= $this->Html->css('assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.css') ?>
-<?= $this->Html->css('assets/libs/switchery/switchery.min.css') ?>
 
 <div class="row">
     <div class="col-sm-12">
@@ -44,48 +41,81 @@
                             <td class="text-right"><?= number_format($order->totalamt) ?></td>
                             <td class="text-right">
 
-                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $order->id ?>" data-status="SENT"> ส่งแล้ว </button>
+                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-id="<?= $order->id ?>" data-status="SENT" data-action="update-status" data-toggle="modal" data-target="#modal-tracking"> ส่งแล้ว </button>
                             </td>
                         </tr>
 
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <?= $this->Form->create('order', ['id' => 'frm-order']) ?>
-            <?= $this->Form->hidden('order_id', ['id' => 'order_id']) ?>
-            <?= $this->Form->hidden('status', ['id' => 'status']) ?>
-            <?= $this->Form->end() ?>
+
         </div>
     </div>
 </div>
 
-<!-- Plugins Js -->
-<?= $this->Html->script('/css/assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/switchery/switchery.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/multiselect/jquery.multi-select.js') ?>
-<?= $this->Html->script('/css/assets/libs/jquery-quicksearch/jquery.quicksearch.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/select2/select2.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/bootstrap-select/bootstrap-select.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/jquery-mask-plugin/jquery.mask.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/dropzone/dropzone.min.js') ?>
-
-<!-- init js -->
-<?= $this->Html->script('/css/assets/js/pages/form-advanced.init.js') ?>
-
+<div class="modal fade bs-example-modal-center" id="modal-tracking" tabindex="-1" role="dialog" aria-labelledby="myCenterModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myCenterModalLabel">กรุณาระบุหมายเลขติดตามพัสดุ [Tracking No]</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <?= $this->Form->create('order', ['id' => 'frm-order']) ?>
+                <?= $this->Form->hidden('order_id', ['id' => 'order_id']) ?>
+                <?= $this->Form->hidden('status', ['id' => 'status']) ?>
+                <div class="form-group">
+                    <?= $this->Form->control('shipping_id', ['options' => $shippings, 'class' => 'form-control', 'id' => 'shipping_id', 'label' => 'บริษัทขนส่ง*']) ?>
+                </div>
+                <div class="form-group">
+                    <?= $this->Form->control('trackingno', ['class' => 'form-control', 'id' => 'trackingno', 'label' => 'Tracking No*']) ?>
+                </div>
+                <?= $this->Form->end() ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="bt-save" class="btn btn-primary">บันทึก</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
 <script>
     $(document).ready(function () {
+        $("#frm-order").validate({
+            rules: {
+                shipping_id: {
+                    required: true
+                },
+                trackingno:{
+                    required: true
+                }
+            },
+            messages: {
+                trackingno:{
+                    required:"กรุณาระบุหมายเลขพัสดุ"
+                }
+            },
+            errorPlacement: function (error, element)
+            {
+                error.insertAfter(element);
+            }
+        });
+        
         $('[data-action="update-status"]').on('click', function () {
             var order_id = $(this).attr('data-id');
             var status = $(this).attr('data-status');
 
             $('#order_id').val(order_id);
             $('#status').val(status);
-            $('#frm-order').submit();
+
         });
 
-
+        $('#bt-save').on('click', function () {
+            if ($("#frm-order").valid()) {
+                 $('#frm-order').submit();
+            }
+           
+        });
     });
-
 </script>

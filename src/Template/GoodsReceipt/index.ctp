@@ -24,7 +24,7 @@
     <div class="col-md-12">
         <div class="card-box">
 
-            <table id="datatable" class="table table-striped table-bordered">
+            <table id="datatable" class="table table-striped table-bordered table-sm">
                 <thead>
                     <tr>
                         <th>วันที่</th>

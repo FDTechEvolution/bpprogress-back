@@ -34,8 +34,9 @@
                 <div class="col-md-4 offset-md-2">
                     <div class="mt-3 float-right">
                         <p class="m-b-10"><strong>วันที่ : </strong> <span class="float-right"> &nbsp;&nbsp;&nbsp;&nbsp; <?= $goodsReceipt->docdate->i18nFormat(DATE_FORMATE, null, NULL) ?></span></p>
-                        <p class="m-b-10"><strong>สถานะ : </strong> <span class="float-right"><?= $goodsReceipt->status ?></span></p>
+                        <p class="m-b-10"><strong>สถานะ : </strong> <span class="float-right"><?=$docStatus[$goodsReceipt->status]['label']  ?></span></p>
                         <p class="m-b-10"><strong>หมายเลขเอกสาร. : </strong> <span class="float-right"><?= $goodsReceipt->docno ?> </span></p>
+                        <p class="m-b-10"><strong>คลังสินค้า. : </strong> <span class="float-right"><?= $goodsReceipt->warehouse->name ?> </span></p>
                     </div>
                 </div><!-- end col -->
             </div>

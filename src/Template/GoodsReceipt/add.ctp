@@ -1,7 +1,4 @@
-<?= $this->Html->css('assets/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.css') ?>
-<?= $this->Html->css('assets/libs/clockpicker/bootstrap-clockpicker.min.css') ?>
-<?= $this->Html->css('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css') ?>
-<?= $this->Html->css('assets/libs/bootstrap-daterangepicker/daterangepicker.css') ?>
+<?= $this->Html->css('/js/bootstrap-datepicker-thai-thai/css/datepicker.css') ?>
 
 <div class="row">
     <div class="col-sm-12">
@@ -36,7 +33,7 @@
                             <label class="col-2 col-form-label">วันที่</label>
                             <div class="col-9">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="docdate" name="docdate">
+                                     <input type="text" name="docdate" id="docdate" data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="th" class="form-control" readonly required>
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="ti-calendar"></i></span>
                                     </div>
@@ -58,28 +55,41 @@
         <?= $this->Form->end() ?>
     </div>
 </div>
-<?= $this->Html->script('/css/assets/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/clockpicker/bootstrap-clockpicker.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/moment/moment.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/bootstrap-daterangepicker/daterangepicker.js') ?>
-
+<?= $this->Html->script('bootstrap-datepicker-thai-thai/js/bootstrap-datepicker.js') ?>
+<?= $this->Html->script('bootstrap-datepicker-thai-thai/js/bootstrap-datepicker-thai.js') ?>
+<?= $this->Html->script('bootstrap-datepicker-thai-thai/js/locales/bootstrap-datepicker.th.js') ?>
 <script>
     $(document).ready(function () {
         $('#docdate').datepicker({
-            format: "dd/mm/yyyy",
-            autoclose:true,
-            locale: {
-                applyLabel: "Submit",
-                cancelLabel: "Cancel",
-                fromLabel: "From",
-                toLabel: "To",
-                customRangeLabel: "Custom",
-                daysOfWeek: ["อา", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-                monthNames: ["มกราคม", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-                firstDay: 1
+            autoClose: true,
+            todayHighlight: true
+        });
+        
+        $("#frm-payment").validate({
+            rules: {
+                email: {
+                    required: true
+                },
+
+            },
+
+            // Messages for form validation
+            messages: {
+
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element)
+            {
+                error.insertAfter(element);
             }
         });
+        
+        $('#bt-save').on('click', function () {
+            if ($("#frm-payment").valid()) {
+                $("#frm-payment").submit();
+            }
 
+        });
     });
 </script>

@@ -12,7 +12,9 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\AddressesTable&\Cake\ORM\Association\BelongsTo $Addresses
+ * @property \App\Model\Table\ShippingsTable&\Cake\ORM\Association\BelongsTo $Shippings
  * @property \App\Model\Table\OrderLinesTable&\Cake\ORM\Association\HasMany $OrderLines
+ * @property \App\Model\Table\PaymentsTable&\Cake\ORM\Association\HasMany $Payments
  *
  * @method \App\Model\Entity\Order get($primaryKey, $options = [])
  * @method \App\Model\Entity\Order newEntity($data = null, array $options = [])
@@ -54,7 +56,13 @@ class OrdersTable extends Table
         $this->belongsTo('Addresses', [
             'foreignKey' => 'address_id',
         ]);
+        $this->belongsTo('Shippings', [
+            'foreignKey' => 'shipping_id',
+        ]);
         $this->hasMany('OrderLines', [
+            'foreignKey' => 'order_id',
+        ]);
+        $this->hasMany('Payments', [
             'foreignKey' => 'order_id',
         ]);
     }
@@ -105,6 +113,11 @@ class OrdersTable extends Table
             ->maxLength('payment_status', 45)
             ->allowEmptyString('payment_status');
 
+        $validator
+            ->scalar('trackingno')
+            ->maxLength('trackingno', 50)
+            ->allowEmptyString('trackingno');
+
         return $validator;
     }
 
@@ -120,6 +133,7 @@ class OrdersTable extends Table
         $rules->add($rules->existsIn(['shop_id'], 'Shops'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['address_id'], 'Addresses'));
+        $rules->add($rules->existsIn(['shipping_id'], 'Shippings'));
 
         return $rules;
     }

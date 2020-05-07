@@ -46,19 +46,19 @@ class UsersFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 'f0380ece-971e-4187-bab7-3a4a97898ccf',
+                'id' => '54e96d4f-3ca2-4be9-ac16-eed2d995d894',
                 'fullname' => 'Lorem ipsum dolor sit amet',
                 'email' => 'Lorem ipsum dolor sit amet',
                 'mobile' => 'Lorem ipsum dolor sit amet',
                 'password' => 'Lorem ipsum dolor sit amet',
-                'image_id' => 'eeeaae6c-aafe-4b58-a1de-834c34afd1f4',
+                'image_id' => '8fa57e72-6391-4ef7-8b69-f82a6fabb0c5',
                 'isactive' => 'Lorem ipsum dolor sit amet',
                 'isverify' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-02 06:06:26',
-                'modified' => '2020-05-02 06:06:26',
+                'created' => '2020-05-06 09:11:29',
+                'modified' => '2020-05-06 09:11:29',
                 'description' => 'Lorem ipsum dolor sit amet',
                 'type' => 'Lorem ipsum dolor sit amet',
-                'shop_id' => '1d6de379-6812-403c-ad42-df76c22a4f0c',
+                'shop_id' => 'bd6586dc-9137-40ff-98a6-c013a73a1066',
             ],
         ];
         parent::init();

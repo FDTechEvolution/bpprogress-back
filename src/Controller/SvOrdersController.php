@@ -19,6 +19,7 @@ class SvOrdersController extends AppController {
     public $Products = null;
     public $Orders = null;
     public $OrderLines = null;
+    public $Payments = null;
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
@@ -27,6 +28,7 @@ class SvOrdersController extends AppController {
         $this->Products = TableRegistry::get('Products');
         $this->Orders = TableRegistry::get('Orders');
         $this->OrderLines = TableRegistry::get('OrderLines');
+        $this->Payments = TableRegistry::get('Payments');
 
         $this->autoRender = false;
     }
@@ -45,7 +47,8 @@ class SvOrdersController extends AppController {
                             }]
                     ],
                     'Shops',
-                    'Users'
+                    'Users',
+                    'Payments', 'Addresses'
                 ])
                 ->where(['Orders.id' => $id])
                 ->first();
@@ -73,15 +76,15 @@ class SvOrdersController extends AppController {
                             }]
                     ],
                     'Shops',
-                    'Users'
+                    'Users', 'Payments', 'Addresses'
                 ])
                 ->where(['Orders.user_id' => $userId])
                 ->order(['Orders.created' => 'DESC'])
                 ->toArray();
-        $_orders = $orders;                 
-        foreach ($_orders as $index=>$order){
+        $_orders = $orders;
+        foreach ($_orders as $index => $order) {
             $orders[$index]['docdate'] = $order->docdate->i18nFormat(DATE_FORMATE, null, NULL);
-        }                    
+        }
 
         $this->responData = ['status' => 200, 'msg' => '', 'data' => $orders];
 
@@ -126,6 +129,9 @@ class SvOrdersController extends AppController {
                     //$order->status = 'NEW';
                     $this->Orders->save($order);
 
+                    //Create payment
+                    $this->createPayment($order->id, $order->user_id, $totalamt);
+
                     $this->responData['data'] = $order;
                     $this->responData['status'] = 200;
                 }
@@ -157,7 +163,7 @@ class SvOrdersController extends AppController {
                     ->first();
 
             if (isset($postData['status'])) {
-                if($postData['status'] =='NEW' && $order->status =='DR'){
+                if ($postData['status'] == 'NEW' && $order->status == 'DR') {
                     $this->loadComponent('Warehouse');
                     $this->Warehouse->updateByOrder($orderId);
                 }
@@ -172,12 +178,13 @@ class SvOrdersController extends AppController {
             if (isset($postData['payment_method'])) {
                 $order->payment_method = $postData['payment_method'];
             }
+            if (isset($postData['payment_status'])) {
+                $order->payment_status = $postData['payment_status'];
+            }
 
             $this->Orders->save($order);
             $this->responData['data'] = $order;
             $this->responData['status'] = 200;
-            
-            
         }
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
@@ -185,6 +192,15 @@ class SvOrdersController extends AppController {
         $this->response = $this->response->withType('json');
 
         return $this->response;
+    }
+
+    private function createPayment($orderId = null, $userId = null, $expectamt = 0) {
+        $payment = $this->Payments->newEntity();
+        $payment->order_id = $orderId;
+        $payment->user_id = $userId;
+        $payment->expectamt = $expectamt;
+
+        $this->Payments->save($payment);
     }
 
     private function createOrderLine($orderId = null, $orderLines = null) {
@@ -200,14 +216,14 @@ class SvOrdersController extends AppController {
                 if ($product->iswholesale == 'Y') {
                     $wholesale = $this->Products->WholesaleRates->find()
                             ->where([
-                                'WholesaleRates.endqty >='=>$line['qty'],
-                                'WholesaleRates.startqty <='=>$line['qty'],
-                                'WholesaleRates.product_id'=>$product->id
-                                    ])
+                                'WholesaleRates.endqty >=' => $line['qty'],
+                                'WholesaleRates.startqty <=' => $line['qty'],
+                                'WholesaleRates.product_id' => $product->id
+                            ])
                             ->first();
-                    if(is_null($wholesale)){
+                    if (is_null($wholesale)) {
                         $unitPrice = $product->special_price;
-                    }else{
+                    } else {
                         $unitPrice = $wholesale->price;
                     }
                 } else {

@@ -19,11 +19,15 @@ use Cake\ORM\Entity;
  * @property string|null $address_id
  * @property string|null $payment_method
  * @property string|null $payment_status
+ * @property string|null $trackingno
+ * @property string|null $shipping_id
  *
  * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Address $address
+ * @property \App\Model\Entity\Shipping $shipping
  * @property \App\Model\Entity\OrderLine[] $order_lines
+ * @property \App\Model\Entity\Payment[] $payments
  */
 class Order extends Entity
 {
@@ -49,9 +53,13 @@ class Order extends Entity
         'address_id' => true,
         'payment_method' => true,
         'payment_status' => true,
+        'trackingno' => true,
+        'shipping_id' => true,
         'shop' => true,
         'user' => true,
         'address' => true,
+        'shipping' => true,
         'order_lines' => true,
+        'payments' => true,
     ];
 }

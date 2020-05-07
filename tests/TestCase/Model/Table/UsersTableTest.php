@@ -26,6 +26,10 @@ class UsersTableTest extends TestCase
         'app.Users',
         'app.Images',
         'app.Shops',
+        'app.Addresses',
+        'app.GoodsTransactions',
+        'app.Orders',
+        'app.Payments',
         'app.UserAuthens',
         'app.UserOtps',
     ];

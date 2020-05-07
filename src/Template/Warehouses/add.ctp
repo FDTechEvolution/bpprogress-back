@@ -17,16 +17,12 @@
                                     <div class="col-lg-12"><legend><?= __('สร้างคลังสินค้า') ?></legend></div>
                                 </div>
                                 <?= $this->Form->create($warehouse, ['class' => 'row px-3']) ?>
+                                <?= $this->Form->hidden('shop_id',['value'=>$user['shop_id']])?>
                                     <fieldset style="width: 100%;">
                                         <div class="row py-2">
                                             <div class="col-lg-2"><label>ชื่อคลังสินค้า : </label></div><div class="col-lg-6"><?php echo $this->Form->control('name', ['class' => 'form-control', 'label' => false]); ?></div>
                                         </div>
-                                        <div class="row py-2">
-                                            <div class="col-lg-2"><label>สถานะ : </label></div><div class="col-lg-6"><?php echo $this->Form->select('isactive', ['Y' => 'เปิดใช้งาน','N' => 'ปิดใช้งาน'], ['class' => 'form-control', 'label' => false]); ?></div>
-                                        </div>
-                                        <!-- <div class="row py-2">
-                                            <div class="col-lg-2"><label>ร้านค้า : </label></div><div class="col-lg-6"><?php echo $this->Form->control('shop_id', ['options' => $shops, 'class' => 'form-control', 'label' => false]); ?></div>
-                                        </div> -->
+                                       
                                         <div class="row py-2">
                                             <div class="col-lg-2"><label>รายละเอียด : </label></div><div class="col-lg-6"><?php echo $this->Form->control('description', ['class' => 'form-control', 'label' => false]); ?></div>
                                         </div>

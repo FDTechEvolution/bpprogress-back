@@ -28,6 +28,8 @@ class OrdersFixture extends TestFixture
         'address_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'payment_method' => ['type' => 'string', 'length' => 45, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'payment_status' => ['type' => 'string', 'length' => 45, 'null' => true, 'default' => 'NOTPAID', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'trackingno' => ['type' => 'string', 'length' => 50, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'shipping_id' => ['type' => 'uuid', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -46,19 +48,21 @@ class OrdersFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '304bd848-1bbf-48fd-89c5-41a07b98856f',
-                'shop_id' => 'c76888c2-a301-4d18-b087-770ad489c1ca',
-                'user_id' => 'e481df86-d483-4c66-8b44-fea7c23b64b4',
-                'docdate' => '2020-05-03',
+                'id' => '93ac956c-2d2b-4325-a6ab-0d82f4b65a0a',
+                'shop_id' => 'b4f27d9b-6dc0-45c2-83f7-0c3d49e601c3',
+                'user_id' => '9c308fa5-6a24-4dcf-bc0e-022ba30c5d14',
+                'docdate' => '2020-05-07',
                 'docno' => 'Lorem ipsum dolor sit amet',
                 'status' => 'Lorem ipsum dolor sit amet',
                 'totalamt' => 1.5,
                 'description' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-03 17:16:27',
-                'modified' => '2020-05-03 17:16:27',
-                'address_id' => 'abc02273-ecf6-440b-b8f6-216f62019d78',
+                'created' => '2020-05-07 09:40:58',
+                'modified' => '2020-05-07 09:40:58',
+                'address_id' => '5583f047-7ba0-485b-939c-980e5ed5e255',
                 'payment_method' => 'Lorem ipsum dolor sit amet',
                 'payment_status' => 'Lorem ipsum dolor sit amet',
+                'trackingno' => 'Lorem ipsum dolor sit amet',
+                'shipping_id' => 'e2a6f621-b34c-4b77-a9db-e8e3efa7c1a7',
             ],
         ];
         parent::init();

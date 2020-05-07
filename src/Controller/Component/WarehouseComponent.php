@@ -38,7 +38,7 @@ class WarehouseComponent extends Component {
         $lines = $goodsReceipt->goods_lines;
 
         foreach ($lines as $index => $line) {
-            $warehouseLine = $this->WarehouseProducts->find()->where(['WarehouseProducts.product_id' => $line->product_id])->first();
+            $warehouseLine = $this->WarehouseProducts->find()->where(['WarehouseProducts.product_id' => $line->product_id,'WarehouseProducts.warehouse_id'=> $goodsReceipt->warehouse_id])->first();
             if (is_null($warehouseLine)) {
                 $warehouseLine = $this->WarehouseProducts->newEntity();
                 $warehouseLine->warehouse_id = $goodsReceipt->warehouse_id;

@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Orders Controller
@@ -14,17 +16,31 @@ use App\Controller\AppController;
 class OrdersController extends AppController {
 
     public $OrderStatus = [
-        'DR'=>'ฉบับร่าง',
-        'NEW'=>'คำสั่งซื้อใหม่',
-        'WT'=>'รอจัดส่ง',
-        'SENT'=>'ส่งแล้ว',
-        'RECEIPT'=>'รับสินค้าแล้ว'
+        'DR' => 'ฉบับร่าง',
+        'NEW' => 'คำสั่งซื้อใหม่',
+        'WT' => 'รอจัดส่ง',
+        'SENT' => 'ส่งแล้ว',
+        'RECEIPT' => 'รับสินค้าแล้ว',
+        'VO' => 'ยกเลิก'
+    ];
+    public $PaymentStatus = [
+        'PAID' => 'ชำระเงินแล้ว',
+        'NOTPAID' => 'ยังไม่ได้ชำระเงิน'
     ];
     
-    public $PaymentStatus = [
-        'PAID'=>'ชำระเงินแล้ว',
-        'NOTPAID'=>'ยังไม่ได้ชำระเงิน'
+    public $PaymentMethod = [
+        'cod'=>'เก็บเงินปลายทาง',
+        'transfer'=>'โอนเงิน',
+        'creditcard'=>'บัตรเครดิต',
+        'cash'=>'เงินสด'
     ];
+    public $Shippings = null;
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        $this->Shippings = TableRegistry::get('Shippings');
+    }
+
     /**
      * Index method
      *
@@ -42,27 +58,70 @@ class OrdersController extends AppController {
         $orders = $this->getOrderBtStatus($status);
         $orderStatus = $this->OrderStatus;
         $paymentStatus = $this->PaymentStatus;
-        $this->set(compact('orders', 'status','orderStatus','paymentStatus'));
+        $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus'));
     }
 
     public function waitingDelivery() {
         if ($this->request->is(['POST'])) {
             $postData = $this->request->getData();
-            $this->Orders->updateAll(['status' => $postData['status']], ['Orders.id' => $postData['order_id']]);
 
-            return $this->redirect(['action' => 'waitingDelivery']);
+            $order = $this->Orders->find()->where(['id' => $postData['order_id']])->first();
+            $order = $this->Orders->patchEntity($order, $postData);
+            $this->Orders->save($order);
+            return $this->redirect(['action' => 'waiting-delivery']);
         }
         $status = 'WT';
         $orders = $this->getOrderBtStatus($status);
         $orderStatus = $this->OrderStatus;
         $paymentStatus = $this->PaymentStatus;
-        $this->set(compact('orders', 'status','orderStatus','paymentStatus'));
+
+        $shippings = $this->Shippings->find('list')->where(['isactive' => 'Y'])->toArray();
+        $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus', 'shippings'));
     }
 
-    private function getOrderBtStatus($status = null ) {
+    public function sent() {
+        if ($this->request->is(['POST'])) {
+            $postData = $this->request->getData();
+            $this->Orders->updateAll(['status' => $postData['status'], 'shipping_id' => $postData['shipping_id']], ['id' => $postData['order_id']]);
+
+            return $this->redirect(['action' => 'waiting-delivery']);
+        }
+        $status = 'SENT';
+        $orders = $this->getOrderBtStatus($status);
+        $orderStatus = $this->OrderStatus;
+        $paymentStatus = $this->PaymentStatus;
+
+        $shippings = $this->Shippings->find('list')->where(['isactive' => 'Y'])->toArray();
+        $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus', 'shippings'));
+    }
+
+    public function view($orderId = null) {
+        $order = $this->Orders->find()
+                ->contain([
+                    'Users',
+                    'Shippings','Addresses',
+                    'OrderLines' => [
+                        'Products' => [
+                            'ProductImages' => [
+                                'Images'
+                            ]
+                        ]
+                    ]
+                ])
+                ->where(['Orders.id' => $orderId])
+                ->first();
+        
+        $orderStatus = $this->OrderStatus;
+        $paymentStatus = $this->PaymentStatus;
+        $paymentMethod = $this->PaymentMethod;
+        
+        $this->set(compact('order','orderStatus', 'paymentStatus','paymentMethod'));
+    }
+
+    private function getOrderBtStatus($status = null) {
         $user = $this->MyAuthen->getLogedUser();
         $orders = $this->Orders->find()
-                ->contain(['Users'])
+                ->contain(['Users', 'Shippings'])
                 ->where(['Orders.shop_id' => $user['shop_id'], 'status' => $status])
                 ->toArray();
         return $orders;

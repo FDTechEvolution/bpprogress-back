@@ -74,18 +74,7 @@
                                 <h6 class="text-overflow m-0">Welcome !</h6>
                             </div>
 
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="remixicon-account-circle-line"></i>
-                                <span>My Account</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="remixicon-settings-3-line"></i>
-                                <span>Settings</span>
-                            </a>
-
+                           
                             <div class="dropdown-divider"></div>
 
                             <?=$this->Html->link('<i class="remixicon-logout-box-line"></i><span>Logout</span>',['controller'=>'logout'],['class'=>'dropdown-item notify-item','escape'=>false])?>

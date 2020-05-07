@@ -24,7 +24,8 @@ class WarehousesController extends AppController {
         ];
         $warehouses = $this->paginate($this->Warehouses);
 
-        $this->set(compact('warehouses'));
+        $user = $this->MyAuthen->getLogedUser();
+        $this->set(compact('warehouses','user'));
     }
 
     /**
@@ -52,6 +53,7 @@ class WarehousesController extends AppController {
     public function add() {
         $warehouse = $this->Warehouses->newEntity();
         if ($this->request->is('post')) {
+            $postData = $this->request->getData();
             $warehouse_name = $postData['name'];
             $checkNameDuplicate = $this->Warehouses->find()->where(['name' => $warehouse_name, 'shop_id' => $postData['shop_id']])->first();
             if (!is_null($checkNameDuplicate)) {
@@ -67,8 +69,9 @@ class WarehousesController extends AppController {
                 $this->Flash->error(__('The warehouse could not be saved. Please, try again.'));
             }
         }
-        $shops = $this->Warehouses->Shops->find('list', ['limit' => 200]);
-        $this->set(compact('warehouse', 'shops'));
+        $user = $this->MyAuthen->getLogedUser();
+        //$shops = $this->Warehouses->Shops->find('list', ['limit' => 200]);
+        $this->set(compact('warehouse', 'user'));
     }
 
     /**

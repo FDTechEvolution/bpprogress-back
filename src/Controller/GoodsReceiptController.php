@@ -25,6 +25,7 @@ class GoodsReceiptController extends AppController {
         $this->Warehouses = TableRegistry::get('Warehouses');
         $this->GoodsTransactions = TableRegistry::get('GoodsTransactions');
         $this->Products = TableRegistry::get('Products');
+        $this->loadComponent('DocumentSequent');
     }
 
     /**
@@ -37,6 +38,7 @@ class GoodsReceiptController extends AppController {
         $goodsReceipts = $this->GoodsTransactions->find()
                 ->contain(['Warehouses'])
                 ->where(['GoodsTransactions.user_id' => $userId])
+                ->order(['GoodsTransactions.created'=>'DESC'])
                 ->toArray();
 
         $this->set(compact('goodsReceipts'));
@@ -131,8 +133,8 @@ class GoodsReceiptController extends AppController {
             $this->Flash->success(__('ยืนยันการนำเข้าสินค้าเรียบร้อยแล้ว'));
             return $this->redirect(['action'=>'confirm',$id]);
         }
-
-        $this->set(compact('goodsReceipt'));
+        $docStatus = $this->DocumentSequent->getDocumentStatus();
+        $this->set(compact('goodsReceipt','docStatus'));
     }
 
 }

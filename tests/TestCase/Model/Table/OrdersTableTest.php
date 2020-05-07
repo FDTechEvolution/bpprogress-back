@@ -27,7 +27,9 @@ class OrdersTableTest extends TestCase
         'app.Shops',
         'app.Users',
         'app.Addresses',
+        'app.Shippings',
         'app.OrderLines',
+        'app.Payments',
     ];
 
     /**

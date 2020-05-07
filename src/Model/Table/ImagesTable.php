@@ -9,6 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Images Model
  *
+ * @property &\Cake\ORM\Association\HasMany $Payments
  * @property \App\Model\Table\ProductImagesTable&\Cake\ORM\Association\HasMany $ProductImages
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\HasMany $Users
  *
@@ -41,6 +42,9 @@ class ImagesTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->hasMany('Payments', [
+            'foreignKey' => 'image_id',
+        ]);
         $this->hasMany('ProductImages', [
             'foreignKey' => 'image_id',
         ]);

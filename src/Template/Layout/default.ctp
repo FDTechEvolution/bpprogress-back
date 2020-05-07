@@ -12,6 +12,8 @@
         <?= $this->Html->css('assets/css/bootstrap.min.css') ?>
         <?= $this->Html->css('assets/css/icons.min.css') ?>
         <?= $this->Html->css('assets/css/app.min.css') ?>
+        <?= $this->Html->css('bpstyle.css') ?>
+        <?= $this->Html->css('thai-font.css') ?>
         
         <?= $this->Html->css('/js/jquery-toast-plugin-master/dist/jquery.toast.min.css') ?>
 

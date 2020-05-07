@@ -27,10 +27,11 @@ class UploadImageComponent extends Component {
         'uploadRootPath' => 'img/'
     ];
 
-    public function upload($file = null, $name = '', $image_x = 800, $image_y = null, $path = null) {
+    public function upload($file = null, $name = '', $image_x = 800, $image_y = null, $path = null, $crop = true) {
         $result = [
             'status' => false,
-            'image_path' => '',
+            'file' => $file,
+            'image_path' => $path,
             'image_name' => '',
             'msg' => ''
         ];
@@ -44,13 +45,15 @@ class UploadImageComponent extends Component {
             }
 
             $handle->file_new_name_body = $name;
-            
 
-            $handle->image_resize = true;
-            $handle->image_ratio = true;
-            $handle->image_ratio_crop = true;
-            $handle->image_x = 800;
-            $handle->image_y = 800;
+
+            if ($crop) {
+                $handle->image_resize = true;
+                $handle->image_ratio = true;
+                $handle->image_ratio_crop = true;
+                $handle->image_x = 800;
+                $handle->image_y = 800;
+            }
             //$handle->image_x = $image_x;
             //$handle->image_ratio_y = true;
             //$handle->image_ratio_crop = 'L';
@@ -61,15 +64,16 @@ class UploadImageComponent extends Component {
                     'status' => true,
                     'image_path' => $fullPath,
                     'image_name' => $handle->file_dst_name,
-                    'url'=>SITE_URL.$fullPath.$handle->file_dst_name,
-                    'data'=>$handle
+                    'url' => SITE_URL . $fullPath . $handle->file_dst_name,
+                    'data' => $handle
                 ];
                 $handle->clean();
             } else {
                 $result = [
                     'status' => false,
-                    'image_path' => '',
                     'image_name' => $name,
+                    'file' => $file,
+                    'image_path' => $fullPath,
                     'msg' => $handle->error
                 ];
                 //echo 'error : ' . $handle->error;

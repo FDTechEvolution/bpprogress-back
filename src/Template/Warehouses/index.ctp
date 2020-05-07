@@ -79,6 +79,7 @@
             </div>
             <div class="modal-body">
                 <?= $this->Form->create('warehouse', ['url'=>['controller'=>'warehouses', 'action'=>'add'], 'class' => 'form-horizontal', 'role' => 'form']) ?>
+                <?= $this->Form->hidden('shop_id',['value'=>$user['shop_id']])?>
                 <fieldset>
                     <div class="row">
                         <div class="col-12" style="padding: 20px;">

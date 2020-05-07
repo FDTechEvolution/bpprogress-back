@@ -40,13 +40,13 @@ class ImagesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '8e427a21-c335-47e8-83b7-3a0caaf53b8d',
+                'id' => '927c7d99-84ee-4d7f-9b01-60fc6c7013a3',
                 'fullpath' => 'Lorem ipsum dolor sit amet',
                 'path' => 'Lorem ipsum dolor sit amet',
                 'name' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-04-29 09:24:52',
-                'modified' => '2020-04-29 09:24:52',
-                'createdby' => '01bd8e4e-8648-4fb1-b246-324e523e9e28',
+                'created' => '2020-05-06 09:31:17',
+                'modified' => '2020-05-06 09:31:17',
+                'createdby' => '42850337-320f-4bf2-ad9e-d89abfb26c1b',
             ],
         ];
         parent::init();
