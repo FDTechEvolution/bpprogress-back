@@ -7,9 +7,15 @@
 
 $(document).ready(function () {
     //<span class="badge badge-danger badge-pill float-right" id="notis-new-order">0</span><span> รายการสั่งซื้อ
-   
-    $.get(siteurl + 'sv-notifications/count-new-order', {})
+
+    $.get(siteurl + 'sv-notifications/get-order-by-status', {})
             .done(function (data) {
-                $('#notis-new-order').text(data.data);
+                console.log(data);
+                $.each(data.data, function (index, item) {
+                    if(item.status ==='NEW'){
+                        $('#notis-new-order').text(item.amt);
+                    }
+                });
+                
             });
 });
