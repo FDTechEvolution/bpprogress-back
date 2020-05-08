@@ -64,6 +64,12 @@ class SvProductsController extends AppController {
                         ->first();
                 $products['images'] = $product_img->image->fullpath;
 
+                $product_gall = $this->ProductImages->find()
+                        ->contain(['Images'])
+                        ->where(['ProductImages.product_id' => $products->id, 'ProductImages.type' => 'NORMAL'])
+                        ->toArray();
+                $products['gallery'] = $product_gall;
+
                 if ($products->iswholesale == 'Y') {
                     $product_wholesales = $this->WholesaleRates->find()
                             ->where(['product_id' => $id])
