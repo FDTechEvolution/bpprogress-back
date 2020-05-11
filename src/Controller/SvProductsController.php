@@ -264,4 +264,78 @@ class SvProductsController extends AppController {
         return $this->response;
     }
 
+    public function search() {
+        $this->autoRender = false;
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+        $productCategory = $this->request->getQuery('type');
+        $search = $this->request->getQuery('search');
+
+        $conditions = ['Products.isactive' => 'Y'];
+
+        if ($productCategory != 'all') {
+            $conditions['Products.product_category_id'] = $productCategory;
+        }
+        if ($search != '') {
+            $conditions['Products.name LIKE '] = "%" . $search . "%";
+        }
+
+
+        $this->log($conditions, 'debug');
+        $products = $this->getProducts($conditions, ['Products.view_count' => 'DESC'], null);
+
+
+        $this->responData['status'] = 200;
+        $this->responData['data'] = $products;
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+    }
+
+    private function getProducts($conditions = null, $order = null, $limit = null) {
+        $result = $this->Products->find()
+                ->contain([
+            'ProductImages' => function($q) {
+                return $q->contain(['Images'])
+                        ->where(['ProductImages.type' => 'DEFAULT']);
+            }
+        ]);
+
+        if ($conditions != null) {
+            $result = $result->where($conditions);
+        }
+        if ($order != null) {
+            $result = $result->order(['Products.view_count' => 'DESC']);
+        }
+        if ($limit != null) {
+            $result = $result->limit($limit);
+        }
+
+        $products = $result->toArray();
+
+        foreach ($products as $index => $product) {
+
+            if (sizeof($product['product_images']) != 0) {
+                $products[$index]['image'] = $product['product_images'][0]['image']['fullpath'];
+            } else {
+                $products[$index]['image'] = null;
+            }
+            if ($product['iswholesale'] == 'Y') {
+                $maxPrice = $this->WholesaleRates->find()
+                        ->where(['WholesaleRates.product_id' => $product['id']])
+                        ->order(['WholesaleRates.price' => 'DESC'])
+                        ->first();
+
+                $minPrice = $this->WholesaleRates->find()
+                        ->where(['WholesaleRates.product_id' => $product['id']])
+                        ->order(['WholesaleRates.price' => 'ASC'])
+                        ->first();
+                $products[$index]['wholesale_price'] = sprintf('%s-%s', number_format($minPrice['price']), number_format($maxPrice['price']));
+            }
+        }
+
+        return $products;
+    }
+
 }
