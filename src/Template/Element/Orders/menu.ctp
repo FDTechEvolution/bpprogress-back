@@ -1,5 +1,5 @@
 
-<?=$this->Html->link('คำสั่งซื้อใหม่',['controller'=>'orders','action'=>'index'],['class'=>$status == 'NEW' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2'])?>
-<?=$this->Html->link('รอจัดส่ง',['controller'=>'orders','action'=>'waiting-delivery'],['class'=>$status == 'WT' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2'])?>
-<?=$this->Html->link('ส่งแล้ว',['controller'=>'orders','action'=>'sent'],['class'=>$status == 'SENT' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2'])?>
-<?=$this->Html->link('รับสินค้าแล้ว',['controller'=>'orders','action'=>'index'],['class'=>$status == 'RECEIPT' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2'])?>
+<?=$this->Html->link('คำสั่งซื้อใหม่ <span id="notis-bt-new-order"></span>',['controller'=>'orders','action'=>'index'],['class'=>$status == 'NEW' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2','escape'=>false])?>
+<?=$this->Html->link('รอจัดส่ง <span id="notis-bt-wt-order"></span>',['controller'=>'orders','action'=>'waiting-delivery'],['class'=>$status == 'WT' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2','escape'=>false])?>
+<?=$this->Html->link('ส่งแล้ว <span id="notis-bt-sent-order"></span>',['controller'=>'orders','action'=>'sent'],['class'=>$status == 'SENT' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2','escape'=>false])?>
+<?=$this->Html->link('รับสินค้าแล้ว <span id="notis-bt-received-order"></span>',['controller'=>'orders','action'=>'received'],['class'=>$status == 'RECEIVED' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2','escape'=>false])?>

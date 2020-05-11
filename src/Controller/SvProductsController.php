@@ -7,6 +7,7 @@ use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Datasource\ConnectionManager;
+
 /**
  * SvProducts Controller
  *
@@ -32,14 +33,35 @@ class SvProductsController extends AppController {
 
     public function getAllProducts() {
         if ($this->request->is(['get', 'ajax'])) {
-            $products = $this->Products->find()->where(['isactive' => 'Y'])->order(['created' => 'DESC'])->limit(20)->toArray();
+            $products = $this->Products->find()
+                    ->contain([
+                        'ProductImages' => function($q) {
+                            return $q->contain(['Images'])
+                                    ->where(['ProductImages.type' => 'DEFAULT']);
+                        }
+                    ])
+                    ->where(['isactive' => 'Y'])
+                    ->order(['created' => 'DESC'])
+                    ->toArray();
+
             foreach ($products as $index => $product) {
-                $product_img = $this->ProductImages->find()
-                        ->contain(['Images'])
-                        ->where(['ProductImages.product_id' => $product->id, 'ProductImages.type' => 'DEFAULT'])
-                        ->first();
-                if (!is_null($product_img)) {
-                    $products[$index]['images'] = $product_img->image->fullpath;
+
+                if (sizeof($product['product_images']) != 0) {
+                    $products[$index]['image'] = $product['product_images'][0]['image']['fullpath'];
+                } else {
+                    $products[$index]['image'] = null;
+                }
+                if ($product['iswholesale'] == 'Y') {
+                    $maxPrice = $this->WholesaleRates->find()
+                            ->where(['WholesaleRates.product_id' => $product['id']])
+                            ->order(['WholesaleRates.price' => 'DESC'])
+                            ->first();
+
+                    $minPrice = $this->WholesaleRates->find()
+                            ->where(['WholesaleRates.product_id' => $product['id']])
+                            ->order(['WholesaleRates.price' => 'ASC'])
+                            ->first();
+                    $products[$index]['wholesale_price'] = sprintf('%s-%s', number_format($minPrice['price']), number_format($maxPrice['price']));
                 }
             }
             $this->responData['status'] = 200;
@@ -165,20 +187,52 @@ class SvProductsController extends AppController {
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
         $this->set(compact('json'));
     }
-    
-    public function getTopViewProduct(){
+
+    public function getTopViewProduct() {
         $this->autoRender = false;
         $this->modifyHeader();
         $this->RequestHandler->respondAs('json');
-        
+
         $limit = $this->request->getQuery('limit');
-        if(!is_numeric($limit)){
-            $limit =10;
+        if (!is_numeric($limit)) {
+            $limit = 10;
         }
-        
-        $sql = 'select p.*,img.fullpath from products p left join product_images pimg on (p.id = pimg.product_id and pimg.type="DEFAULT") left join images img on pimg.image_id = img.id order by p.view_count DESC limit 10';
-        $products = $this->Connection->execute($sql, ['limit' => $limit])->fetchAll('assoc');
-        
+
+        //$sql = 'select p.*,img.fullpath from products p left join product_images pimg on (p.id = pimg.product_id and pimg.type="DEFAULT") left join images img on pimg.image_id = img.id order by p.view_count DESC limit 10';
+        //$products = $this->Connection->execute($sql, ['limit' => $limit])->fetchAll('assoc');
+        $products = $this->Products->find()
+                ->contain([
+                    'ProductImages' => function($q) {
+                        return $q->contain(['Images'])
+                                ->where(['ProductImages.type' => 'DEFAULT']);
+                    }
+                ])
+                ->where(['isactive' => 'Y'])
+                ->order(['Products.view_count' => 'DESC'])
+                ->limit($limit)
+                ->toArray();
+
+        foreach ($products as $index => $product) {
+
+            if (sizeof($product['product_images']) != 0) {
+                $products[$index]['image'] = $product['product_images'][0]['image']['fullpath'];
+            } else {
+                $products[$index]['image'] = null;
+            }
+            if ($product['iswholesale'] == 'Y') {
+                $maxPrice = $this->WholesaleRates->find()
+                        ->where(['WholesaleRates.product_id' => $product['id']])
+                        ->order(['WholesaleRates.price' => 'DESC'])
+                        ->first();
+
+                $minPrice = $this->WholesaleRates->find()
+                        ->where(['WholesaleRates.product_id' => $product['id']])
+                        ->order(['WholesaleRates.price' => 'ASC'])
+                        ->first();
+                $products[$index]['wholesale_price'] = sprintf('%s-%s', number_format($minPrice['price']), number_format($maxPrice['price']));
+            }
+        }
+
         $this->responData['status'] = 200;
         $this->responData['data'] = $products;
 

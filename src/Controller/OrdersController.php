@@ -20,7 +20,7 @@ class OrdersController extends AppController {
         'NEW' => 'คำสั่งซื้อใหม่',
         'WT' => 'รอจัดส่ง',
         'SENT' => 'ส่งแล้ว',
-        'RECEIPT' => 'รับสินค้าแล้ว',
+        'RECEIVED' => 'รับสินค้าแล้ว',
         'VO' => 'ยกเลิก'
     ];
     public $PaymentStatus = [
@@ -87,6 +87,22 @@ class OrdersController extends AppController {
             return $this->redirect(['action' => 'waiting-delivery']);
         }
         $status = 'SENT';
+        $orders = $this->getOrderBtStatus($status);
+        $orderStatus = $this->OrderStatus;
+        $paymentStatus = $this->PaymentStatus;
+
+        $shippings = $this->Shippings->find('list')->where(['isactive' => 'Y'])->toArray();
+        $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus', 'shippings'));
+    }
+    
+    public function received(){
+        if ($this->request->is(['POST'])) {
+            $postData = $this->request->getData();
+            $this->Orders->updateAll(['status' => $postData['status'], 'shipping_id' => $postData['shipping_id']], ['id' => $postData['order_id']]);
+
+            return $this->redirect(['action' => 'waiting-delivery']);
+        }
+        $status = 'RECEIVED';
         $orders = $this->getOrderBtStatus($status);
         $orderStatus = $this->OrderStatus;
         $paymentStatus = $this->PaymentStatus;

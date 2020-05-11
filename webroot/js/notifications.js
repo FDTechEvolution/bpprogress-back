@@ -12,8 +12,16 @@ $(document).ready(function () {
             .done(function (data) {
                 console.log(data);
                 $.each(data.data, function (index, item) {
+                    var html = '<span class="badge badge-pill badge-light-dark">'+item.amt+'</span>';
                     if(item.status ==='NEW'){
                         $('#notis-new-order').text(item.amt);
+                        $('#notis-bt-new-order').append(html);
+                    }else if(item.status ==='WT'){
+                        $('#notis-bt-wt-order').append(html);
+                    }else if(item.status ==='SENT'){
+                        $('#notis-bt-sent-order').append(html);
+                    }else if(item.status ==='RECEIVED'){
+                        $('#notis-bt-received-order').append(html);
                     }
                 });
                 
