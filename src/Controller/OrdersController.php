@@ -82,9 +82,9 @@ class OrdersController extends AppController {
     public function sent() {
         if ($this->request->is(['POST'])) {
             $postData = $this->request->getData();
-            $this->Orders->updateAll(['status' => $postData['status'], 'shipping_id' => $postData['shipping_id']], ['id' => $postData['order_id']]);
+            $this->Orders->updateAll(['status' => $postData['status']], ['id' => $postData['order_id']]);
 
-            return $this->redirect(['action' => 'waiting-delivery']);
+            return $this->redirect(['action' => 'sent']);
         }
         $status = 'SENT';
         $orders = $this->getOrderBtStatus($status);

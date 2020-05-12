@@ -26,7 +26,7 @@
                         <th>สถานะ</th>
                         <th>บริษัทขนส่ง</th>
                         <th>หมายเลขพัสดุ</th>
-                       
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,9 +37,11 @@
                             <td><?= $this->Html->link($order->docno, ['controller' => 'orders', 'action' => 'view', $order->id]) ?></td>
                             <td><?= $order->user->fullname ?></td>
                             <td><?= $orderStatus[$order->status] ?></td>
-                            <td><?= $order->shipping->name?></td>
-                            <td><?= $order->trackingno?></td>
-                            
+                            <td><?= $order->shipping->name ?></td>
+                            <td><?= $order->trackingno ?></td>
+                            <td class="text-right">
+                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $order->id ?>" data-status="RECEIVED"> รับสินค้าแล้ว </button>
+                            </td>
                         </tr>
 
                     <?php endforeach; ?>
@@ -50,69 +52,25 @@
     </div>
 </div>
 
-<div class="modal fade bs-example-modal-center" id="modal-tracking" tabindex="-1" role="dialog" aria-labelledby="myCenterModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myCenterModalLabel">กรุณาระบุหมายเลขติดตามพัสดุ [Tracking No]</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                <?= $this->Form->create('order', ['id' => 'frm-order']) ?>
-                <?= $this->Form->hidden('order_id', ['id' => 'order_id']) ?>
-                <?= $this->Form->hidden('status', ['id' => 'status']) ?>
-                <div class="form-group">
-                    <?= $this->Form->control('shipping_id', ['options' => $shippings, 'class' => 'form-control', 'id' => 'shipping_id', 'label' => 'บริษัทขนส่ง*']) ?>
-                </div>
-                <div class="form-group">
-                    <?= $this->Form->control('trackingno', ['class' => 'form-control', 'id' => 'trackingno', 'label' => 'Tracking No*']) ?>
-                </div>
-                <?= $this->Form->end() ?>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="bt-save" class="btn btn-primary">บันทึก</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<?= $this->Form->create('order', ['id' => 'frm-order']) ?>
+<?= $this->Form->hidden('order_id', ['id' => 'order_id']) ?>
+<?= $this->Form->hidden('status', ['id' => 'status']) ?>
+<?= $this->Form->end() ?>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
 
 <script>
     $(document).ready(function () {
-        $("#frm-order").validate({
-            rules: {
-                shipping_id: {
-                    required: true
-                },
-                trackingno:{
-                    required: true
-                }
-            },
-            messages: {
-                trackingno:{
-                    required:"กรุณาระบุหมายเลขพัสดุ"
-                }
-            },
-            errorPlacement: function (error, element)
-            {
-                error.insertAfter(element);
-            }
-        });
-        
-        $('[data-action="update-status"]').on('click', function () {
+        $('[data-action="update-status"]').on('click',function(){
             var order_id = $(this).attr('data-id');
             var status = $(this).attr('data-status');
-
+            
             $('#order_id').val(order_id);
             $('#status').val(status);
-
+            $('#frm-order').submit();
         });
 
-        $('#bt-save').on('click', function () {
-            if ($("#frm-order").valid()) {
-                 $('#frm-order').submit();
-            }
-           
-        });
+
     });
+
 </script>

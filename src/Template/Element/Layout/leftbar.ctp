@@ -30,10 +30,6 @@
                         <li>
                             <?= $this->Html->link('รับสินค้าเข้า', ['controller' => 'goods-receipt']) ?>
                         </li>
-
-                        <li>
-                            <?= $this->Html->link('ยี่ห้อสินค้า', ['controller' => 'brands']) ?>
-                        </li>
                     </ul>
                 </li>
                 <li>
