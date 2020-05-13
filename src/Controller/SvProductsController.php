@@ -243,6 +243,27 @@ class SvProductsController extends AppController {
 
         return $this->response;
     }
+    
+    public function getTopSales(){
+        $this->loadComponent('ReadSqlFiles');
+        $this->autoRender = false;
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+        
+        $sql = $this->ReadSqlFiles->read('top_sales_pd.sql');
+        
+        $products = $this->Connection->execute($sql, [])->fetchAll('assoc');
+        
+        $this->responData['status'] = 200;
+        $this->responData['data'] = $products;
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+
+        return $this->response;
+    }
 
     public function updateView() {
         $this->autoRender = false;

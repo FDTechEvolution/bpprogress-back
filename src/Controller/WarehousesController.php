@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
+use Cake\Database\Expression\QueryExpression;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Warehouses Controller
@@ -13,19 +17,25 @@ use App\Controller\AppController;
  */
 class WarehousesController extends AppController {
 
+    public $Connection = null;
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+        $this->Connection = ConnectionManager::get('default');
+    }
+
     /**
      * Index method
      *
      * @return \Cake\Http\Response|null
      */
     public function index() {
-        $this->paginate = [
-            'contain' => ['Shops']
-        ];
-        $warehouses = $this->paginate($this->Warehouses);
 
+        $sql = 'select w.*,sum(wp.qty) as product_count from warehouses w left join warehouse_products wp on w.id = wp.warehouse_id group by w.id order by w.name asc';
+        $warehouses = $this->Connection->execute($sql, [])->fetchAll('assoc');
+        
         $user = $this->MyAuthen->getLogedUser();
-        $this->set(compact('warehouses','user'));
+        $this->set(compact('warehouses', 'user'));
     }
 
     /**

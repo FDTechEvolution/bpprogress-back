@@ -6,10 +6,7 @@
             <ul class="metismenu" id="side-menu">
                 <li class="menu-title">เมนู</li>
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
-
-                        <span> Dashboards </span>
-                    </a>
+                    <?= $this->Html->link('<i class="remixicon-dashboard-line"></i><span>Dashboards </span>', ['controller' => 'home'],['class'=>'waves-effect','escape'=>false]) ?>
                 </li>
                 <li>
                     <?= $this->Html->link('<i class="mdi mdi-cart-plus"></i><span class="badge badge-danger badge-pill float-right" id="notis-new-order"></span><span> รายการสั่งซื้อ </span>', ['controller' => 'orders', 'action' => 'index', 'status' => 'NEW'], ['class' => 'waves-effect', 'escape' => false]) ?>

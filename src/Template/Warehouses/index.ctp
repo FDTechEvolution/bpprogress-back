@@ -21,8 +21,9 @@
             <table cellpadding="0" cellspacing="0" id="datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr style="background-color: #3b73da91; color: #000;">
-                        <th scope="col" style="width: 15%;"><?= __('คลังสินค้า') ?></th>
-                        <th scope="col" style="width: 40%;"><?= __('รายละเอียด') ?></th>
+                        <th scope="col"><?= __('คลังสินค้า') ?></th>
+                        <th scope="col"><?= __('รายละเอียด') ?></th>
+                        <th class="text-right">จำนวนสินค้าในคลัง</th>
                         <th scope="col" style="width: 15%;" class="text-center"><?= __('สถานะ') ?></th>
                         <th scope="col" style="width: 30%;" class="actions text-center"><?= __('การจัดการ') ?></th>
                     </tr>
@@ -30,26 +31,27 @@
                 <tbody>
                     <?php foreach ($warehouses as $index => $warehouse): ?>
                     <tr>
-                        <td><?= h($warehouse->name) ?></td>
-                        <td><?= h($warehouse->description) ?></td>
+                        <td><?= h($warehouse['name']) ?></td>
+                        <td><?= h($warehouse['description']) ?></td>
+                        <td class="text-right"><?= number_format($warehouse['product_count'])?></td>
                         <td class="text-center">
                             <?= $this->Form->create('changStatForm', ['url'=>['controller'=>'warehouses', 'action'=>'status'], 'class' => 'form-horizontal', 'role' => 'form', 'id'=>'frm_stat-'.$index.'']) ?>
                                 <fieldset>
-                                    <?php if(h($warehouse->isactive == 'Y')) { ?>
+                                    <?php if(h($warehouse['isactive'] == 'Y')) { ?>
                                         <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-Y-'.$index.'', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'N', 'escape' => false, 'checked' => 'checked', 'onchange' => 'this.form.submit()']) ?>
                                     <?php }else{ ?>
                                         <?= $this->Form->checkbox(__('isactive'), ['id' => 'isactive-N-'.$index.'', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'data-size' => 'small', 'value' => 'Y', 'escape' => false, 'onchange' => 'this.form.submit()']) ?>
                                     <?php } ?>
-                                    <?php echo $this->Form->control('WH_ID', ['id' => 'stat_WH_ID-'.$index.'', 'class' => 'form-control', 'label' => false, 'type' => 'hidden', 'value' => $warehouse->id]); ?>
+                                    <?php echo $this->Form->control('WH_ID', ['id' => 'stat_WH_ID-'.$index.'', 'class' => 'form-control', 'label' => false, 'type' => 'hidden', 'value' => $warehouse['id']]); ?>
                                 </fieldset>
                             <?= $this->Form->end() ?>
                         </td>
                         <?php
                             $modalWH = [
-                                'data-id' => $warehouse->id,
-                                'data-name' => $warehouse->name,
-                                'data-description' => $warehouse->description,
-                                'data-shop' => $warehouse->shop_id,
+                                'data-id' => $warehouse['id'],
+                                'data-name' => $warehouse['name'],
+                                'data-description' => $warehouse['description'],
+                                'data-shop' => $warehouse['shop_id'],
                                 'class' => 'btn btn-icon waves-effect waves-light btn-success m-b-5',
                                 'data-toggle' => 'modal', 
                                 'data-target' => '#editWHModal',
@@ -57,9 +59,9 @@
                             ];
                         ?>
                         <td class="actions text-center">
-                            <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $warehouse->id], ['class' => 'btn btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?>
-                            <?= $this->Html->link(__('<i class="mdi mdi-tooltip-edit"></i> แก้ไข'), ['action' => 'edit', $warehouse->id], $modalWH) ?>
-                            <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $warehouse->id], ['confirm' => __('ยืนยันการลบคลังสินค้า #{0}?', $warehouse->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
+                            <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $warehouse['id']], ['class' => 'btn btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?>
+                            <?= $this->Html->link(__('<i class="mdi mdi-tooltip-edit"></i> แก้ไข'), ['action' => 'edit', $warehouse['id']], $modalWH) ?>
+                            <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $warehouse['id']], ['confirm' => __('ยืนยันการลบคลังสินค้า #{0}?', $warehouse['name']), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -165,9 +167,9 @@
 <?= $this->Html->script('/css/assets/libs/bootstrap-select/bootstrap-select.min.js') ?>
 <?= $this->Html->script('/css/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js') ?>
 <?= $this->Html->script('/css/assets/libs/jquery-mask-plugin/jquery.mask.min.js') ?>
-<?= $this->Html->script('/css/assets/libs/dropzone/dropzone.min.js') ?>
 
-
+<!-- init js -->
+<?= $this->Html->script('/css/assets/js/pages/form-advanced.init.js') ?>
 <script>
     $(document).ready(function () {
         $('#editWHModal').on('show.bs.modal', function (e) {
@@ -182,9 +184,6 @@
             $('#frm_edit input[id="edit_shopID"]').val(shopId);
         });
 
-        $.noConflict();
-        var table = $('#datatable').DataTable();
     });
 </script>
-<!-- init js -->
-<?= $this->Html->script('/css/assets/js/pages/form-advanced.init.js') ?>
+
