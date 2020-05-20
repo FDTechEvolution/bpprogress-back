@@ -15,6 +15,23 @@ function generateCode(length) {
     return result;
 }
 
-function removeElementById(id){
-    $("#"+id).remove();
+function removeElementById(id) {
+    $("#" + id).remove();
+}
+
+function numberOnly(ele) {
+    $(ele).keypress(function (e) {
+        var strNumber = this.value;
+         if(strNumber==='0'){
+             this.value ='';
+         }
+//if the letter is not digit then display error and don't type anything
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+//display error message
+            //alert("Insert Only Numbers");
+            return false;
+        }
+       
+        
+    });
 }

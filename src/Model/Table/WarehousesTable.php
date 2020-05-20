@@ -10,8 +10,9 @@ use Cake\Validation\Validator;
  * Warehouses Model
  *
  * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
- * @property &\Cake\ORM\Association\HasMany $GoodsTransactions
- * @property &\Cake\ORM\Association\HasMany $WarehouseProducts
+ * @property \App\Model\Table\GoodsTransactionsTable&\Cake\ORM\Association\HasMany $GoodsTransactions
+ * @property \App\Model\Table\UsedWarehousesTable&\Cake\ORM\Association\HasMany $UsedWarehouses
+ * @property \App\Model\Table\WarehouseProductsTable&\Cake\ORM\Association\HasMany $WarehouseProducts
  *
  * @method \App\Model\Entity\Warehouse get($primaryKey, $options = [])
  * @method \App\Model\Entity\Warehouse newEntity($data = null, array $options = [])
@@ -49,6 +50,9 @@ class WarehousesTable extends Table
         $this->hasMany('GoodsTransactions', [
             'foreignKey' => 'warehouse_id',
         ]);
+        $this->hasMany('UsedWarehouses', [
+            'foreignKey' => 'warehouse_id',
+        ]);
         $this->hasMany('WarehouseProducts', [
             'foreignKey' => 'warehouse_id',
         ]);
@@ -80,6 +84,11 @@ class WarehousesTable extends Table
             ->scalar('description')
             ->maxLength('description', 255)
             ->allowEmptyString('description');
+
+        $validator
+            ->scalar('status')
+            ->maxLength('status', 45)
+            ->allowEmptyString('status');
 
         return $validator;
     }

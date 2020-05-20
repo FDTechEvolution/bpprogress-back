@@ -207,7 +207,7 @@ class SvProductsController extends AppController {
                                 ->where(['ProductImages.type' => 'DEFAULT']);
                     }
                 ])
-                ->where(['isactive' => 'Y'])
+                ->where(['Products.isactive' => 'Y'])
                 ->order(['Products.view_count' => 'DESC'])
                 ->limit($limit)
                 ->toArray();
@@ -243,17 +243,17 @@ class SvProductsController extends AppController {
 
         return $this->response;
     }
-    
-    public function getTopSales(){
+
+    public function getTopSales() {
         $this->loadComponent('ReadSqlFiles');
         $this->autoRender = false;
         $this->modifyHeader();
         $this->RequestHandler->respondAs('json');
-        
+
         $sql = $this->ReadSqlFiles->read('top_sales_pd.sql');
-        
+
         $products = $this->Connection->execute($sql, [])->fetchAll('assoc');
-        
+
         $this->responData['status'] = 200;
         $this->responData['data'] = $products;
 
@@ -357,6 +357,29 @@ class SvProductsController extends AppController {
         }
 
         return $products;
+    }
+
+    public function calculatePrice() {
+        $productId = $this->request->getQuery('product');
+        $qty = $this->request->getQuery('qty');
+        
+        
+        $this->autoRender = false;
+        $this->loadComponent('Product');
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+        
+        
+        
+        $unitPrice = $this->Product->getUnitPriceByQty($productId, $qty);
+        $product = $this->Products->find()->where(['Products.id'=>$productId])->first();
+
+        $this->responData['status'] = 200;
+        $this->responData['data'] = ['unit_price'=>$unitPrice,'product_id'=>$productId,'qty'=>$qty,'product'=>$product];
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
     }
 
 }

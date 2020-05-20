@@ -42,15 +42,15 @@ class OrderLinesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '98d72064-6144-45bd-8850-a7f7b3be4c15',
-                'order_id' => 'dea920a0-8ca3-4630-9898-af026f818cef',
-                'product_id' => '16099bcf-3ad5-4a6a-934f-d9244bfe276b',
+                'id' => '01785738-b7ea-41e5-873e-56212e71be6f',
+                'order_id' => '7acddfca-3d26-4eb2-a20f-bb7879e5009a',
+                'product_id' => '2529efd6-49f9-42dd-ae71-fac50d2127d9',
                 'qty' => 1,
                 'unit_price' => 1.5,
                 'amount' => 1.5,
                 'description' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-01 10:15:45',
-                'modified' => '2020-05-01 10:15:45',
+                'created' => '2020-05-19 05:29:28',
+                'modified' => '2020-05-19 05:29:28',
             ],
         ];
         parent::init();

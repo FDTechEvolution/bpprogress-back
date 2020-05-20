@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\OrdersTable&\Cake\ORM\Association\BelongsTo $Orders
  * @property \App\Model\Table\ProductsTable&\Cake\ORM\Association\BelongsTo $Products
+ * @property &\Cake\ORM\Association\HasMany $UsedWarehouses
  *
  * @method \App\Model\Entity\OrderLine get($primaryKey, $options = [])
  * @method \App\Model\Entity\OrderLine newEntity($data = null, array $options = [])
@@ -48,6 +49,9 @@ class OrderLinesTable extends Table
         $this->belongsTo('Products', [
             'foreignKey' => 'product_id',
             'joinType' => 'INNER',
+        ]);
+        $this->hasMany('UsedWarehouses', [
+            'foreignKey' => 'order_line_id',
         ]);
     }
 

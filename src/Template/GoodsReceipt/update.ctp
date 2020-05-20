@@ -75,7 +75,7 @@
                                             <td class="text-right"><?= number_format($line->qty) ?></td>
                                             <td class="text-right">
                                                 <input type="hidden" name="lines[product_id][]" value="<?= $line->product->id ?>"/>
-                                                <input type="hidden" name="lines[qty][]" value="<?= $line->qty ?>"/>
+                                                <input type="hidden" name="lines[qty][]" value="<?= $line->qty ?>" />
                                                 <button class="btn btn-outline-secondary" onclick="removeElementById('<?= $line->product->id ?>')">ลบ</button>
                                             </td>
                                         </tr>
@@ -194,7 +194,7 @@
                                 strContent += '<td><image src="' + product.images + '" width="70"/></td>';
                                 strContent += '<td>' + product.name + '</td>';
                                 strContent += '<td>';
-                                strContent += '<input type="number" name="lines[qty][]" value="0" class="form-control"/>';
+                                strContent += '<input type="number" name="lines[qty][]" value="1" class="form-control" onkeydown="numberOnly(this)"/>';
                                 strContent += '<input type="hidden" name="lines[product_id][]" value="' + product.id + '"/>';
                                 strContent += '</td>';
                                 strContent += '<td class="text-right"><button class="btn btn-outline-secondary" onclick="removeElementById(\'' + product.id + '\')">ลบ</button></td>';

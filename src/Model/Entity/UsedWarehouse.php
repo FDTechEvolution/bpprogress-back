@@ -4,23 +4,20 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Warehouse Entity
+ * UsedWarehouse Entity
  *
  * @property string $id
- * @property string $name
+ * @property string $order_line_id
+ * @property string $warehouse_id
+ * @property int $qty
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
- * @property string|null $isactive
  * @property string|null $description
- * @property string $shop_id
- * @property string|null $status
  *
- * @property \App\Model\Entity\Shop $shop
- * @property \App\Model\Entity\GoodsTransaction[] $goods_transactions
- * @property \App\Model\Entity\UsedWarehouse[] $used_warehouses
- * @property \App\Model\Entity\WarehouseProduct[] $warehouse_products
+ * @property \App\Model\Entity\OrderLine $order_line
+ * @property \App\Model\Entity\Warehouse $warehouse
  */
-class Warehouse extends Entity
+class UsedWarehouse extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -32,16 +29,13 @@ class Warehouse extends Entity
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
+        'order_line_id' => true,
+        'warehouse_id' => true,
+        'qty' => true,
         'created' => true,
         'modified' => true,
-        'isactive' => true,
         'description' => true,
-        'shop_id' => true,
-        'status' => true,
-        'shop' => true,
-        'goods_transactions' => true,
-        'used_warehouses' => true,
-        'warehouse_products' => true,
+        'order_line' => true,
+        'warehouse' => true,
     ];
 }

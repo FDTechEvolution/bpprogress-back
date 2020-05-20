@@ -30,6 +30,8 @@ class SvOrdersController extends AppController {
         $this->OrderLines = TableRegistry::get('OrderLines');
         $this->Payments = TableRegistry::get('Payments');
 
+        $this->loadComponent('Warehouse');
+
         $this->autoRender = false;
     }
 
@@ -129,8 +131,12 @@ class SvOrdersController extends AppController {
                     //$order->status = 'NEW';
                     $this->Orders->save($order);
 
+
                     //Create payment
                     $this->createPayment($order->id, $order->user_id, $totalamt);
+
+                    //Update Stock
+                    $this->Warehouse->updateByOrder($order->id);
 
                     $this->responData['data'] = $order;
                     $this->responData['status'] = 200;
@@ -163,11 +169,9 @@ class SvOrdersController extends AppController {
                     ->first();
 
             if (isset($postData['status'])) {
-                if ($postData['status'] == 'NEW' && $order->status == 'DR') {
-                    $this->loadComponent('Warehouse');
-                    $this->Warehouse->updateByOrder($orderId);
-                }
                 $order->status = $postData['status'];
+                $newStatus = $postData['status'];
+                $this->void($orderId,$newStatus);
             }
             if (isset($postData['totalamt'])) {
                 $order->totalamt = $postData['totalamt'];
@@ -193,6 +197,24 @@ class SvOrdersController extends AppController {
 
         return $this->response;
     }
+    
+    private function void($orderId = null,$newStatus = 'NEW'){
+        $order = $this->Orders->find()
+                ->contain(['OrderLines'=>['UsedWarehouses']])
+                ->where(['Orders.id'=>$orderId])
+                ->first();
+        
+        if($order->status != 'VO' && $newStatus == 'VO'){
+            $orderLines = $order->order_lines;
+            foreach ($orderLines as $line){
+                $usedWarehouses = $line['used_warehouses'];
+                
+                foreach ($usedWarehouses as $usedWarehouse){
+                    $this->Warehouse->updateWarehuseProductQty($usedWarehouse['warehouse_id'], $line['product_id'], $usedWarehouse['qty'], 'VOID');
+                }
+            }
+        }
+    }
 
     private function createPayment($orderId = null, $userId = null, $expectamt = 0) {
         $payment = $this->Payments->newEntity();
@@ -204,6 +226,8 @@ class SvOrdersController extends AppController {
     }
 
     private function createOrderLine($orderId = null, $orderLines = null) {
+        $this->loadComponent('Product');
+
         foreach ($orderLines as $index => $line) {
             $product = $this->Products->find()->contain(['WholesaleRates'])->where(['Products.id' => $line['product_id']])->first();
             if (!is_null($product)) {
@@ -212,23 +236,8 @@ class SvOrdersController extends AppController {
                 $orderLine->product_id = $product->id;
                 $orderLine->qty = $line['qty'];
 
-                $unitPrice = 0;
-                if ($product->iswholesale == 'Y') {
-                    $wholesale = $this->Products->WholesaleRates->find()
-                            ->where([
-                                'WholesaleRates.endqty >=' => $line['qty'],
-                                'WholesaleRates.startqty <=' => $line['qty'],
-                                'WholesaleRates.product_id' => $product->id
-                            ])
-                            ->first();
-                    if (is_null($wholesale)) {
-                        $unitPrice = $product->special_price;
-                    } else {
-                        $unitPrice = $wholesale->price;
-                    }
-                } else {
-                    $unitPrice = $product->special_price;
-                }
+                $unitPrice = $this->Product->getUnitPriceByQty($product->id, $line['qty']);
+
                 $orderLine->unit_price = $unitPrice;
                 $orderLine->amount = ($orderLine->qty * $orderLine->unit_price);
 
@@ -269,6 +278,24 @@ class SvOrdersController extends AppController {
         return [
             'status' => $status, 'msg' => $msg
         ];
+    }
+
+    public function checkStockByProduct() {
+        $productId = $this->request->getQuery('product_id');
+        $useQty = $this->request->getQuery('qty');
+
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+
+        $result = $this->Warehouse->checkStockByProduct($productId, $useQty);
+
+        $this->responData = ['status' => 200, 'msg' => '', 'data' => $result];
+
+        $json = json_encode($this->responData);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
     }
 
 }

@@ -1,21 +1,21 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\WarehousesTable;
+use App\Model\Table\UsedWarehousesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\WarehousesTable Test Case
+ * App\Model\Table\UsedWarehousesTable Test Case
  */
-class WarehousesTableTest extends TestCase
+class UsedWarehousesTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\WarehousesTable
+     * @var \App\Model\Table\UsedWarehousesTable
      */
-    public $Warehouses;
+    public $UsedWarehouses;
 
     /**
      * Fixtures
@@ -23,11 +23,9 @@ class WarehousesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Warehouses',
-        'app.Shops',
-        'app.GoodsTransactions',
         'app.UsedWarehouses',
-        'app.WarehouseProducts',
+        'app.OrderLines',
+        'app.Warehouses',
     ];
 
     /**
@@ -38,8 +36,8 @@ class WarehousesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Warehouses') ? [] : ['className' => WarehousesTable::class];
-        $this->Warehouses = TableRegistry::getTableLocator()->get('Warehouses', $config);
+        $config = TableRegistry::getTableLocator()->exists('UsedWarehouses') ? [] : ['className' => UsedWarehousesTable::class];
+        $this->UsedWarehouses = TableRegistry::getTableLocator()->get('UsedWarehouses', $config);
     }
 
     /**
@@ -49,7 +47,7 @@ class WarehousesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Warehouses);
+        unset($this->UsedWarehouses);
 
         parent::tearDown();
     }
