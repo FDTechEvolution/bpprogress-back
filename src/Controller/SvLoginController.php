@@ -43,7 +43,7 @@ class SvLoginController extends AppController {
                     $this->responData['status'] = 403;
                     $this->responData['msg'] = 'หมายเลขโทรศัพท์ หรือ รหัสผ่าน ไม่ถูกต้อง!';
                 } else {
-                    if ($user->type != 'NORMAL') {
+                    if ($user->type == 'ADMIN' || $user->type == 'SELLER') {
                         $authenCode = $this->User->generateAuthenCode($user->id);
                         $user['authen_code'] = $authenCode;
                         $this->responData['data'] = $user;
