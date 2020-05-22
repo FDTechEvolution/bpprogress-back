@@ -94,14 +94,23 @@ class ProductsController extends AppController {
                 ->contain([
                     'ProductImages' => [
                         'Images',
-                        'sort'=>['ProductImages.type'=>'ASC']
+                        'sort' => ['ProductImages.type' => 'ASC']
                     ], 'WholesaleRates'
                 ])
                 ->where(['Products.id' => $id])
                 ->first();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $postData = $this->request->getData();
-            $this->log($postData, 'debug');
+            //$this->log($postData, 'debug');
+            if (isset($postData['isactive']) && $postData['isactive'] != 'Y') {
+                $postData['isactive'] = 'N';
+            }
+            if (isset($postData['isretail']) && $postData['isretail'] != 'Y') {
+                $postData['isretail'] = 'N';
+            }
+            if (isset($postData['iswholesale']) && $postData['iswholesale'] != 'Y') {
+                $postData['iswholesale'] = 'N';
+            }
             $product = $this->Products->patchEntity($product, $postData);
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
