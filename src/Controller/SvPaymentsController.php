@@ -36,7 +36,7 @@ class SvPaymentsController extends AppController {
 
             $postData = $this->request->getData();
             $paymentId = $postData['payment_id'];
-            $this->log($postData,'debug');
+            //$this->log($postData,'debug');
             $payment = $this->Payments->find()->where(['Payments.id'=>$paymentId])->first();
             $payment = $this->Payments->patchEntity($payment, $postData);
             $payment->status = 'NEW';

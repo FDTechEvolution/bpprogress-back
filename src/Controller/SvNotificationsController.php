@@ -67,5 +67,23 @@ class SvNotificationsController extends AppController {
 
         return $this->response;
     }
+    
+    public function getPaymentByStatus() {
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+        
+        $user = $this->MyAuthen->getLogedUser();
+        $sql = 'select p.status,count(p.id) as amt from payments p join orders o on p.order_id = o.id where o.shop_id = :shop_id group by p.status';
+        $countOrderStatus = $this->Connection->execute($sql, ['shop_id' => $user['shop_id']])->fetchAll('assoc');
+        
+        $this->responData['status'] = 200;
+        $this->responData['data'] = $countOrderStatus;
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
+    }
 
 }

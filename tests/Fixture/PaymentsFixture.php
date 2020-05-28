@@ -45,18 +45,18 @@ class PaymentsFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '12da6129-5faf-4f93-a4e5-3c355efa3c14',
-                'user_id' => 'c317310a-ac6b-48d1-872a-04dc4b305ef4',
-                'order_id' => '811a3cfa-ad47-4613-9c73-10f1af220eb2',
+                'id' => 'ba530a39-79b6-4843-a911-a28bf82f32d3',
+                'user_id' => '953db377-9496-487d-a991-000c599e7f46',
+                'order_id' => 'b29984a4-a6d6-4a4a-a4e5-4918918f123e',
                 'amount' => 1.5,
-                'image_id' => '113203dc-dc8a-4b98-934b-a545fa2af1c0',
+                'image_id' => '150c1004-807a-4383-96fd-6c891403a1bf',
                 'transfertime' => 'Lorem ipsum dolor sit amet',
-                'created' => '2020-05-06 16:58:52',
-                'modified' => '2020-05-06 16:58:52',
+                'created' => '2020-05-28 06:35:01',
+                'modified' => '2020-05-28 06:35:01',
                 'description' => 'Lorem ipsum dolor sit amet',
                 'status' => 'Lorem ipsum dolor sit amet',
                 'expectamt' => 1.5,
-                'docdate' => '2020-05-06',
+                'docdate' => '2020-05-28',
             ],
         ];
         parent::init();

@@ -12,18 +12,33 @@ $(document).ready(function () {
             .done(function (data) {
                 console.log(data);
                 $.each(data.data, function (index, item) {
-                    var html = '<span class="badge badge-pill badge-light-dark">'+item.amt+'</span>';
-                    if(item.status ==='NEW'){
+                    var html = '<span class="badge badge-pill badge-light-dark">' + item.amt + '</span>';
+                    if (item.status === 'NEW') {
                         $('#notis-new-order').text(item.amt);
                         $('#notis-bt-new-order').append(html);
-                    }else if(item.status ==='WT'){
+                    } else if (item.status === 'WT') {
                         $('#notis-bt-wt-order').append(html);
-                    }else if(item.status ==='SENT'){
+                    } else if (item.status === 'SENT') {
                         $('#notis-bt-sent-order').append(html);
-                    }else if(item.status ==='RECEIVED'){
+                    } else if (item.status === 'RECEIVED') {
                         $('#notis-bt-received-order').append(html);
                     }
                 });
-                
+
+            });
+
+    $.get(siteurl + 'sv-notifications/get-payment-by-status', {})
+            .done(function (data) {
+                console.log(data);
+                $.each(data.data, function (index, item) {
+                    var html = '<span class="badge badge-pill badge-light-dark">' + item.amt + '</span>';
+                    if (item.status === 'NEW') {
+                        $('#notis-new-payment').text(item.amt);
+                        $('#notis-bt-new-payment').append(html);
+                    }else if (item.status === 'CF') {
+                        $('#notis-bt-cf-payment').append(html);
+                    }
+                });
+
             });
 });

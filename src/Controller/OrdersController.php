@@ -46,7 +46,7 @@ class OrdersController extends AppController {
      * @return \Cake\Http\Response|null
      */
     public function index() {
-
+        $this->loadComponent('Payment');
         if ($this->request->is(['POST'])) {
             $postData = $this->request->getData();
             $this->Orders->updateAll(['status' => $postData['status']], ['Orders.id' => $postData['order_id'], 'Orders.status' => 'NEW']);
@@ -56,7 +56,7 @@ class OrdersController extends AppController {
         $status = 'NEW';
         $orders = $this->getOrderBtStatus($status);
         $orderStatus = $this->OrderStatus;
-        $paymentStatus = $this->PaymentStatus;
+        $paymentStatus = $this->Payment->getPaymentStatus();
         $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus'));
     }
 
