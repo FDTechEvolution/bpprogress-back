@@ -373,9 +373,13 @@ class SvProductsController extends AppController {
         
         $unitPrice = $this->Product->getUnitPriceByQty($productId, $qty);
         $product = $this->Products->find()->where(['Products.id'=>$productId])->first();
+        $minWholesale = $this->Products->WholesaleRates->find()
+                ->where(['WholesaleRates.product_id'=>$productId])
+                ->order(['startqty'=>'ASC'])
+                ->first();
 
         $this->responData['status'] = 200;
-        $this->responData['data'] = ['unit_price'=>$unitPrice,'product_id'=>$productId,'qty'=>$qty,'product'=>$product];
+        $this->responData['data'] = ['unit_price'=>$unitPrice,'product_id'=>$productId,'qty'=>$qty,'product'=>$product,'min_wholesale'=>$minWholesale];
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
         $this->response = $this->response->withStringBody($json);

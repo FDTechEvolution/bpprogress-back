@@ -171,7 +171,7 @@ class SvOrdersController extends AppController {
             if (isset($postData['status'])) {
                 $order->status = $postData['status'];
                 $newStatus = $postData['status'];
-                $this->void($orderId,$newStatus);
+                //$this->void($orderId,$newStatus);
             }
             if (isset($postData['totalamt'])) {
                 $order->totalamt = $postData['totalamt'];
@@ -197,23 +197,46 @@ class SvOrdersController extends AppController {
 
         return $this->response;
     }
-    
-    private function void($orderId = null,$newStatus = 'NEW'){
-        $order = $this->Orders->find()
-                ->contain(['OrderLines'=>['UsedWarehouses']])
-                ->where(['Orders.id'=>$orderId])
-                ->first();
-        
-        if($order->status != 'VO' && $newStatus == 'VO'){
-            $orderLines = $order->order_lines;
-            foreach ($orderLines as $line){
-                $usedWarehouses = $line['used_warehouses'];
-                
-                foreach ($usedWarehouses as $usedWarehouse){
-                    $this->Warehouse->updateWarehuseProductQty($usedWarehouse['warehouse_id'], $line['product_id'], $usedWarehouse['qty'], 'VOID');
+
+    public function void() {
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+
+        if ($this->request->is(['post', 'ajax'])) {
+            $postData = $this->request->getData();
+            $orderId = $postData['order_id'];
+            $order = $this->Orders->find()
+                    ->contain(['OrderLines' => ['UsedWarehouses']])
+                    ->where(['Orders.id' => $orderId])
+                    ->first();
+
+            if ($order->status == 'NEW' || $order->status == 'WS') {
+                $orderLines = $order->order_lines;
+                foreach ($orderLines as $line) {
+                    $usedWarehouses = $line['used_warehouses'];
+
+                    foreach ($usedWarehouses as $usedWarehouse) {
+                        $this->Warehouse->updateWarehuseProductQty($usedWarehouse['warehouse_id'], $line['product_id'], $usedWarehouse['qty'], 'VOID');
+                    }
                 }
+
+                $order->status = 'VO';
+                $this->Orders->save($order);
+
+                $this->responData['data'] = $order;
+                $this->responData['status'] = 200;
+            } else {
+                $this->responData['data'] = $order;
+                $this->responData['status'] = 400;
+                $this->responData['msg'] = 'ไม่สามารถยกเลิกรายการได้';
             }
         }
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
     }
 
     private function createPayment($orderId = null, $userId = null, $expectamt = 0) {
