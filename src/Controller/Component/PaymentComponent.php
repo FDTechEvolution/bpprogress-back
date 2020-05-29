@@ -17,10 +17,27 @@ class PaymentComponent extends Component
     protected $_defaultConfig = [];
     public $PaymentStatus = [
         'PAID' => 'ชำระเงินแล้ว',
-        'NOTPAID' => 'ยังไม่ได้ชำระเงิน'
+        'NOTPAID' => 'ยังไม่ได้ชำระเงิน',
+        'NEW'=>'รอยืนยัน',
+        'CF'=>'ยืนยัน',
+        'DR'=>'ยังไม่ได้ชำระเงิน'
     ];
+    
+
+    public $PaymentMethod = [
+        'cod' => 'เก็บเงินปลายทาง',
+        'transfer' => 'โอนเงิน',
+        'creditcard' => 'บัตรเครดิต',
+        'cash' => 'เงินสด'
+    ];
+    
     
     public function getPaymentStatus(){
         return $this->PaymentStatus;
     }
+    
+    public function getPaymentMethod(){
+        return $this->PaymentMethod;
+    }
+    
 }

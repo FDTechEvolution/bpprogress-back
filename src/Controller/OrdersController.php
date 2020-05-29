@@ -57,7 +57,8 @@ class OrdersController extends AppController {
         $orders = $this->getOrderBtStatus($status);
         $orderStatus = $this->OrderStatus;
         $paymentStatus = $this->Payment->getPaymentStatus();
-        $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus'));
+        $paymentMethod = $this->Payment->getPaymentMethod();
+        $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus','paymentMethod'));
     }
 
     public function waitingDelivery() {
@@ -149,8 +150,9 @@ class OrdersController extends AppController {
     private function getOrderBtStatus($status = null) {
         $user = $this->MyAuthen->getLogedUser();
         $orders = $this->Orders->find()
-                ->contain(['Users', 'Shippings'])
+                ->contain(['Users', 'Shippings','Payments'])
                 ->where(['Orders.shop_id' => $user['shop_id'], 'status' => $status])
+                ->order(['Orders.created'=>'DESC'])
                 ->toArray();
         return $orders;
     }

@@ -91,14 +91,3 @@
 
 <!-- init js -->
 <?= $this->Html->script('/css/assets/js/pages/form-advanced.init.js') ?>
-
-
-<script>
-    $(document).ready(function () {
-
-
-        $.noConflict();
-        var table = $('#datatable').DataTable();
-    });
-
-</script>
