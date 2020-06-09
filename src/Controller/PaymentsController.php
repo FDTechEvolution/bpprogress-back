@@ -34,6 +34,7 @@ class PaymentsController extends AppController {
         $payments = $this->Payments->find()
                 ->contain(['Users','Orders'=>['Users'],'Images'])
                 ->where(['Payments.status'=>$status])
+                ->order(['Payments.modified'=>'DESC'])
                 ->toArray();
         
         $paymentStatus = $this->Payment->getPaymentStatus();

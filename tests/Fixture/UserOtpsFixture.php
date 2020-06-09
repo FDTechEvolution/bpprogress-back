@@ -21,6 +21,7 @@ class UserOtpsFixture extends TestFixture
         'otp_code' => ['type' => 'integer', 'length' => 6, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        'isactive' => ['type' => 'string', 'length' => null, 'null' => true, 'default' => 'Y', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -39,12 +40,13 @@ class UserOtpsFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 'df827a4c-6b21-4fb7-a8ff-5b2b71bb7566',
-                'user_id' => '4e92cdf5-c22b-4ae5-a1b5-0e26d5fed7e2',
+                'id' => '205fcf76-6ad6-40d6-aaf6-0ee3bc84a98e',
+                'user_id' => '84216110-c50e-49b0-99cd-7732ffcdb7e5',
                 'otp_ref' => 'Lo',
                 'otp_code' => 1,
-                'created' => '2020-04-14 08:50:14',
-                'modified' => '2020-04-14 08:50:14',
+                'created' => '2020-05-30 09:00:38',
+                'modified' => '2020-05-30 09:00:38',
+                'isactive' => 'Lorem ipsum dolor sit amet',
             ],
         ];
         parent::init();

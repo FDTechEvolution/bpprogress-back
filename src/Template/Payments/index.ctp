@@ -28,6 +28,8 @@
                         <th>หมายเลขคำสั่งซื้อ</th>
                         <th>ลูกค้า</th>
 
+                        
+                        <th class="text-center">หลักฐาน</th>
                         <th class="text-right">ยอดเงินที่ต้องชำระ</th>
                         <th class="text-right">จำนวนเงินที่ชำระ</th>
 
@@ -47,7 +49,11 @@
 
                             <td class="text-right"><?= number_format($order->totalamt) ?></td>
                             <td class="text-right"><?= number_format($payment->amount) ?></td>
-
+                            <td class="text-center">
+                                <?php if (isset($payment->image['fullpath'])) { ?>
+                                    <a href="<?= $payment->image['fullpath'] ?>" target="_blank"><image src="<?= $payment->image['fullpath'] ?>" width="40" /></a>
+                                <?php } ?>
+                            </td>
                             <td class="text-right">
                                 <?php if ($payment->status == 'NEW') { ?>
                                     <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $payment->id ?>" data-status="CF"> ยืนยัน </button>
@@ -65,6 +71,28 @@
         </div>
     </div>
 </div>
+<div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">หลักฐานการชำระเงิน</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-12">
+                        <image src="" id=""class="img-responsive" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
 
 <!-- Plugins Js -->
 <?= $this->Html->script('/css/assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js') ?>

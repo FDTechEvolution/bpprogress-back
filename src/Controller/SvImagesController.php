@@ -31,7 +31,7 @@ class SvImagesController extends AppController {
         $this->loadComponent('UploadImage');
         if ($this->request->is(['post', 'ajax'])) {
             $postData = $this->request->getData();
-            //$this->log($postData, 'debug');
+            $this->log($postData, 'debug');
             $file = $postData['image_file'];
             
             if (!is_null($file['name']) && $file['name'] != '') {

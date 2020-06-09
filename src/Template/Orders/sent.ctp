@@ -47,7 +47,7 @@
 
                             </td>
                             <td class="text-right">
-                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $order->id ?>" data-status="RECEIVED"> รับสินค้าแล้ว </button>
+                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $order->id ?>" data-status="RECEIVED" typ="button"> รับสินค้าแล้ว </button>
                             </td>
                         </tr>
 
@@ -81,7 +81,7 @@
     </div><!-- /.modal-dialog -->
 </div>
 <?= $this->Form->create('order', ['id' => 'frm-order']) ?>
-<?= $this->Form->hidden('order_id', ['id' => 'order_id']) ?>
+<?= $this->Form->hidden('order_id', ['id' => 'id']) ?>
 <?= $this->Form->hidden('status', ['id' => 'status']) ?>
 <?= $this->Form->end() ?>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
@@ -93,7 +93,7 @@
             var order_id = $(this).attr('data-id');
             var status = $(this).attr('data-status');
 
-            $('#order_id').val(order_id);
+            $('#id').val(order_id);
             $('#status').val(status);
             $('#frm-order').submit();
         });

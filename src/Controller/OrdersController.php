@@ -62,6 +62,7 @@ class OrdersController extends AppController {
     }
 
     public function waitingDelivery() {
+        $this->loadComponent('Payment');
         if ($this->request->is(['POST'])) {
             $postData = $this->request->getData();
 
@@ -75,14 +76,16 @@ class OrdersController extends AppController {
         $orders = $this->getOrderBtStatus($status);
         $orderStatus = $this->OrderStatus;
         $paymentStatus = $this->PaymentStatus;
+        $paymentMethod = $this->Payment->getPaymentMethod();
 
         $shippings = $this->Shippings->find('list')->where(['isactive' => 'Y'])->toArray();
-        $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus', 'shippings'));
+        $this->set(compact('orders', 'status', 'orderStatus', 'paymentStatus', 'shippings','paymentMethod'));
     }
 
     public function sent() {
         if ($this->request->is(['POST'])) {
             $postData = $this->request->getData();
+            $this->log($postData,'debug');
             $this->Orders->updateAll(['status' => $postData['status']], ['id' => $postData['order_id'], 'status' => 'SENT']);
             $this->Flash->success('อัพเดทสถานะแล้ว');
             return $this->redirect(['action' => 'sent']);

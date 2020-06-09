@@ -44,15 +44,28 @@
                             <td><?= $paymentMethod[$order->payment_method] ?></td>
                             <td>
                                 <?= $paymentStatus[$order->payment_status] ?>
-                                <?php if ($order->payment_method == 'transfer' && sizeof($order->payments)>0) { 
-                                $pStatus = $order['payments'][0]['status'];
-                                echo '/'.$paymentStatus[$pStatus];
-                                } ?>
+                                <?php
+                                if ($order->payment_method == 'transfer' && sizeof($order->payments) > 0) {
+                                    $pStatus = $order['payments'][0]['status'];
+                                    echo '/' . $paymentStatus[$pStatus];
+                                }
+                                ?>
                             </td>
                             <td class="text-right"><?= number_format($order->totalamt) ?></td>
                             <td class="text-right">
+                                <?php if ($order->payment_method == 'transfer') { ?>
+                                    <?php if ($pStatus == 'DR') { ?>
+                                        <p class="text-danger">รอผู้สั่งซื้อชำระเงิน</p>
+                                    <?php } elseif ($pStatus == 'NEW') { ?>
+                                        <p class="text-danger">กรุณา <?=$this->Html->link('ยืนยันการชำระเงิน',['controller'=>'payments'])?> </p>
+                                    <?php } else { ?>
+                                        <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $order->id ?>" data-status="WT"> ยืนยันคำสั่งซื้อ </button>
+                                    <?php } ?>
 
-                                <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $order->id ?>" data-status="WT"> ยืนยันคำสั่งซื้อ </button>
+                                <?php } else { ?>
+                                    <button class="btn btn-sm btn-icon waves-effect btn-outline-secondary" data-action="update-status" data-id="<?= $order->id ?>" data-status="WT"> ยืนยันคำสั่งซื้อ </button>
+
+                                <?php } ?>
                             </td>
                         </tr>
 

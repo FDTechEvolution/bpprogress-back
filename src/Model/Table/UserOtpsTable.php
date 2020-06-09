@@ -69,6 +69,10 @@ class UserOtpsTable extends Table
             ->requirePresence('otp_code', 'create')
             ->notEmptyString('otp_code');
 
+        $validator
+            ->scalar('isactive')
+            ->allowEmptyString('isactive');
+
         return $validator;
     }
 

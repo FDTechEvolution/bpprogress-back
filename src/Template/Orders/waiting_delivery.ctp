@@ -24,6 +24,7 @@
                         <th>หมายเลขคำสั่งซื้อ</th>
                         <th>ลูกค้า</th>
                         <th>สถานะ</th>
+                        <th>รูปแบบการชำระเงิน</th>
                         <th>สถานะการชำระเงิน</th>
                         <th class="text-right">จำนวนเงิน</th>
                         <th></th>
@@ -37,6 +38,7 @@
                             <td><?= $this->Html->link($order->docno, ['controller' => 'orders', 'action' => 'view', $order->id]) ?></td>
                             <td><?= $order->user->fullname ?></td>
                             <td><?= $orderStatus[$order->status] ?></td>
+                            <td><?= $paymentMethod[$order->payment_method] ?></td>
                             <td><?= $paymentStatus[$order->payment_status] ?></td>
                             <td class="text-right"><?= number_format($order->totalamt) ?></td>
                             <td class="text-right">

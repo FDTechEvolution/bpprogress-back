@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property int $otp_code
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
+ * @property string|null $isactive
  *
  * @property \App\Model\Entity\User $user
  */
@@ -32,6 +33,7 @@ class UserOtp extends Entity
         'otp_code' => true,
         'created' => true,
         'modified' => true,
+        'isactive' => true,
         'user' => true,
     ];
 }

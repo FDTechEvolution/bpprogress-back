@@ -26,15 +26,16 @@ class SvUsersController extends AppController {
         $this->Addresses = TableRegistry::get('Addresses');
 
         $this->loadComponent('User');
+        $this->loadComponent('Sms');
 
         $this->autoRender = false;
     }
 
     public function getUser($id = null) {
         $user = $this->Users->find()
-                ->contain(['Addresses'=>function($q){
-                    return $q->where(['Addresses.isactive'=>'Y']);
-                }])
+                ->contain(['Addresses' => function($q) {
+                        return $q->where(['Addresses.isactive' => 'Y']);
+                    }])
                 ->where(['Users.id' => $id])
                 ->first();
 
@@ -78,12 +79,12 @@ class SvUsersController extends AppController {
             if (isset($postData['address_id']) && $postData['address_id'] != '') {
                 $address = $this->Addresses->find()->where(['Addresses.id' => $postData['address_id']])->first();
                 if (!is_null($address)) {
-                    if(isset($postData['isactive'])){
+                    if (isset($postData['isactive'])) {
                         $address->isactive = $postData['isactive'];
                     }
-                    
+
                     $this->Addresses->save($address);
-                     $this->responData = ['status' => 200, 'msg' => '', 'data' => $address];
+                    $this->responData = ['status' => 200, 'msg' => '', 'data' => $address];
                 }
             }
         }
@@ -103,11 +104,11 @@ class SvUsersController extends AppController {
             if (isset($postData['user_id']) && $postData['user_id'] != '') {
                 $user = $this->Users->find()->where(['id' => $postData['user_id']])->first();
                 if (!is_null($user)) {
-                    
+
                     $user->fullname = $postData['fullname'];
                     $user->email = $postData['email-name'];
                     $user->mobile = $postData['mobile'];
-                    
+
                     $this->Users->save($user);
                     $this->responData = ['status' => 200, 'msg' => '', 'data' => $user];
                 }
@@ -123,26 +124,57 @@ class SvUsersController extends AppController {
         return $this->response;
     }
 
+    public function resetPassword() {
+        if ($this->request->is(['POST', 'PUT', 'AJAX'])) {
+            $postData = $this->request->getData();
+            $userId = $postData['user_id'];
+            $user = $this->Users->find()
+                    ->where(['Users.id'=>$userId])
+                    ->first();
+            
+            $newPassword = $this->Utils->generateRandomString(6);
+            
+            $this->Sms->send($user->mobile, 'รหัสผ่านใหม่ของคุณคือ:'.$newPassword);
+            $newPassword = $this->User->hasPassword($newPassword);
+            
+            
+            
+            $user->password = $newPassword;
+            $this->Users->save($user);
+            
+            $this->responData['status'] = 200;
+            
+        }
+        
+        $this->modifyHeader();
+        $this->RequestHandler->respondAs('json');
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+
+        return $this->response;
+    }
+
     public function changePassword() {
         if ($this->request->is(['POST', 'PUT', 'AJAX'])) {
             $postData = $this->request->getData();
             // $this->log($postData, 'debug');
-            if(isset($postData['old_password']) && $postData['old_password'] != '') {
+            if (isset($postData['old_password']) && $postData['old_password'] != '') {
                 $checkOldPassword = $this->checkOldPassword($postData['old_password'], $postData['user_id']);
-                if($checkOldPassword) {
-                    if($postData['new_password'] >= 8 && $postData['confirm_password'] >= 8) {
-                        if($postData['new_password'] == $postData['confirm_password']) {
+                if ($checkOldPassword) {
+                    if ($postData['new_password'] >= 8 && $postData['confirm_password'] >= 8) {
+                        if ($postData['new_password'] == $postData['confirm_password']) {
                             $setNewPassword = $this->Users->find()->where(['id' => $postData['user_id']])->first();
                             $setNewPassword->password = $this->User->hasPassword($postData['new_password']);
                             $this->Users->save($setNewPassword);
                             $this->responData = ['status' => 200, 'msg' => '', 'data' => $setNewPassword];
-                        }else{
+                        } else {
                             $this->responData = ['status' => 404, 'msg' => 'รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบ...'];
                         }
-                    }else{
+                    } else {
                         $this->responData = ['status' => 404, 'msg' => 'รหัสผ่านไม่ครบ กรุณาตรวจสอบ...'];
                     }
-                }else{
+                } else {
                     $this->responData = ['status' => 404, 'msg' => 'รหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบ...'];
                 }
             }
@@ -159,7 +191,7 @@ class SvUsersController extends AppController {
 
     private function checkOldPassword($old_password, $user_id) {
         $user = $this->Users->find()->where(['id' => $user_id])->first();
-        return $this->User->checkPassword($old_password,$user->password);
+        return $this->User->checkPassword($old_password, $user->password);
     }
 
 }
