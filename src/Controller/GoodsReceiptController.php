@@ -63,7 +63,7 @@ class GoodsReceiptController extends AppController {
         }
 
 
-        $warehouses = $this->Warehouses->find('list');
+        $warehouses = $this->Warehouses->find('list')->where(['status' => 'ACTIVE']);
 
         $this->set(compact('warehouses'));
     }
@@ -135,6 +135,24 @@ class GoodsReceiptController extends AppController {
         }
         $docStatus = $this->DocumentSequent->getDocumentStatus();
         $this->set(compact('goodsReceipt','docStatus'));
+    }
+
+    public function delete($id = null) {
+        $this->GoodsLines = TableRegistry::get('GoodsLines');
+
+        $goodstransaction = $this->GoodsTransactions->find()->where(['id' => $id])->first();
+        $docno = $goodstransaction->docno;
+        if($this->GoodsTransactions->delete($goodstransaction)){
+            $goodslines = $this->GoodsLines->find()->where(['goods_transaction_id' => $id])->toArray();
+            foreach($goodslines as $goodsline) {
+                $this->GoodsLines->delete($goodsline);
+            }
+            $this->Flash->success(__('รายการรับสินค้าเข้าระบบหมายเลข "'.$docno.'" ถูกลบแล้ว'));
+        }else{
+            $this->Flash->error(__('ไม่สามารถลบรายการรับสินค้าเข้าระบบหมายเลข "'.$docno.'" ได้'));
+        }
+
+        return $this->redirect(['action' => 'index']);
     }
 
 }

@@ -31,7 +31,7 @@ class WarehousesController extends AppController {
      */
     public function index() {
 
-        $sql = 'select w.*,sum(wp.qty) as product_count from warehouses w left join warehouse_products wp on w.id = wp.warehouse_id group by w.id order by w.name asc';
+        $sql = 'select w.*,sum(wp.qty) as product_count from warehouses w left join warehouse_products wp on w.id = wp.warehouse_id where w.status = "ACTIVE" group by w.id order by w.name asc';
         $warehouses = $this->Connection->execute($sql, [])->fetchAll('assoc');
 
         $user = $this->MyAuthen->getLogedUser();
@@ -151,7 +151,7 @@ class WarehousesController extends AppController {
                 ->contain(['WarehouseProducts'])
                 ->where(['Warehouses.id' => $id])
                 ->first();
-
+        $warehouse_name = $warehouse->name;
         $isOk = true;
         foreach ($warehouse->warehouse_products as $line) {
             if ($line['qty'] > 0) {
@@ -162,12 +162,10 @@ class WarehousesController extends AppController {
         if ($isOk) {
             $warehouse->status = 'DELETED';
             $this->Warehouses->save($warehouse);
-            $this->Flash->success(__('The warehouse has been deleted.'));
+            $this->Flash->success(__('คลังสินค้า "'.$warehouse_name.'" ถูกลบแล้ว...'));
         } else {
-            $this->Flash->error('ไม่สามารถลบคลังสินค้าได้ เนื่องจากยังมีสินค้าคงหลังและใช้งานอยู่');
+            $this->Flash->error('ไม่สามารถลบคลังสินค้า "'.$warehouse_name.'" ได้ เนื่องจากยังมีสินค้าคงเหลือและใช้งานอยู่');
         }
-
-
 
         return $this->redirect(['action' => 'index']);
     }

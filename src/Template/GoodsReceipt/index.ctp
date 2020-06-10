@@ -54,7 +54,7 @@
                                 <?= $this->Html->link('<i class="remixicon-list-check"></i>', ['action' => 'confirm', $item->id], ['class' => '', 'escape' => false]) ?>
                                 <?php if ($item->status != 'CF') { ?>
                                     <?= $this->Html->link('<i class="remixicon-pencil-fill"></i>', ['action' => 'update', $item->id], ['class' => '', 'escape' => false]) ?>
-                                    <?= $this->Html->link('<i class="remixicon-delete-bin-2-line"></i>', ['action' => 'delete', $item->id], ['class' => '', 'escape' => false]) ?>
+                                    <?= $this->Html->link('<i class="remixicon-delete-bin-2-line"></i>', ['action' => 'delete', $item->id], ['confirm' => __('โปรดยืนยันการลบ #{0}?', $item->docno), 'class' => '', 'escape' => false]) ?>
                                 <?php } ?>
                             </td>
                         </tr>

@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+use Cake\Event\Event;
 
 /**
  * Brands Controller
@@ -12,16 +14,29 @@ use App\Controller\AppController;
  */
 class BrandsController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null
-     */
+    public $Products = null;
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+
+        $this->Products = TableRegistry::get('Products');
+    }
+
     public function index()
     {
-        $brands = $this->paginate($this->Brands);
+        $product_count = array();
+        $brands = $this->Brands->find()->contain(['Products'])->toArray();
 
-        $this->set(compact('brands'));
+        foreach($brands as $brand) {
+            $num = 0;
+            $products = $this->Products->find()->where(['brand_id' => $brand->id])->toArray();
+            foreach($products as $product) {
+                $num++;
+            }
+            array_push($product_count, $num);
+        }
+
+        $this->set(compact('brands','product_count'));
     }
 
     /**
@@ -131,12 +146,18 @@ class BrandsController extends AppController
      */
     public function delete($id = null)
     {
+        $products = $this->Products->find()->where(['brand_id' => $id])->first();
         $this->request->allowMethod(['post', 'delete']);
         $brand = $this->Brands->get($id);
-        if ($this->Brands->delete($brand)) {
-            $this->Flash->success(__('The brand has been deleted.'));
-        } else {
-            $this->Flash->error(__('The brand could not be deleted. Please, try again.'));
+        $brand_name = $brand->name;
+        if (is_null($products)) {
+            if ($this->Brands->delete($brand)) {
+                $this->Flash->success(__('ลบรายการยี่ห้อสินค้า "'.$brand_name.'" เรียบร้อยแล้ว...'));
+            } else {
+                $this->Flash->error(__('ไม่สามารถลบรายการยี่ห้อสินค้า "'.$brand_name.'" ได้...'));
+            }
+        }else{
+            $this->Flash->error(__('ไม่สามารถลบรายการยี่ห้อสินค้า "'.$brand_name.'" ได้ เนื่องจากยังมีสินค้าอยู่ในยี่ห้อนี้ กรุณาจัดการก่อน...'));
         }
 
         return $this->redirect(['action' => 'index']);

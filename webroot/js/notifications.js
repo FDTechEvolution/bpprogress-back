@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     $.get(siteurl + 'sv-notifications/get-order-by-status', {})
             .done(function (data) {
-                console.log(data);
+                // console.log(data);
                 $.each(data.data, function (index, item) {
                     var html = '<span class="badge badge-pill badge-light-dark">' + item.amt + '</span>';
                     if (item.status === 'NEW') {
@@ -29,7 +29,7 @@ $(document).ready(function () {
 
     $.get(siteurl + 'sv-notifications/get-payment-by-status', {})
             .done(function (data) {
-                console.log(data);
+                // console.log(data);
                 $.each(data.data, function (index, item) {
                     var html = '<span class="badge badge-pill badge-light-dark">' + item.amt + '</span>';
                     if (item.status === 'NEW') {

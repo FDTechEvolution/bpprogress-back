@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+use Cake\Event\Event;
 
 /**
  * ProductCategories Controller
@@ -12,16 +14,31 @@ use App\Controller\AppController;
  */
 class ProductCategoriesController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null
-     */
+    public $Products = null;
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+
+        $this->Products = TableRegistry::get('Products');
+    }
+
     public function index()
     {
-        $productCategories = $this->paginate($this->ProductCategories);
-
-        $this->set(compact('productCategories'));
+        $product_count = array();
+        $productCategories = $this->ProductCategories->find()
+                                ->contain(['Products' => function($q) { return  $q->select(['Products.product_category_id','total' => $q->func()->count('Products.product_category_id')])->group(['Products.product_category_id']); } ])
+                                ->toArray();
+        
+        foreach($productCategories as $productCategory) {
+            $num = 0;
+            $products = $this->Products->find()->where(['product_category_id' => $productCategory->id])->toArray();
+            foreach($products as $product) {
+                $num++;
+            }
+            array_push($product_count, $num);
+        }
+        
+        $this->set(compact('productCategories','product_count'));
     }
 
     /**
@@ -131,12 +148,18 @@ class ProductCategoriesController extends AppController
      */
     public function delete($id = null)
     {
+        $products = $this->Products->find()->where(['product_category_id' => $id])->first();
         $this->request->allowMethod(['post', 'delete']);
         $productCategory = $this->ProductCategories->get($id);
-        if ($this->ProductCategories->delete($productCategory)) {
-            $this->Flash->success(__('The product category has been deleted.'));
+        $productCategory_name = $productCategory->name;
+        if (is_null($products)) {
+            if($this->ProductCategories->delete($productCategory)){
+                $this->Flash->success(__('ลบรายการหมวดหมู่สินค้า "'.$productCategory_name.'" เรียบร้อยแล้ว...'));
+            }else{
+                $this->Flash->error(__('ไม่สามารถลบรายการหมวดหมู่สินค้า "'.$productCategory_name.'" ได้...'));
+            }
         } else {
-            $this->Flash->error(__('The product category could not be deleted. Please, try again.'));
+            $this->Flash->error(__('ไม่สามารถลบรายการหมวดหมู่สินค้า "'.$productCategory_name.'" ได้ เนื่องจากยังมีสินค้าอยู่ในหมวดหมู่นี้ กรุณาจัดการก่อน...'));
         }
 
         return $this->redirect(['action' => 'index']);

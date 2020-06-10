@@ -44,7 +44,7 @@
                                 if ($product->special_price != 0) {
                                     echo "<strong style='color: #000;'>/</strong> <span style='color: #dd0000;'>" . number_format(h($product->special_price)) . "</span>" . " <span>( " . number_format(h(($product->price - $product->special_price) / $product->price) * 100) . "% )</span>";
                                 }
-                                ?> ></td>
+                                ?></td>
 
                             <td class="text-center"><strong><?php
                                     if ($product->qty >= 20) {
@@ -68,7 +68,7 @@
 
                             <td class="actions text-center">
                                 <?= $this->Html->link(__('<i class="mdi mdi-tooltip-edit"></i> แก้ไข'), ['action' => 'update', $product->id], ['class' => 'btn btn-icon waves-effect waves-light btn-success m-b-5', 'escape' => false]) ?>
-                                <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $product->id], ['confirm' => __('โปรดตรวจสอบ!!...รายการสินค้าที่อยู่ในยี่ห้อนี้ทั้งหมดจะถูกลบไปด้วย\n ยืนยันการลบ #{0}?', $product->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
+                                <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $product->id], ['confirm' => __('โปรดยืนยันการลบ #{0}?', $product->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

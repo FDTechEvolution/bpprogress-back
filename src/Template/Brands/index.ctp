@@ -20,10 +20,11 @@
             <table cellpadding="0" cellspacing="0" id="datatable" class="table table-striped table-bordered">
                 <thead>
                     <tr style="background-color: #3b73da91; color: #000;">
-                        <th scope="col" style="width: 15%;"><?= __('ยี่ห้อ') ?></th>
-                        <th scope="col" style="width: 40%;"><?= __('รายละเอียด') ?></th>
-                        <th scope="col" style="width: 15%;" class="text-center"><?= __('สถานะ') ?></th>
-                        <th scope="col" style="width: 30%;" class="actions text-center"><?= __('การจัดการ') ?></th>
+                        <th scope="col" style="width: 25%;"><?= __('ยี่ห้อ') ?></th>
+                        <th scope="col" style="width: 30%;"><?= __('รายละเอียด') ?></th>
+                        <th scope="col" style="width: 15%;" class="text-center"><?= __('จำนวนสินค้า') ?></th>
+                        <th scope="col" style="width: 10%;" class="text-center"><?= __('สถานะ') ?></th>
+                        <th scope="col" style="width: 20%;" class="actions text-center"><?= __('การจัดการ') ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,6 +32,7 @@
                     <tr>
                         <td><?= h($brand->name) ?></td>
                         <td><?= h($brand->description) ?></td>
+                        <td class="text-center"><?= h($product_count[$index]) ?></td>
                         <td class="text-center">
                             <?= $this->Form->create('changStatForm', ['url'=>['controller'=>'brands', 'action'=>'status'], 'class' => 'form-horizontal', 'role' => 'form', 'id'=>'frm_stat-'.$index.'']) ?>
                                 <fieldset>
@@ -57,7 +59,7 @@
                         <td class="actions text-center">
                             <!-- <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $brand->id], ['class' => 'btn btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?> -->
                             <?= $this->Html->link(__('<i class="mdi mdi-tooltip-edit"></i> แก้ไข'), ['action' => 'edit', $brand->id], $modalCate) ?>
-                            <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $brand->id], ['confirm' => __('โปรดตรวจสอบ!!...รายการสินค้าที่อยู่ในยี่ห้อนี้ทั้งหมดจะถูกลบไปด้วย\n ยืนยันการลบ #{0}?', $brand->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
+                            <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $brand->id], ['confirm' => __('โปรดตรวจสอบ!!...หากยังมีรายการสินค้าที่อยู่ในยี่ห้อนี้ จะไม่สามารถลบได้\n ยืนยันการลบ #{0}?', $brand->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>

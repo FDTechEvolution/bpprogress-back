@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -15,6 +16,16 @@ use Cake\ORM\TableRegistry;
 class ProductsController extends AppController {
 
     public $WholesaleRates = null;
+
+    public function beforeFilter(Event $event) {
+        parent::beforeFilter($event);
+
+        $this->Warehouses = TableRegistry::get('Warehouses');
+        $this->WarehouseProducts = TableRegistry::get('WarehouseProducts');
+        $this->GoodsLines = TableRegistry::get('GoodsLines');
+        $this->GoodsTransactions = TableRegistry::get('GoodsTransactions');
+        $this->OrderLines = TableRegistry::get('OrderLines');
+    }
 
     /**
      * Index method
@@ -55,6 +66,7 @@ class ProductsController extends AppController {
     public function add() {
         $product = $this->Products->newEntity();
         if ($this->request->is('post')) {
+            // $this->log($product, 'debug');
             $product = $this->Products->patchEntity($product, $this->request->getData());
             $user = $this->MyAuthen->getLogedUser();
             $product->shop_id = $user['shop_id'];
@@ -215,11 +227,30 @@ class ProductsController extends AppController {
      */
     public function delete($id = null) {
         $this->request->allowMethod(['post', 'delete']);
+        $orderline = $this->OrderLines->find()->where(['product_id' => $id])->first();
         $product = $this->Products->get($id);
-        if ($this->Products->delete($product)) {
-            $this->Flash->success(__('The product has been deleted.'));
-        } else {
-            $this->Flash->error(__('The product could not be deleted. Please, try again.'));
+        $product_name = $product->name;
+        if(is_null($orderline)) {
+            
+            if ($this->Products->delete($product)) {
+
+                $warehouseproducts = $this->WarehouseProducts->find()->where(['product_id' => $id])->toArray();
+                foreach($warehouseproducts as $warehouseproduct) {
+                    $this->WarehouseProducts->delete($warehouseproduct);
+                }
+                $goodslines = $this->GoodsLines->find()->where(['product_id' => $id])->toArray();
+                foreach($goodslines as $goodsline) {
+                    $goodstransaction = $this->GoodsTransactions->find()->where(['id' => $goodsline->goods_transaction_id])->first();
+                    $this->GoodsTransactions->delete($goodstransaction);
+                    $this->GoodsLines->delete($goodsline);
+                }
+
+                $this->Flash->success(__('สินค้า "'.$product_name.'" ถูกลบแล้ว'));
+            } else {
+                $this->Flash->error(__('The product could not be deleted. Please, try again.'));
+            }
+        }else{
+            $this->Flash->error(__('ไม่สามารถลบสินค้า "'.$product_name.'" ได้ เนื่องจากสินค้ามีประวัติการสั่งซื้อ...กรุณาปิดการแสดงผลแทนการลบสินค้า'));
         }
 
         return $this->redirect(['action' => 'index']);
