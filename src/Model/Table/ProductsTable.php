@@ -14,6 +14,7 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\ShopsTable&\Cake\ORM\Association\BelongsTo $Shops
  * @property \App\Model\Table\GoodsLinesTable&\Cake\ORM\Association\HasMany $GoodsLines
  * @property \App\Model\Table\OrderLinesTable&\Cake\ORM\Association\HasMany $OrderLines
+ * @property &\Cake\ORM\Association\HasMany $PreorderRates
  * @property \App\Model\Table\ProductImagesTable&\Cake\ORM\Association\HasMany $ProductImages
  * @property \App\Model\Table\WarehouseProductsTable&\Cake\ORM\Association\HasMany $WarehouseProducts
  * @property \App\Model\Table\WholesaleRatesTable&\Cake\ORM\Association\HasMany $WholesaleRates
@@ -62,6 +63,9 @@ class ProductsTable extends Table
             'foreignKey' => 'product_id',
         ]);
         $this->hasMany('OrderLines', [
+            'foreignKey' => 'product_id',
+        ]);
+        $this->hasMany('PreorderRates', [
             'foreignKey' => 'product_id',
         ]);
         $this->hasMany('ProductImages', [
@@ -139,6 +143,10 @@ class ProductsTable extends Table
         $validator
             ->integer('view_count')
             ->allowEmptyString('view_count');
+
+        $validator
+            ->scalar('ispreorder')
+            ->allowEmptyString('ispreorder');
 
         return $validator;
     }

@@ -28,6 +28,7 @@ class SvProductsController extends AppController {
         $this->Products = TableRegistry::get('Products');
         $this->ProductImages = TableRegistry::get('ProductImages');
         $this->WholesaleRates = TableRegistry::get('WholesaleRates');
+        $this->PreorderRates = TableRegistry::get('PreorderRates');
         $this->Connection = ConnectionManager::get('default');
     }
 
@@ -98,6 +99,14 @@ class SvProductsController extends AppController {
                             ->order(['startqty' => 'ASC'])
                             ->toArray();
                     $products['wholesale_rate'] = $product_wholesales;
+                }
+
+                if ($products->ispreorder == 'Y') {
+                    $product_preorder = $this->PreorderRates->find()
+                            ->where(['product_id' => $id])
+                            ->order(['startqty' => 'ASC'])
+                            ->toArray();
+                    $products['preorder_rate'] = $product_preorder;
                 }
             }
 

@@ -107,10 +107,11 @@ class ProductsController extends AppController {
                     'ProductImages' => [
                         'Images',
                         'sort' => ['ProductImages.type' => 'ASC']
-                    ], 'WholesaleRates'
+                    ], 'WholesaleRates', 'PreorderRates'
                 ])
                 ->where(['Products.id' => $id])
                 ->first();
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $postData = $this->request->getData();
             //$this->log($postData, 'debug');
@@ -123,12 +124,18 @@ class ProductsController extends AppController {
             if (isset($postData['iswholesale']) && $postData['iswholesale'] != 'Y') {
                 $postData['iswholesale'] = 'N';
             }
+            if (isset($postData['ispreorder']) && $postData['ispreorder'] != 'Y') {
+                $postData['ispreorder'] = 'N';
+            }
             $product = $this->Products->patchEntity($product, $postData);
             if ($this->Products->save($product)) {
                 $this->Flash->success(__('The product has been saved.'));
 
                 //Wholesales
                 $this->wholesalesPrice($id, $postData['wholesales']);
+
+                //Preorders
+                $this->preorderPrice($id, $postData['preorders']);
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -156,6 +163,26 @@ class ProductsController extends AppController {
             $wholesale->product_id = $productId;
 
             $this->WholesaleRates->save($wholesale);
+        }
+    }
+
+    private function preorderPrice($productId = null, $preorders = []) {
+        $this->PreorderRates = TableRegistry::get('PreorderRates');
+
+        $result = $this->PreorderRates->deleteAll(['PreorderRates.product_id' => $productId]);
+
+        foreach ($preorders['startqty'] as $index => $startQty) {
+            $endQty = $preorders['endqty'][$index];
+            $price = $preorders['price'][$index];
+
+            $preorder = $this->PreorderRates->newEntity();
+            $preorder->seq = $index;
+            $preorder->startqty = is_null($startQty) || $startQty == '' ? 0 : $startQty;
+            $preorder->endqty = is_null($endQty) || $endQty == '' ? 0 : $endQty;
+            $preorder->price = is_null($price) || $price == '' ? 0 : $price;
+            $preorder->product_id = $productId;
+
+            $this->PreorderRates->save($preorder);
         }
     }
 
@@ -231,20 +258,20 @@ class ProductsController extends AppController {
         $product = $this->Products->get($id);
         $product_name = $product->name;
         if(is_null($orderline)) {
-            
-            if ($this->Products->delete($product)) {
+            $this->WholesaleRates = TableRegistry::get('WholesaleRates');
+            $this->PreorderRates = TableRegistry::get('PreorderRates');
 
-                $warehouseproducts = $this->WarehouseProducts->find()->where(['product_id' => $id])->toArray();
-                foreach($warehouseproducts as $warehouseproduct) {
-                    $this->WarehouseProducts->delete($warehouseproduct);
-                }
+            if ($this->Products->delete($product)) {
+                $warehouseproducts = $this->WarehouseProducts->deleteAll(['WarehouseProducts.product_id' => $id]);
+                $warehouserates = $this->WholesaleRates->deleteAll(['WholesaleRates.product_id' => $id]);
+                $preorderrates = $this->PreorderRates->deleteAll(['PreorderRates.product_id' => $id]);
+                
                 $goodslines = $this->GoodsLines->find()->where(['product_id' => $id])->toArray();
                 foreach($goodslines as $goodsline) {
                     $goodstransaction = $this->GoodsTransactions->find()->where(['id' => $goodsline->goods_transaction_id])->first();
                     $this->GoodsTransactions->delete($goodstransaction);
                     $this->GoodsLines->delete($goodsline);
                 }
-
                 $this->Flash->success(__('สินค้า "'.$product_name.'" ถูกลบแล้ว'));
             } else {
                 $this->Flash->error(__('The product could not be deleted. Please, try again.'));

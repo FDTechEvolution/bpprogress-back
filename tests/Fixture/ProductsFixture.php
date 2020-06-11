@@ -33,6 +33,7 @@ class ProductsFixture extends TestFixture
         'qty' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => '0', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'shop_id' => ['type' => 'uuid', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
         'view_count' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => '0', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'ispreorder' => ['type' => 'string', 'length' => null, 'null' => true, 'default' => 'N', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -51,24 +52,25 @@ class ProductsFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '5c94bb72-f2ca-47a3-8f08-5e3efb68484c',
-                'brand_id' => '5db0a422-11f9-4274-a24d-b9402cf781c0',
+                'id' => '7a3f114d-bf0d-4bf6-b2ed-993d90c7a2ca',
+                'brand_id' => 'ad8b1907-110a-44e9-8fa8-d69131b466b3',
                 'name' => 'Lorem ipsum dolor sit amet',
                 'isretail' => 'Lorem ipsum dolor sit amet',
                 'iswholesale' => 'Lorem ipsum dolor sit amet',
                 'isstock' => 'Lorem ipsum dolor sit amet',
                 'isactive' => 'Lorem ipsum dolor sit amet',
-                'product_category_id' => 'bd28d30d-4fbb-459a-b90f-879170e2a153',
+                'product_category_id' => 'ae0293fc-430f-4a2a-8475-1ce4068637e2',
                 'price' => 1.5,
                 'special_price' => 1.5,
                 'short_description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
                 'description' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-                'created' => '2020-05-06 06:17:16',
-                'modified' => '2020-05-06 06:17:16',
+                'created' => '2020-06-11 03:30:31',
+                'modified' => '2020-06-11 03:30:31',
                 'note' => 'Lorem ipsum dolor sit amet',
                 'qty' => 1,
-                'shop_id' => '9050c796-dddf-4da3-b1ec-e38b5546191e',
+                'shop_id' => '90a7dd0b-9459-4a2e-b784-328202b1edff',
                 'view_count' => 1,
+                'ispreorder' => 'Lorem ipsum dolor sit amet',
             ],
         ];
         parent::init();

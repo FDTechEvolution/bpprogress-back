@@ -24,6 +24,7 @@ use Cake\ORM\Entity;
  * @property int|null $qty
  * @property string $shop_id
  * @property int|null $view_count
+ * @property string|null $ispreorder
  *
  * @property \App\Model\Entity\Brand $brand
  * @property \App\Model\Entity\ProductCategory $product_category
@@ -63,6 +64,7 @@ class Product extends Entity
         'qty' => true,
         'shop_id' => true,
         'view_count' => true,
+        'ispreorder' => true,
         'brand' => true,
         'product_category' => true,
         'shop' => true,

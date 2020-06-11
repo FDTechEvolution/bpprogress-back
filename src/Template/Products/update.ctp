@@ -71,8 +71,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-12"><hr class="hr-style"></div>
+                                </div>
                             </div>
                         </div>
+                        
                         <div class="form-group row">
                             <label class="col-2 col-form-label">ขายส่ง</label>
                             <div class="col-9">
@@ -140,8 +144,85 @@
                                 <div class="row">
                                     <div class="col-12"><button type="button" class="btn btn-outline-success" id="bt-add-wholesales-rate">เพิ่มราคาส่ง</button></div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-12"><hr class="hr-style"></div>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="form-group row mt-4">
+                            <label class="col-2 col-form-label">พรีออเดอร์</label>
+                            <div class="col-9">
+                                <?= $this->Form->checkbox(__('ispreorder'), ['id' => 'ispreorder', 'data-plugin' => 'switchery', 'data-color' => '#00b19d', 'value' => 'Y', 'escape' => false]) ?>
+                                <div class="row mt-2">
+                                    <div class="col-4">
+                                        <label>ตั้งแต่จำนวน</label>
+                                    </div>
+                                    <div class="col-4">
+                                        <label>ถึงจำนวน</label>
+                                    </div>
+                                    <div class="col-2">
+                                        <label>ราคาพรีออเดอร์</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12" id="box-preorder-input">
+                                        <?php if (sizeof($product->preorder_rates) == 0) { ?>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" name="preorders[startqty][]" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <input type="number" name="preorders[endqty][]" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <div class="form-group">
+                                                        <input type="number" name="preorders[price][]" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } else { ?>
+                                            <?php foreach ($product->preorder_rates as $item): ?>
+                                                <div class="row" id="<?= $item['id'] ?>">
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <input type="number" name="preorders[startqty][]" class="form-control" value="<?= $item['startqty'] ?>" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <input type="number" name="preorders[endqty][]" class="form-control" value="<?= $item['endqty'] ?>"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="form-group">
+                                                            <input type="number" name="preorders[price][]" class="form-control" value="<?= $item['price'] ?>"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="form-group">
+                                                            <button type="button" class="btn btn-outline-secondary waves-effect waves-light" onclick="removeElementById('<?= $item['id'] ?>');">ลบ</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php } ?>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-12"><button type="button" class="btn btn-outline-success" id="bt-add-preorder-rate">เพิ่มราคาพรีออเดอร์</button></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12"><hr class="hr-style"></div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label class="col-2 col-form-label">รูปภาพสินค้า</label>
 
@@ -220,7 +301,11 @@
 <!-- init js -->
 <?= $this->Html->script('/css/assets/js/pages/form-advanced.init.js') ?>
 
-
+<style>
+hr.hr-style {
+    border-top: 1px solid #ddd;
+}
+</style>
 
 <script>
 
@@ -326,6 +411,35 @@
             btHtml += '</div>';
 
             $('#box-wholesales-input').append(btHtml);
+        });
+
+        $('#bt-add-preorder-rate').on('click', function () {
+            var idRandom = generateCode(20);
+            var btHtml = '';
+            btHtml += '<div class="row" id="' + idRandom + '">';
+            btHtml += '<div class="col-4">';
+            btHtml += ' <div class="form-group">';
+            btHtml += '     <input type="number" name="preorders[startqty][]" class="form-control" />';
+            btHtml += ' </div>';
+            btHtml += '</div>';
+            btHtml += '<div class="col-4">';
+            btHtml += ' <div class="form-group">';
+            btHtml += '     <input type="number" name="preorders[endqty][]" class="form-control" />';
+            btHtml += ' </div>';
+            btHtml += '</div>';
+            btHtml += '<div class="col-2">';
+            btHtml += ' <div class="form-group">';
+            btHtml += '     <input type="number" name="preorders[price][]" class="form-control" />';
+            btHtml += ' </div>';
+            btHtml += '</div>';
+            btHtml += '<div class="col-2">';
+            btHtml += ' <div class="form-group">';
+            btHtml += '     <button type="button" class="btn btn-outline-secondary waves-effect waves-light" onclick="removeElementById(\'' + idRandom + '\');">ลบ</button>';
+            btHtml += ' </div>';
+            btHtml += '</div>';
+            btHtml += '</div>';
+
+            $('#box-preorder-input').append(btHtml);
         });
 
         $('#short_description').summernote({

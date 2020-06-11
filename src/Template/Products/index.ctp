@@ -28,10 +28,11 @@
                     <tr style="background-color: #3b73da91; color: #000;">
                         <th scope="col" style="width: 5%;" class="text-center"><?= __('#') ?></th>
                         <th scope="col" style="width: 20%;"><?= __('ชื่อสินค้า') ?></th>
-                        <th scope="col" style="width: 20%;" class="text-center"><?= __('ราคา / ราคาพิเศษ (฿)') ?></th>
-                        <th scope="col" style="width: 15%;" class="text-center"><?= __('คงเหลือ') ?></th>
+                        <th scope="col" style="width: 17%;" class="text-center"><?= __('ราคา / ราคาพิเศษ (฿)') ?></th>
+                        <th scope="col" style="width: 18%;" class="text-center"><?= __('การขาย') ?></th>
+                        <th scope="col" style="width: 10%;" class="text-center"><?= __('คงเหลือ') ?></th>
                         <th scope="col" style="width: 10%;" class="text-center"><?= __('สถานะ') ?></th>
-                        <th scope="col" style="width: 30%;" class="actions text-center"><?= __('การจัดการ') ?></th>
+                        <th scope="col" style="width: 20%;" class="actions text-center"><?= __('การจัดการ') ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +45,28 @@
                                 if ($product->special_price != 0) {
                                     echo "<strong style='color: #000;'>/</strong> <span style='color: #dd0000;'>" . number_format(h($product->special_price)) . "</span>" . " <span>( " . number_format(h(($product->price - $product->special_price) / $product->price) * 100) . "% )</span>";
                                 }
-                                ?></td>
+                                ?>
+                            </td>
+
+                            <td class="text-center">
+                                <?php
+                                    if($product->isretail == 'Y') {
+                                        echo "ปลีก";
+                                    }
+                                    if($product->iswholesale == 'Y') {
+                                        if($product->isretail == 'Y') {
+                                            echo " / ";
+                                        }
+                                        echo "ส่ง";
+                                    }
+                                    if($product->ispreorder == 'Y') {
+                                        if($product->isretail == 'Y' || $product->iswholesale == 'Y') {
+                                            echo " / ";
+                                        }
+                                        echo "พรีออเดอร์";
+                                    }
+                                ?>
+                            </td>
 
                             <td class="text-center"><strong><?php
                                     if ($product->qty >= 20) {

@@ -143,10 +143,8 @@ class GoodsReceiptController extends AppController {
         $goodstransaction = $this->GoodsTransactions->find()->where(['id' => $id])->first();
         $docno = $goodstransaction->docno;
         if($this->GoodsTransactions->delete($goodstransaction)){
-            $goodslines = $this->GoodsLines->find()->where(['goods_transaction_id' => $id])->toArray();
-            foreach($goodslines as $goodsline) {
-                $this->GoodsLines->delete($goodsline);
-            }
+            $goodslines = $this->GoodsLines->deleteAll(['GoodsLines.goods_transaction_id' => $id]);
+
             $this->Flash->success(__('รายการรับสินค้าเข้าระบบหมายเลข "'.$docno.'" ถูกลบแล้ว'));
         }else{
             $this->Flash->error(__('ไม่สามารถลบรายการรับสินค้าเข้าระบบหมายเลข "'.$docno.'" ได้'));
