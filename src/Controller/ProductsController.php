@@ -111,6 +111,7 @@ class ProductsController extends AppController {
                 ])
                 ->where(['Products.id' => $id])
                 ->first();
+        //$this->log($product,'debug');
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $postData = $this->request->getData();

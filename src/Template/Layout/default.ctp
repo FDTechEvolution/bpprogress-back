@@ -14,7 +14,8 @@
         <?= $this->Html->css('assets/css/app.min.css') ?>
         <?= $this->Html->css('bpstyle.css') ?>
         <?= $this->Html->css('thai-font.css') ?>
-        
+        <?= $this->Html->css('loading.css') ?>
+
         <?= $this->Html->css('/js/jquery-toast-plugin-master/dist/jquery.toast.min.css') ?>
 
 
@@ -32,7 +33,7 @@
     </head>
 
     <body>
-
+        <div class="loading" id="box-loading" style="display: none;">Loading&#8230;</div>
         <!-- Begin page -->
         <div id="wrapper">
 
@@ -220,6 +221,20 @@
         <!-- App js -->
         <?= $this->Html->script('/css/assets/js/app.min.js') ?>
         <?= $this->Html->script('notifications.js') ?>
+        <script>
 
+            
+           
+            $(document).ready(function () {
+
+                $(window).bind('beforeunload', function () {
+                    $('#box-loading').show();
+                });
+
+                $(window).bind("load", function () {
+                    $('#box-loading').hide();
+                });
+            });
+        </script>
     </body>
 </html>

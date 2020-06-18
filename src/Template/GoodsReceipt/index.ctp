@@ -30,7 +30,7 @@
     <div class="col-md-12">
         <div class="card-box">
 
-            <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+            <table id="scroll-horizontal-datatable" class="table w-100">
                 <thead>
                     <tr>
                         <th>วันที่</th>

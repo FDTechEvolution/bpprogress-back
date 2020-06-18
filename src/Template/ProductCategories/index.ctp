@@ -1,3 +1,9 @@
+<!-- third party css -->
+<?= $this->Html->css('assets/libs/datatables/dataTables.bootstrap4.css') ?>
+<?= $this->Html->css('assets/libs/datatables/responsive.bootstrap4.css') ?>
+<?= $this->Html->css('assets/libs/datatables/buttons.bootstrap4.css') ?>
+<?= $this->Html->css('assets/libs/datatables/select.bootstrap4.css') ?>
+
 <?= $this->Html->css('assets/libs/datatables/dataTables.bootstrap4.css') ?>
 <?= $this->Html->css('assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.css') ?>
 <?= $this->Html->css('assets/libs/switchery/switchery.min.css') ?>
@@ -18,9 +24,9 @@
                     <?= $this->Html->link(__('<i class="mdi mdi-plus-circle-outline"></i> เพิ่มประเภทสินค้า'), ['action' => 'add'], ['class' => 'btn btn-primary btn-rounded w-md waves-effect waves-light m-b-5', 'data-toggle' => 'modal', 'data-target' => '#addCateModal', 'escape' => false]) ?>
                 </div>
             </div>
-            <table id="datatable" class="table table-striped table-bordered">
+            <table cellpadding="0" cellspacing="0" id="basic-datatable" class="table w-100">
                 <thead>
-                    <tr style="background-color: #3b73da91; color: #000;">
+                    <tr>
                         <th scope="col" style="width: 25%;"><?= __('ประเภท') ?></th>
                         <th scope="col" style="width: 30%;"><?= __('รายละเอียด') ?></th>
                         <th scope="col" style="width: 15%;" class="text-center"><?= __('จำนวนสินค้า') ?></th>
@@ -51,16 +57,16 @@
                                 'data-id' => $productCategory->id,
                                 'data-name' => $productCategory->name,
                                 'data-description' => $productCategory->description,
-                                'class' => 'btn btn-icon waves-effect waves-light btn-success m-b-5',
+                                'class' => 'btn btn-sm btn-icon waves-effect waves-light btn-success m-b-5',
                                 'data-toggle' => 'modal',
                                 'data-target' => '#editCateModal',
                                 'escape' => false
                             ];
                             ?>
                             <td class="actions text-center">
-                                <!-- <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $productCategory->id], ['class' => 'btn btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?> -->
+                                <!-- <?= $this->Html->link(__('<i class="mdi mdi-view-list"></i> รายละเอียด'), ['action' => 'view', $productCategory->id], ['class' => 'btn btn-sm btn-icon waves-effect waves-light btn-primary m-b-5', 'escape' => false]) ?> -->
                                 <?= $this->Html->link(__('<i class="mdi mdi-tooltip-edit"></i> แก้ไข'), ['action' => 'edit', $productCategory->id], $modalCate) ?>
-                                <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $productCategory->id], ['confirm' => __('โปรดตรวจสอบ!!...หากยังมีรายการสินค้าที่อยู่ในหมวดหมู่นี้ จะไม่สามารถลบได้\n ยืนยันการลบ #{0}?', $productCategory->name), 'class' => 'btn btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
+                                <?= $this->Form->postLink(__('<i class="mdi mdi-delete-forever"></i> ลบ'), ['action' => 'delete', $productCategory->id], ['confirm' => __('โปรดตรวจสอบ!!...หากยังมีรายการสินค้าที่อยู่ในหมวดหมู่นี้ จะไม่สามารถลบได้\n ยืนยันการลบ #{0}?', $productCategory->name), 'class' => 'btn btn-sm btn-icon waves-effect waves-light btn-danger m-b-5', 'escape' => false]) ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -152,6 +158,20 @@
         </div>
     </div>
 </div>
+<!-- third party js -->
+<?= $this->Html->script('/css/assets/libs/datatables/jquery.dataTables.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/dataTables.bootstrap4.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/dataTables.responsive.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/responsive.bootstrap4.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/dataTables.buttons.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/buttons.html5.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/buttons.flash.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/buttons.print.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/dataTables.keyTable.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/datatables/dataTables.select.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/pdfmake/pdfmake.min.js') ?>
+<?= $this->Html->script('/css/assets/libs/pdfmake/vfs_fonts.js') ?>
+<!-- third party js ends -->
 <!-- Plugins Js -->
 <?= $this->Html->script('/css/assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js') ?>
 <?= $this->Html->script('/css/assets/libs/switchery/switchery.min.js') ?>
@@ -177,5 +197,16 @@
             $('#frm_edit textarea[id="edit_description"]').val(description);
         });
 
+$("#basic-datatable").DataTable({
+            language: {
+                paginate: {
+                    previous: "<i class='mdi mdi-chevron-left'>",
+                    next: "<i class='mdi mdi-chevron-right'>"
+                }
+            },
+            drawCallback: function () {
+                $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+            }
+        });
     });
 </script>
