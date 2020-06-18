@@ -118,6 +118,10 @@ class OrdersTable extends Table
             ->maxLength('trackingno', 50)
             ->allowEmptyString('trackingno');
 
+        $validator
+            ->scalar('ispreorder')
+            ->allowEmptyString('ispreorder');
+
         return $validator;
     }
 

@@ -104,6 +104,9 @@ class SvOrdersController extends AppController {
         if ($this->request->is(['post', 'ajax'])) {
             //$postData = $this->request->getData();
             $postData = $this->request->getData();
+            if (isset($postData['ispreorder']) && $postData['ispreorder'] != 'Y') {
+                $postData['ispreorder'] = 'N';
+            }
             //$this->log($postData,'debug');
             $result = $this->verifyOrderFields($postData);
             if ($result['status'] == true) {
@@ -112,10 +115,11 @@ class SvOrdersController extends AppController {
                 $order->user_id = $postData['user_id'];
                 $order->docdate = new Date();
                 $order->status = 'DR';
+                $order->ispreorder = $postData['ispreorder'];
                 $order->docno = $this->Utils->generateNormalDocNo('OR');
 
                 if ($this->Orders->save($order)) {
-                    $this->createOrderLine($order->id, $postData['order_lines']);
+                    $this->createOrderLine($order->id, $postData['order_lines'], $order->ispreorder);
 
                     //Update final order
                     $order = $this->Orders->find()
@@ -248,18 +252,18 @@ class SvOrdersController extends AppController {
         $this->Payments->save($payment);
     }
 
-    private function createOrderLine($orderId = null, $orderLines = null) {
+    private function createOrderLine($orderId = null, $orderLines = null, $preorder = null) {
         $this->loadComponent('Product');
 
         foreach ($orderLines as $index => $line) {
-            $product = $this->Products->find()->contain(['WholesaleRates'])->where(['Products.id' => $line['product_id']])->first();
+            $product = $this->Products->find()->contain(['WholesaleRates','PreorderRates'])->where(['Products.id' => $line['product_id']])->first();
             if (!is_null($product)) {
                 $orderLine = $this->OrderLines->newEntity();
                 $orderLine->order_id = $orderId;
                 $orderLine->product_id = $product->id;
                 $orderLine->qty = $line['qty'];
 
-                $unitPrice = $this->Product->getUnitPriceByQty($product->id, $line['qty']);
+                $unitPrice = $this->Product->getUnitPriceByQty($product->id, $line['qty'], $preorder);
 
                 $orderLine->unit_price = $unitPrice;
                 $orderLine->amount = ($orderLine->qty * $orderLine->unit_price);

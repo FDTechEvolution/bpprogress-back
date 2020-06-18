@@ -386,6 +386,7 @@ class SvProductsController extends AppController {
     public function calculatePrice() {
         $productId = $this->request->getQuery('product');
         $qty = $this->request->getQuery('qty');
+        $preorder = $this->request->getQuery('ispreorder');
         
         
         $this->autoRender = false;
@@ -395,7 +396,7 @@ class SvProductsController extends AppController {
         
         
         
-        $unitPrice = $this->Product->getUnitPriceByQty($productId, $qty);
+        $unitPrice = $this->Product->getUnitPriceByQty($productId, $qty, $preorder);
         $product = $this->Products->find()->where(['Products.id'=>$productId])->first();
         $minWholesale = $this->Products->WholesaleRates->find()
                 ->where(['WholesaleRates.product_id'=>$productId])

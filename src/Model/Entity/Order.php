@@ -21,6 +21,7 @@ use Cake\ORM\Entity;
  * @property string|null $payment_status
  * @property string|null $trackingno
  * @property string|null $shipping_id
+ * @property string|null $ispreorder
  *
  * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\User $user
@@ -55,6 +56,7 @@ class Order extends Entity
         'payment_status' => true,
         'trackingno' => true,
         'shipping_id' => true,
+        'ispreorder' => true,
         'shop' => true,
         'user' => true,
         'address' => true,
