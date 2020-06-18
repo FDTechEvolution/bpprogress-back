@@ -173,18 +173,33 @@ class SvProductsController extends AppController {
             $id = $this->request->getQuery('id');
             // $this->log($id, 'debug');
             $products = $this->Products->find()
-                    ->contain(['ProductCategories'])
+                    ->contain(['ProductCategories','ProductImages' => function($q) {
+                        return $q->contain(['Images'])
+                                ->where(['ProductImages.type' => 'DEFAULT']);
+                    }])
                     ->where(['ProductCategories.id' => $id, 'Products.isactive' => 'Y'])
                     ->order(['Products.created' => 'DESC'])
                     ->limit(20)
                     ->toArray();
             if ($products) {
                 foreach ($products as $index => $product) {
-                    $product_img = $this->ProductImages->find()
-                            ->contain(['Images'])
-                            ->where(['ProductImages.product_id' => $product->id, 'ProductImages.type' => 'DEFAULT'])
-                            ->first();
-                    $products[$index]['images'] = $product_img->image->fullpath;
+                    if (sizeof($product['product_images']) != 0) {
+                        $products[$index]['image'] = $product['product_images'][0]['image']['fullpath'];
+                    } else {
+                        $products[$index]['image'] = null;
+                    }
+                    if ($product['iswholesale'] == 'Y') {
+                        $maxPrice = $this->WholesaleRates->find()
+                                ->where(['WholesaleRates.product_id' => $product['id']])
+                                ->order(['WholesaleRates.price' => 'DESC'])
+                                ->first();
+    
+                        $minPrice = $this->WholesaleRates->find()
+                                ->where(['WholesaleRates.product_id' => $product['id']])
+                                ->order(['WholesaleRates.price' => 'ASC'])
+                                ->first();
+                        $products[$index]['wholesale_price'] = sprintf('%s-%s', number_format($minPrice['price']), number_format($maxPrice['price']));
+                    }
                 }
                 $this->responData['status'] = 200;
                 $this->responData['data'] = $products;
@@ -389,6 +404,20 @@ class SvProductsController extends AppController {
 
         $this->responData['status'] = 200;
         $this->responData['data'] = ['unit_price'=>$unitPrice,'product_id'=>$productId,'qty'=>$qty,'product'=>$product,'min_wholesale'=>$minWholesale];
+
+        $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
+        $this->response = $this->response->withStringBody($json);
+        $this->response = $this->response->withType('json');
+    }
+
+    public function checkProduct() {
+        if ($this->request->is(['get', 'ajax'])) {
+            $productId = $this->request->getQuery('id');
+
+            $product = $this->Products->find()->where(['id' => $productId])->first();
+            $this->responData['status'] = 200;
+            $this->responData['data'] = $product;
+        }
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
         $this->response = $this->response->withStringBody($json);
