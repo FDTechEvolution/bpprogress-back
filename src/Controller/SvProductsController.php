@@ -415,14 +415,13 @@ class SvProductsController extends AppController {
         if ($this->request->is(['get', 'ajax'])) {
             $productId = $this->request->getQuery('id');
 
-            $product = $this->Products->find()->where(['id' => $productId])->first();
+            $product = $this->Products->find()->contain(['WholesaleRates'])->where(['id' => $productId])->first();
             $this->responData['status'] = 200;
             $this->responData['data'] = $product;
         }
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
-        $this->response = $this->response->withStringBody($json);
-        $this->response = $this->response->withType('json');
+        $this->set(compact('json'));
     }
 
 }
