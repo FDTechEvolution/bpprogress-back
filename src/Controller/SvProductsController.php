@@ -416,8 +416,13 @@ class SvProductsController extends AppController {
             $productId = $this->request->getQuery('id');
 
             $product = $this->Products->find()->contain(['WholesaleRates'])->where(['id' => $productId])->first();
-            $this->responData['status'] = 200;
-            $this->responData['data'] = $product;
+            if($product) {
+                $this->responData['status'] = 200;
+                $this->responData['data'] = $product;
+            }else{
+                $this->responData['status'] = 404;
+            }
+            
         }
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
