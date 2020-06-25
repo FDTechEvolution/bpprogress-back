@@ -41,8 +41,8 @@ class SvProductsController extends AppController {
                                     ->where(['ProductImages.type' => 'DEFAULT']);
                         }
                     ])
-                    ->where(['isactive' => 'Y'])
-                    ->order(['created' => 'DESC'])
+                    ->where(['Products.isactive' => 'Y'])
+                    ->order(['Products.created' => 'DESC'])
                     ->toArray();
 
             foreach ($products as $index => $product) {
@@ -108,10 +108,14 @@ class SvProductsController extends AppController {
                             ->toArray();
                     $products['preorder_rate'] = $product_preorder;
                 }
+
+                $this->responData['status'] = 200;
+                $this->responData['data'] = $products;
+            }else{
+                $this->responData['status'] = 404;
+                $this->responData['data'] = 'NOT FOUND';
             }
 
-            $this->responData['status'] = 200;
-            $this->responData['data'] = $products;
         }
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
