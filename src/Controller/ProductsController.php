@@ -231,6 +231,9 @@ class ProductsController extends AppController {
         if ($this->request->is(['patch', 'post', 'put'])) {
             $postData = $this->request->getData();
             $id = $postData['productID'];
+            if (isset($postData['isactive']) && $postData['isactive'] != 'Y') {
+                $postData['isactive'] = 'N';
+            }
             $Product = $this->Products->get($id, [
                 'contain' => [],
             ]);
