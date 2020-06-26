@@ -34,6 +34,9 @@ class SvProductsController extends AppController {
 
     public function getAllProducts() {
         if ($this->request->is(['get', 'ajax'])) {
+            $limit = $this->request->getQuery('limit');
+            $page = $this->request->getQuery('page');
+            $allproduct = $this->Products->find()->where(['isactive' => 'Y'])->toArray();
             $products = $this->Products->find()
                     ->contain([
                         'ProductImages' => function($q) {
@@ -42,6 +45,8 @@ class SvProductsController extends AppController {
                         }
                     ])
                     ->where(['Products.isactive' => 'Y'])
+                    ->limit($limit)
+                    ->page($page)
                     ->order(['Products.created' => 'DESC'])
                     ->toArray();
 
@@ -67,6 +72,7 @@ class SvProductsController extends AppController {
             }
             $this->responData['status'] = 200;
             $this->responData['data'] = $products;
+            $this->responData['count'] = $allproduct;
         }
 
         $json = json_encode($this->responData, JSON_UNESCAPED_UNICODE);
@@ -175,7 +181,10 @@ class SvProductsController extends AppController {
     public function getProductCategory() {
         if ($this->request->is(['get', 'ajax'])) {
             $id = $this->request->getQuery('id');
-            // $this->log($id, 'debug');
+            $limit = $this->request->getQuery('limit');
+            $page = $this->request->getQuery('page');
+            $allproduct = $this->Products->find()->contain(['ProductCategories'])->where(['ProductCategories.id' => $id, 'Products.isactive' => 'Y'])->toArray();
+
             $products = $this->Products->find()
                     ->contain(['ProductCategories','ProductImages' => function($q) {
                         return $q->contain(['Images'])
@@ -183,7 +192,8 @@ class SvProductsController extends AppController {
                     }])
                     ->where(['ProductCategories.id' => $id, 'Products.isactive' => 'Y'])
                     ->order(['Products.created' => 'DESC'])
-                    ->limit(20)
+                    ->limit($limit)
+                    ->page($page)
                     ->toArray();
             if ($products) {
                 foreach ($products as $index => $product) {
@@ -207,6 +217,7 @@ class SvProductsController extends AppController {
                 }
                 $this->responData['status'] = 200;
                 $this->responData['data'] = $products;
+                $this->responData['count'] = $allproduct;
             } else {
                 $this->responData['status'] = 400;
             }
