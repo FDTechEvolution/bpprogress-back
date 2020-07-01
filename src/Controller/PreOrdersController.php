@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -7,14 +6,13 @@ use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
 /**
- * Orders Controller
+ * PreOrders Controller
  *
- * @property \App\Model\Table\OrdersTable $Orders
  *
- * @method \App\Model\Entity\Order[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\PreOrder[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class OrdersController extends AppController {
-
+class PreOrdersController extends AppController
+{
     public $OrderStatus = [
         'DR' => 'ฉบับร่าง',
         'NEW' => 'คำสั่งซื้อใหม่',
@@ -37,6 +35,7 @@ class OrdersController extends AppController {
 
     public function beforeFilter(Event $event) {
         parent::beforeFilter($event);
+        $this->Orders = TableRegistry::get('Orders');
         $this->Shippings = TableRegistry::get('Shippings');
     }
 
@@ -45,7 +44,8 @@ class OrdersController extends AppController {
      *
      * @return \Cake\Http\Response|null
      */
-    public function index() {
+    public function index()
+    {
         $this->loadComponent('Payment');
         if ($this->request->is(['POST'])) {
             $postData = $this->request->getData();
@@ -154,10 +154,9 @@ class OrdersController extends AppController {
         $user = $this->MyAuthen->getLogedUser();
         $orders = $this->Orders->find()
                 ->contain(['Users', 'Shippings','Payments'])
-                ->where(['Orders.shop_id' => $user['shop_id'], 'status' => $status, 'Orders.ispreorder' => 'N'])
+                ->where(['Orders.shop_id' => $user['shop_id'], 'status' => $status, 'Orders.ispreorder' => 'Y'])
                 ->order(['Orders.created'=>'DESC'])
                 ->toArray();
         return $orders;
     }
-
 }

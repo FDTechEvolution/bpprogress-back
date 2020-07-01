@@ -1,0 +1,5 @@
+
+<?=$this->Html->link('คำสั่งซื้อใหม่ <span id="notis-bt-new-preorder"></span>',['controller'=>'pre-orders','action'=>'index'],['class'=>$status == 'NEW' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2','escape'=>false])?>
+<?=$this->Html->link('รอจัดส่ง <span id="notis-bt-wt-preorder"></span>',['controller'=>'pre-orders','action'=>'waiting-delivery'],['class'=>$status == 'WT' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2','escape'=>false])?>
+<?=$this->Html->link('ส่งแล้ว <span id="notis-bt-sent-preorder"></span>',['controller'=>'pre-orders','action'=>'sent'],['class'=>$status == 'SENT' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2','escape'=>false])?>
+<?=$this->Html->link('รับสินค้าแล้ว <span id="notis-bt-received-preorder"></span>',['pre-controller'=>'orders','action'=>'received'],['class'=>$status == 'RECEIVED' ? 'btn btn-primary mr-2' : 'btn btn-outline-secondary mr-2','escape'=>false])?>

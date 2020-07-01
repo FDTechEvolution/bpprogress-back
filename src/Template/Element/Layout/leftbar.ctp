@@ -12,6 +12,9 @@
                     <?= $this->Html->link('<i class="mdi mdi-cart-plus"></i><span class="badge badge-danger badge-pill float-right" id="notis-new-order"></span><span> รายการสั่งซื้อ </span>', ['controller' => 'orders', 'action' => 'index', 'status' => 'NEW'], ['class' => 'waves-effect', 'escape' => false]) ?>
                 </li>
                 <li>
+                    <?= $this->Html->link('<i class="mdi mdi-cube-send"></i><span class="badge badge-danger badge-pill float-right" id="notis-new-preorder"></span><span> รายการพรีออเดอร์ </span>', ['controller' => 'pre-orders', 'action' => 'index', 'status' => 'NEW'], ['class' => 'waves-effect', 'escape' => false]) ?>
+                </li>
+                <li>
                     <?= $this->Html->link('<i class="fas fa-money-bill-wave-alt"></i><span class="badge badge-danger badge-pill float-right" id="notis-new-payment"></span><span> แจ้งชำระเงิน </span>', ['controller' => 'payments', 'action' => 'index'], ['class' => 'waves-effect', 'escape' => false]) ?>
                 </li>
                 <li class="mm-active">

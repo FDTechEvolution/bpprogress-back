@@ -27,6 +27,25 @@ $(document).ready(function () {
 
             });
 
+    $.get(siteurl + 'sv-notifications/get-preorder-by-status', {})
+            .done(function (data) {
+                // console.log(data);
+                $.each(data.data, function (index, item) {
+                    var html = '<span class="badge badge-pill badge-light-dark">' + item.amt + '</span>';
+                    if (item.status === 'NEW') {
+                        $('#notis-new-preorder').text(item.amt);
+                        $('#notis-bt-new-preorder').append(html);
+                    } else if (item.status === 'WT') {
+                        $('#notis-bt-wt-preorder').append(html);
+                    } else if (item.status === 'SENT') {
+                        $('#notis-bt-sent-preorder').append(html);
+                    } else if (item.status === 'RECEIVED') {
+                        $('#notis-bt-received-preorder').append(html);
+                    }
+                });
+
+            });
+
     $.get(siteurl + 'sv-notifications/get-payment-by-status', {})
             .done(function (data) {
                 // console.log(data);
